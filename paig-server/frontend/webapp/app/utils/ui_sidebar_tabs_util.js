@@ -5,6 +5,7 @@ import {UI_CONSTANTS} from 'utils/globals';
 import {SIDEBAR_MENU} from 'components/site/sidebar_menu';
 import {configProperties} from 'utils/config_properties';
 import {permissionCheckerUtil} from 'common-ui/utils/permission_checker_util';
+import stores from 'data/stores/all_stores';
 
 const {
 	DASHBOARD,
@@ -32,7 +33,7 @@ const {
     VECTOR_DB_PERMISSIONS,
     EVALUATION,
     EVALUATION_CONFIG,
-    EVALUATION_REPORTS
+    EVALUATION_REPORTS,
     VECTOR_DB_PERMISSIONS,
     GUARDRAILS,
     RESPONSE_TEMPLATES,

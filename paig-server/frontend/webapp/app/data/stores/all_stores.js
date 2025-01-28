@@ -43,7 +43,7 @@ const stores = {
 	vectorDBPolicyStore,
 	dataProtectStore,
 	shieldAuditsReportsStore,
-	evaluationStore
+	evaluationStore,
 	shieldAuditsReportsStore,
 	guardrailStore,
 	guardrailResponseTemplateStore,
