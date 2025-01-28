@@ -33,6 +33,10 @@ const {
     EVALUATION,
     EVALUATION_CONFIG,
     EVALUATION_REPORTS
+    VECTOR_DB_PERMISSIONS,
+    GUARDRAILS,
+    RESPONSE_TEMPLATES,
+    GUARDRAIL_CONNECTION_PROVIDER
 } = UI_CONSTANTS
 
 const SIDEBAR_MENU_ITEMS = {
@@ -44,7 +48,9 @@ const SIDEBAR_MENU_ITEMS = {
             },
             [VECTOR_DB]: {
                 TABS: [VECTOR_DB, VECTOR_DB_PERMISSIONS]
-            }
+            },
+            [GUARDRAILS]: {},
+            [RESPONSE_TEMPLATES]: {}
         }
     },
     [AUDITS]: {
@@ -66,6 +72,7 @@ const SIDEBAR_MENU_ITEMS = {
     [ACCOUNT]: {
         SUBMENU: {
             [SHIELD_CONFIGURATION]: {},
+            [GUARDRAIL_CONNECTION_PROVIDER]: {},
             [USER_MANAGEMENT]: {
                 TABS: [PORTAL_USERS, PORTAL_GROUPS]
             },
@@ -105,7 +112,9 @@ const UI_DEFAULT_FEATURE_SIDEBAR_TABS = {
     [APPLICATIONS]: {
         [AI_APPLICATIONS]: {
             TABS: [AI_APPLICATIONS, AI_APPLICATIONS_PERMISSIONS]
-        }
+        },
+        [GUARDRAILS]: {},
+        [RESPONSE_TEMPLATES]: {}
     },
     [AUDITS]: {
         [SECURITY]: {}
@@ -118,6 +127,7 @@ const UI_DEFAULT_FEATURE_SIDEBAR_TABS = {
         [SAVED_REPORTS]: {}
     },
     [ACCOUNT]: {
+        [GUARDRAIL_CONNECTION_PROVIDER]: {},
         [USER_MANAGEMENT]: {
             TABS: [PORTAL_USERS, PORTAL_GROUPS]
         },
@@ -151,7 +161,7 @@ class UISidebarTabsUtil {
             },*/ {
                 "name": "VECTOR_DB",
                 "value": 'true'
-            }, 
+            },
             {
                 "name": "EVALUATION",
                 "value": 'true'
@@ -408,6 +418,9 @@ const featurePermissionUIMap = {
     },
     'governance.evaluation_reports': {
         propertyForShowHide: [`${AUDITS}.${EVALUATION_REPORTS}`]
+    },
+    'governance.guardrails': {
+        propertyForShowHide: [`${APPLICATIONS}.${GUARDRAILS}`, `${APPLICATIONS}.${RESPONSE_TEMPLATES}`, `${ACCOUNT}.${GUARDRAIL_CONNECTION_PROVIDER}`]
     },
     'audits.security': {
         propertyForShowHide: [`${AUDITS}.${SECURITY}`]
