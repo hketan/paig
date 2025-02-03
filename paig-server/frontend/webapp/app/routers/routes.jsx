@@ -3,11 +3,11 @@ import {Switch, Route, Redirect} from "react-router-dom";
 
 import history from 'common-ui/routers/history'
 import {UI_CONSTANTS} from 'utils/globals';
-import {Authorization, getRedirectPath} from 'auth/authorization';
+// import {Authorization, getRedirectPath} from 'auth/authorization';
 
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
 
-import CPageNotFound from 'containers/c_page_not_found';
+/* import CPageNotFound from 'containers/c_page_not_found';
 import CForbiddenError from 'containers/c_forbidden_error';
 
 import CDashboard from 'containers/dashboard/c_dashboard';
@@ -29,7 +29,7 @@ import CShieldConfig from 'containers/shield_configuration/c_shield_configuratio
 import CMetaData from 'containers/metadata/c_metadata';
 
 import CReporting from 'containers/reports/c_reporting';
-import CSavedReportsListing from 'containers/reports/c_saved_reports_listing';
+import CSavedReportsListing from 'containers/reports/c_`saved_reports_listing'; */
 
 history.listen((location, action) => {
     // scroll to top when route changes
@@ -37,7 +37,7 @@ history.listen((location, action) => {
 });
 
 const RedirectToPath = () => {
-    let path = getRedirectPath();
+    let path = 'dashboard';//getRedirectPath();
     console.log('landing page path: ', path);
     return <Redirect to={path} />;
 }
@@ -47,11 +47,17 @@ const checkComponentPermission = (permissionProperty) => {
     return !permissionCheckerUtil.checkHasReadPermission(permission);
 }
 
+const Dashboard = () => {
+    return (<div>Loader</div>)
+}
+
 const Routes = () => (
 	<Switch>
 		<Route exact path="/" component={RedirectToPath} />
 
-        <Route path="/dashboard" name="Dashboard" component={Authorization(CDashboard, [UI_CONSTANTS.DASHBOARD])} />
+		<Route path="/dashboard" name="Dashboard" component={Dashboard} />
+
+        {/* <Route path="/dashboard" name="Dashboard" component={Authorization(CDashboard, [UI_CONSTANTS.DASHBOARD])} />
 
         <Route path="/ai_application/create" name="Create Application" component={Authorization(CAIApplicationCreate, [UI_CONSTANTS.APPLICATIONS, UI_CONSTANTS.AI_APPLICATIONS])} />
         <Route path="/ai_application/:id" name="AI Application Details" component={Authorization(CAIApplicationMain, [UI_CONSTANTS.APPLICATIONS, UI_CONSTANTS.AI_APPLICATIONS])} />
@@ -62,28 +68,28 @@ const Routes = () => (
         <Route path="/vector_db" name="Vector DB" component={Authorization(CVectorDB, [UI_CONSTANTS.APPLICATIONS, UI_CONSTANTS.VECTOR_DB])} />
 
         <Route path="/audits_security" name="Access Audits" component={Authorization(CSecurityAudits, [UI_CONSTANTS.AUDITS, UI_CONSTANTS.SECURITY])} />
-        {/* TODO: [PAIG-2025] Uncomment this route once Admin Audits implemented */}
-        {/* <Route path="/admin_audits" name="Admin Audits" component={Authorization(CAdminAudits, [UI_CONSTANTS.COMPLIANCE, UI_CONSTANTS.ADMIN_AUDITS])} /> */}
+         */}{/* TODO: [PAIG-2025] Uncomment this route once Admin Audits implemented */}{/*
+         */}{/* <Route path="/admin_audits" name="Admin Audits" component={Authorization(CAdminAudits, [UI_CONSTANTS.COMPLIANCE, UI_CONSTANTS.ADMIN_AUDITS])} /> */}{/*
 
-        {/* TODO: [PAIG-2025] Uncomment this route once Shield Configuration implemented */}
-        {/* <Route path="/shield_configuration" name="Shield Configuration" component={Authorization(CShieldConfig, [UI_CONSTANTS.ACCOUNT, UI_CONSTANTS.SHIELD_CONFIGURATION])} /> */}
+         */}{/* TODO: [PAIG-2025] Uncomment this route once Shield Configuration implemented */}{/*
+         */}{/* <Route path="/shield_configuration" name="Shield Configuration" component={Authorization(CShieldConfig, [UI_CONSTANTS.ACCOUNT, UI_CONSTANTS.SHIELD_CONFIGURATION])} /> */}{/*
         <Route path="/user_management" name="User Management" component={Authorization(CUserManagementMain, [UI_CONSTANTS.ACCOUNT, UI_CONSTANTS.USER_MANAGEMENT])} />
         <Route path="/tags" name="Tags" component={Authorization(CSensitiveData, [UI_CONSTANTS.ACCOUNT, UI_CONSTANTS.SENSITIVE_DATA])} />
         <Route path="/vector_db_metadata" name="Vector DB Metadata" component={Authorization(CMetaData, [UI_CONSTANTS.ACCOUNT, UI_CONSTANTS.META_DATA])} />
 
-        {/*Reports*/}
-        {/* TODO: [PAIG-2025] Uncomment this route once Saved Reports implemented */}
-        {/* <Route path="/saved_reports" name="Saved Reports" component={Authorization(CSavedReportsListing, [UI_CONSTANTS.REPORTS, UI_CONSTANTS.SAVED_REPORTS])} /> */}
+         */}{/*Reports*/}{/*
+         */}{/* TODO: [PAIG-2025] Uncomment this route once Saved Reports implemented */}{/*
+         */}{/* <Route path="/saved_reports" name="Saved Reports" component={Authorization(CSavedReportsListing, [UI_CONSTANTS.REPORTS, UI_CONSTANTS.SAVED_REPORTS])} /> */}{/*
         <Route exact path="/built_in_reports" name="Built-in Reports" component={Authorization(CReporting, [UI_CONSTANTS.REPORTS, UI_CONSTANTS.BUILT_IN_REPORTS])} />
         <Route path="/built_in_reports/:reportType/new" name="Built-in Reports" component={Authorization(CReporting, [UI_CONSTANTS.REPORTS, UI_CONSTANTS.BUILT_IN_REPORTS])} />
-        {/* TODO: [PAIG-2025] Uncomment this route once Saved Reports implemented */}
-        {/* <Route path="/reports/:reportType/:configId" name="Saved Reports" component={Authorization(CReporting, [UI_CONSTANTS.REPORTS, UI_CONSTANTS.BUILT_IN_REPORTS])} /> */}
+         */}{/* TODO: [PAIG-2025] Uncomment this route once Saved Reports implemented */}{/*
+         */}{/* <Route path="/reports/:reportType/:configId" name="Saved Reports" component={Authorization(CReporting, [UI_CONSTANTS.REPORTS, UI_CONSTANTS.BUILT_IN_REPORTS])} /> */}{/*
         
-        {/* <Route path="/report/:configId" name="Saved Reports" component={Authorization(CReporting, [UI_CONSTANTS.REPORTS, UI_CONSTANTS.BUILT_IN_REPORTS])} /> */}
+         */}{/* <Route path="/report/:configId" name="Saved Reports" component={Authorization(CReporting, [UI_CONSTANTS.REPORTS, UI_CONSTANTS.BUILT_IN_REPORTS])} /> */}{/*
 
 		<Route path="/not_found"  component={CPageNotFound} />
         <Route path="/forbidden" component={CForbiddenError}  />
-        <Redirect to="/not_found" from="*" />
+        <Redirect to="/not_found" from="*" /> */}
 	</Switch>
 )
 

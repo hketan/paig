@@ -18,7 +18,7 @@ module.exports = {
   module: {
     rules: [{
       //test: /\.(css|scss)$/,
-      test: /\.(css)$/,
+      test: /\.(c|sa|sc)ss$/i,
       use: [{
           loader: MiniCssExtractPlugin.loader,
           options: {
@@ -37,6 +37,14 @@ module.exports = {
               })
             ]
           }
+        },
+        'resolve-url-loader',
+        {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              implementation: require('sass')
+            }
         }
       ]
     }]
@@ -56,7 +64,7 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       //filename: `${commonPaths.cssFolder}/[name].css`,
-      filename: `${commonPaths.cssFolder}/style.css`,
+      filename: `${commonPaths.cssFolder}/styles.css`,
       chunkFilename: `${commonPaths.cssFolder}/[id].css`,
     })
   ],

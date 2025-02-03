@@ -1,22 +1,22 @@
 import React from 'react';
 
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import SecurityIcon from '@material-ui/icons/Security';
-import InsertChartOutlinedOutlinedIcon from '@material-ui/icons/InsertChartOutlinedOutlined';
+//import DashboardIcon from '@material-ui/icons/Dashboard';
+//import SecurityIcon from '@material-ui/icons/Security';
+//import InsertChartOutlinedOutlinedIcon from '@material-ui/icons/InsertChartOutlinedOutlined';
 
 import { UI_CONSTANTS } from 'utils/globals';
-import { AccountIcon, CodeWindowIcon, ShieldIcon } from './privacera_logo';
+//import { AccountIcon, CodeWindowIcon, ShieldIcon } from './privacera_logo';
 
 
 const SIDEBAR_MENU = [{
   to: "/dashboard",
   name: "Dashboard",
-  icon: <DashboardIcon className="list-svg-icon" />,
+//  /icon: <DashboardIcon className="list-svg-icon" />,
   sidebar: UI_CONSTANTS.DASHBOARD
 }, {
   menuToggleAttrName: "applications",
   name: "Application",
-  icon: <CodeWindowIcon className="list-svg-icon" />,
+  //icon: <CodeWindowIcon className="list-svg-icon" />,
   sidebar: UI_CONSTANTS.APPLICATIONS,
   child: [{
     to: "/ai_applications",
@@ -34,7 +34,7 @@ const SIDEBAR_MENU = [{
 }, {
    menuToggleAttrName: "audits",
    name: "Security",
-   icon: <SecurityIcon className="list-svg-icon" />,
+   //icon: <SecurityIcon className="list-svg-icon" />,
    sidebar: UI_CONSTANTS.AUDITS,
    child: [{
      to: "/audits_security",
@@ -59,7 +59,7 @@ const SIDEBAR_MENU = [{
 {
   menuToggleAttrName: "reports",
   name: "Reports",
-  icon: <InsertChartOutlinedOutlinedIcon className="list-svg-icon" />,
+  //icon: <InsertChartOutlinedOutlinedIcon className="list-svg-icon" />,
   sidebar: UI_CONSTANTS.REPORTS,
   child: [{
     to: "/built_in_reports",
@@ -82,7 +82,7 @@ const SIDEBAR_MENU = [{
 }, {
   menuToggleAttrName: "account",
   name: "Account",
-  icon: <AccountIcon className="list-svg-icon" />,
+  //icon: <AccountIcon className="list-svg-icon" />,
   sidebar: UI_CONSTANTS.ACCOUNT,
   child: [
   // TODO: [PAIG-2025] Uncomments to enable Shield Configuration

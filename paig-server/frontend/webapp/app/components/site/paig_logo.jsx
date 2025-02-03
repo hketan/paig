@@ -1,6 +1,6 @@
 import React from 'react';
 
-import LinearProgress from '@material-ui/core/LinearProgress';
+// import LinearProgress from '@material-ui/core/LinearProgress';
 
 
 const DarkPaigLogo = () => {
@@ -70,7 +70,7 @@ const PaigLoader = () => {
     <div className="loader-container">
       <div className="loader-inner paig-loader">
         <DarkPaigBigLogo />
-        <LinearProgress className="m-t-sm" />
+        {/* <LinearProgress className="m-t-sm" /> */}
       </div>
     </div>
   )

@@ -17,43 +17,44 @@ module.exports = {
   },
   module: {
     rules: [{
-      test: /\.(css)$/,
+      test: /\.(c|sa|sc)ss$/i,
       use: [
-        'style-loader', {
+        'style-loader',
+        {
           loader: 'css-loader',
           options: {
             sourceMap: true,
-            // importLoaders: 2,
-            modules: false,
+            modules: false
             // localIdentName: '[name]__[local]___[hash:base64:5]',
-          },
-        }, {
+          }
+        },
+        {
           loader: 'postcss-loader',
           options: {
             sourceMap: true,
-            plugins: [
-              autoprefixer({
-                browsers: ['last 2 versions']
-              })
-            ]
+            postcssOptions: {
+                plugins: [
+                    require('autoprefixer')() // Correct placement
+                ]
+            }
           }
         },
-        //'resolve-url-loader',
-        //'sass-loader',
-      ],
-    }, ],
+        'resolve-url-loader',
+        {
+           loader: 'sass-loader',
+           options: {
+             sourceMap: true,
+             implementation: require("sass"),
+             /*sassOptions: {
+                includePaths: ['node_modules']
+             }*/
+           }
+        }
+      ]
+    }]
   },
   plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.LoaderOptionsPlugin({
-      options: {
-        postcss: [
-          autoprefixer({
-            browsers: ['last 2 versions']
-          }),
-        ]
-      }
-    })
+    new webpack.NoEmitOnErrorsPlugin()
   ],
   optimization: {
     minimize: false,
@@ -77,8 +78,8 @@ module.exports = {
     port: commonPaths.port,
     host: commonPaths.host,
     hot: true,
-    proxy: {
-      '/': {
+    proxy: [{
+        context: () => true,
         target: commonPaths.target,
         changeOrigin: true, // needed for virtual hosted sites
         ws: false, // proxy websockets
@@ -93,9 +94,9 @@ module.exports = {
           }
 
           // console.log("path: ", proxyReq.path)
-        }
-      }
-    }
+        },
+        logLevel: 'info'
+    }]
   },
   devtool: 'inline-source-map'
 };

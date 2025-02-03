@@ -1,33 +1,53 @@
 import {hot} from 'react-hot-loader';
-import React, {Component, createRef} from 'react';
+import React, {Component, createRef, Fragment} from 'react';
 import {reaction} from 'mobx';
 import {Provider} from 'mobx-react'
 import { withRouter } from "react-router";
-import { SnackbarProvider } from 'notistack';
-//import DevTools from 'mobx-react-devtools';
 
-import {withStyles} from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import {
+  Header,
+  HeaderContainer,
+  HeaderName,
+  HeaderNavigation,
+  HeaderMenuButton,
+  HeaderMenuItem,
+  HeaderGlobalBar,
+  HeaderGlobalAction,
+  Switcher,
+  SkipToContent,
+  SideNavMenu,
+  SideNavMenuItem,
+  SideNav,
+  SideNavItems,
+  SideNavLink,
+  HeaderSideNavItems,
+  StoryContent,
+  Fade,
+  Footer,
+  Content
+} from '@carbon/react';
 
-import theme from 'components/site/theme';
+import { Menu, UserAvatar, Close, SwitcherIcon } from '@carbon/icons-react';
+
+//import theme from 'components/site/theme';
 import {Routes} from 'routers/routes';
 import UiState from 'data/ui_state'
-import UISidebarTabsUtil from 'utils/ui_sidebar_tabs_util';
-import AccountJobStatus from 'containers/account/account_job_status';
-import {PaigLoader} from 'components/site/paig_logo';
-import {FailedTenantSetup} from 'containers/base_container';
-import f from 'common-ui/utils/f';
+//import UISidebarTabsUtil from 'utils/ui_sidebar_tabs_util';
+//import AccountJobStatus from 'containers/account/account_job_status';
+//import {PaigLoader} from 'components/site/paig_logo';
+//import {FailedTenantSetup} from 'containers/base_container';
+//import f from 'common-ui/utils/f';
 import {createRoutes} from 'common-ui/lib/RouteUtils';
-import {Confirm} from 'common-ui/lib/fs_modal';
-import {permissionCheckerUtil} from 'common-ui/utils/permission_checker_util';
-import "pdfmake/build/pdfmake";
-import PDFUtil from 'components/reports/reports_pdfUtil';
-import PendoInitializer from 'components/pendo/pendo_initializer';
+//import {Confirm} from 'common-ui/lib/fs_modal';
+//import {permissionCheckerUtil} from 'common-ui/utils/permission_checker_util';
+//import "pdfmake/build/pdfmake";
+//import PDFUtil from 'components/reports/reports_pdfUtil';
+//import PendoInitializer from 'components/pendo/pendo_initializer';
 
-if (PDFUtil && PDFUtil.loadFonts) {
+import { DarkPaigLogo } from 'components/site/paig_logo';
+import VLayout from 'components/site/v_layout';
+
+/*if (PDFUtil && PDFUtil.loadFonts) {
   PDFUtil.loadFonts();
 }
 
@@ -43,7 +63,7 @@ const SnackbarStyleComponent = withStyles((theme) => ({
   action: {
     paddingLeft: 0
   }
-}))(SnackbarProvider);
+}))(SnackbarProvider);*/
 
 class Root extends Component {
   constructor(props) {
@@ -51,7 +71,7 @@ class Root extends Component {
     this.notificationSystem = createRef();
     this.confirm = createRef();
 
-    permissionCheckerUtil.setUp();
+//    permissionCheckerUtil.setUp();
 
     reaction(
       () => UiState.refreshProps,
@@ -64,17 +84,17 @@ class Root extends Component {
   }
   state = {
     error: false,
-    loaded: false,
-    jobLoaded: false,
+    loaded: true,
+    jobLoaded: true,
     pendoApiKey: null,
     pendoHost: null
   }
   async fetch() {
     try {
-      UISidebarTabsUtil.setStores(this.props.stores);
-      await UiState.fetch();
+      //UISidebarTabsUtil.setStores(this.props.stores);
+      //await UiState.fetch();
       this.setState({loaded: true});
-      UiState.setRefreshProps(false);
+      //UiState.setRefreshProps(false);
     } catch(e) {
       console.log(e);
       this.setState({error: true, loaded: true});
@@ -139,8 +159,8 @@ class Root extends Component {
   }
   componentDidMount() {
     this.fetch();
-    f.setNotificationSystem(this.notificationSystem.current);
-    f.setConfirmBox(this.confirm.current);
+    //f.setNotificationSystem(this.notificationSystem.current);
+    //f.setConfirmBox(this.confirm.current);
   }
   handlePollJobStatus = (jobLoaded) => {
     this.setState({jobLoaded});
@@ -160,32 +180,122 @@ class Root extends Component {
         renderComponent = Routes();
         UiState.setRoutes(createRoutes(renderComponent.props.children));
       } else {
-        renderComponent = <AccountJobStatus pollJobStatus={this.handlePollJobStatus} />
+        renderComponent = null //<AccountJobStatus pollJobStatus={this.handlePollJobStatus} />
       }
     }
 
     return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
         <Provider { ...stores }>
-          <SnackbarStyleComponent ref={this.notificationSystem} maxSnack={10}
+            {
+                state.loaded ?
+                    (
+                        <Fragment>
+                        /*<HeaderContainer
+                          render={({ isSideNavExpanded, onClickSideNavExpand }) => (
+                            <Fragment>
+                              <Header aria-label="Privacera PAIG">
+                                <SkipToContent />
+                                <HeaderMenuButton
+                                  //isCollapsible={true}
+                                  aria-label={isSideNavExpanded ? 'Close menu' : 'Open menu'}
+                                  onClick={onClickSideNavExpand}
+                                  isActive={isSideNavExpanded}
+                                  aria-expanded={isSideNavExpanded}
+                                />
+                                <HeaderName href="#" prefix="">
+                                  <DarkPaigLogo />
+                                </HeaderName>
+                                <SideNav
+                                  aria-label="Side navigation"
+                                  expanded={isSideNavExpanded}
+                                  onSideNavBlur={onClickSideNavExpand}
+                                  href="#main-content"
+                                >
+                                  <SideNavItems>
+                                    <SideNavLink renderIcon={Fade} href="#/dashboard" isActive={true}>
+                                      Dashboard
+                                    </SideNavLink>
+                                    <SideNavMenu renderIcon={Fade} title="Category title">
+                                      <SideNavMenuItem href="#/dashboard">
+                                        Dashboard
+                                      </SideNavMenuItem>
+                                      <SideNavMenuItem href="https://www.carbondesignsystem.com/">
+                                        Link
+                                      </SideNavMenuItem>
+                                      <SideNavMenuItem href="https://www.carbondesignsystem.com/">
+                                        Link
+                                      </SideNavMenuItem>
+                                    </SideNavMenu>
+                                    <SideNavMenu renderIcon={Fade} title="Category title" >
+                                      <SideNavMenuItem isActive={true} href="https://www.carbondesignsystem.com/">
+                                        Link
+                                      </SideNavMenuItem>
+                                      <SideNavMenuItem href="https://www.carbondesignsystem.com/">
+                                        Link
+                                      </SideNavMenuItem>
+                                      <SideNavMenuItem href="https://www.carbondesignsystem.com/">
+                                        Link
+                                      </SideNavMenuItem>
+                                    </SideNavMenu>
+                                    <SideNavMenu renderIcon={Fade} title="Category title">
+                                      <SideNavMenuItem href="https://www.carbondesignsystem.com/">
+                                        Link
+                                      </SideNavMenuItem>
+                                      <SideNavMenuItem href="https://www.carbondesignsystem.com/">
+                                        Link
+                                      </SideNavMenuItem>
+                                      <SideNavMenuItem href="https://www.carbondesignsystem.com/">
+                                        Link
+                                      </SideNavMenuItem>
+                                    </SideNavMenu>
+                                    <SideNavLink renderIcon={Fade} href="https://www.carbondesignsystem.com/">
+                                      Link
+                                    </SideNavLink>
+                                    <SideNavLink renderIcon={Fade} href="https://www.carbondesignsystem.com/">
+                                      Link
+                                    </SideNavLink>
+                                  </SideNavItems>
+                                </SideNav>
+                              </Header>
+                            </Fragment>
+                          )}
+                        />*/
+                        <VLayout />
+                        <Content id="main-content" style={{ paddingLeft: '270px' }}>
+                          sfasd
+                        </Content>
+                        </Fragment>
+                    )
+                :
+                <div>Loader</div>
+            }
+        </Provider>
+    )
+
+    return (
+      <Fragment>
+      {/*<ThemeProvider theme={theme}>*/}
+        <Provider { ...stores }>
+          {/*<SnackbarStyleComponent ref={this.notificationSystem} maxSnack={10}
             action={(key) => (
               <IconButton data-testid="snackbar-close-btn" onClick={onClickDismiss(key)}>
                 <CloseIcon className="text-white" />
               </IconButton>
             )}
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          >
-            { state.loaded ? renderComponent : <PaigLoader /> }
-            {
+          >*/}
+            {/*{ state.loaded ? renderComponent : <PaigLoader /> }*/}
+            { state.loaded ? renderComponent : 'Loader' }
+            {/*{
               state.pendoApiKey &&
               <PendoInitializer apiKey={state.pendoApiKey} host={state.pendoHost} />
-            }
-            <Confirm ref={this.confirm} maxWidth="xs" />
+            }*/}
+            {/*<Confirm ref={this.confirm} maxWidth="xs" />*/}
             {/*<DevTools />*/}
-          </SnackbarStyleComponent>
+          {/*</SnackbarStyleComponent>*/}
         </Provider>
-      </ThemeProvider>
+      {/*</ThemeProvider>*/}
+      </Fragment>
     )
   }
 }

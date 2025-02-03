@@ -2,7 +2,7 @@ import { observable, action, computed} from 'mobx';
 
 import f from 'common-ui/utils/f';
 import {permissionCheckerUtil} from 'common-ui/utils/permission_checker_util';
-import UISidebarTabsUtil from 'utils/ui_sidebar_tabs_util';
+//import UISidebarTabsUtil from 'utils/ui_sidebar_tabs_util';
 import stores from 'data/stores/all_stores';
 
 class UiState {
