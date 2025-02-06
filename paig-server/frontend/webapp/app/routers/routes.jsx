@@ -24,12 +24,14 @@ import CVectorDBMain from 'containers/applications/vector_db/c_vector_db_main';
 import CSecurityAudits from 'containers/audits/security/c_security_audits';
 import CAdminAudits from 'containers/compliance/c_admin_audits';
 
-import CSensitiveData from 'containers/account/sensitive_data/c_sensitive_data';
+
 import CShieldConfig from 'containers/shield_configuration/c_shield_configuration';
 import CMetaData from 'containers/metadata/c_metadata';
 
 import CReporting from 'containers/reports/c_reporting';
 import CSavedReportsListing from 'containers/reports/c_`saved_reports_listing'; */
+
+import CSensitiveData from 'containers/account/sensitive_data/c_sensitive_data';
 
 history.listen((location, action) => {
     // scroll to top when route changes
@@ -56,6 +58,7 @@ const Routes = () => (
 		<Route exact path="/" component={RedirectToPath} />
 
 		<Route path="/dashboard" name="Dashboard" component={Dashboard} />
+		<Route path="/tags" name="Tags" component={CSensitiveData} />
 
         {/* <Route path="/dashboard" name="Dashboard" component={Authorization(CDashboard, [UI_CONSTANTS.DASHBOARD])} />
 

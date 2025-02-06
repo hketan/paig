@@ -1,12 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { inject } from "mobx-react";
 import { observable } from "mobx";
 
 import f from "common-ui/utils/f";
 import { DEFAULTS } from "common-ui/utils/globals";
-import BaseContainer from "containers/base_container";
-import VSensitiveData from "components/account/sensitive_data/v_sensitive_data";
-import { SearchField } from 'common-ui/components/filters';
+// import BaseContainer from "containers/base_container";
+// import VSensitiveData from "components/account/sensitive_data/v_sensitive_data";
+// import { SearchField } from 'common-ui/components/filters';
 
 @inject("sensitiveDataStore")
 class CSensitiveData extends Component {
@@ -50,8 +50,8 @@ class CSensitiveData extends Component {
 
   render() {
     return (
-      <BaseContainer
-        handleRefresh={this.handleRefresh}
+      <Fragment
+        /* handleRefresh={this.handleRefresh}
         titleColAttr={{ lg: 8, md: 7 }}
         headerChildren={(
           <SearchField
@@ -61,13 +61,14 @@ class CSensitiveData extends Component {
             onEnter={this.handleSearch}
             data-track-id="search-sensitive-data"
           />
-        )}
+        )} */
       >
-        <VSensitiveData
+        {/* <VSensitiveData
           data={this.cSensitiveData}
           pageChange={this.handlePageChange}
-        />
-      </BaseContainer>
+        /> */}
+        sensitive data
+      </Fragment>
     );
   }
 }

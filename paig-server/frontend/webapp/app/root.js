@@ -262,7 +262,7 @@ class Root extends Component {
                         />*/
                         <VLayout />
                         <Content id="main-content" style={{ paddingLeft: '270px' }}>
-                          sfasd
+                          { state.loaded ? renderComponent : 'Loader' }
                         </Content>
                         </Fragment>
                     )
