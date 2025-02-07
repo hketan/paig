@@ -2,21 +2,23 @@ import React, { Component, Fragment } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
-import { Tabs, Tab, Grid, Box } from '@material-ui/core';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import DeleteIcon from '@material-ui/icons/Delete';
-import HelpIcon from '@material-ui/icons/Help';
-import FeedbackIcon from '@material-ui/icons/Feedback';
+// import { Tabs, Tab, Grid, Box } from '@material-ui/core';
+// import GetAppIcon from '@material-ui/icons/GetApp';
+// import DeleteIcon from '@material-ui/icons/Delete';
+// import HelpIcon from '@material-ui/icons/Help';
+// import FeedbackIcon from '@material-ui/icons/Feedback';
+
+import {Loading, Tabs, TabList, Tab, TabPanels, TabPanel} from '@carbon/react';
 
 import f from 'common-ui/utils/f';
 import UiState from 'data/ui_state';
 import { UI_CONSTANTS, FEATURE_PERMISSIONS } from 'utils/globals';
-import BaseContainer from 'containers/base_container';
-import CAIApplicationDetail from 'containers/applications/ai_applications/c_ai_application_detail';
+//import BaseContainer from 'containers/base_container';
+//import CAIApplicationDetail from 'containers/applications/ai_applications/c_ai_application_detail';
 import CAIPermissions from 'containers/policies/ai_policies/c_ai_permissions';
 import {findActiveGuideByName, clearGuideTimeout, PENDO_GUIDE_NAME} from 'components/pendo/pendo_initializer';
-import { TabPanel } from 'common-ui/components/generic_components';
-import { AddButtonWithPermission, AddButton, CanDelete, CustomAnchorBtn } from 'common-ui/components/action_buttons';
+//import { TabPanel } from 'common-ui/components/generic_components';
+//import { AddButtonWithPermission, AddButton, CanDelete, CustomAnchorBtn } from 'common-ui/components/action_buttons';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
 
 @inject('aiApplicationStore')
@@ -37,14 +39,14 @@ class CAIApplicationMain extends Component {
         feedbackGuide: null
     }
 
-    views = [{
+    views = [/* {
         title: "Overview",
-        view: CAIApplicationDetail,
+        //view: CAIApplicationDetail,
         tab: `${UI_CONSTANTS.AI_APPLICATIONS}.${UI_CONSTANTS.AI_APPLICATIONS}`,
         index: 0,
         ref: null,
         trackId: 'application-overview-tab'
-    }, {
+    },  */{
         title: "Permissions",
         view: CAIPermissions,
         tab: `${UI_CONSTANTS.AI_APPLICATIONS}.${UI_CONSTANTS.AI_APPLICATIONS_PERMISSIONS}`,
@@ -155,6 +157,43 @@ class CAIApplicationMain extends Component {
         const {state, _vState, handleBackButton, handleTabSelect, getApplicationDetails}  = this;
         let tabs = [];
         let tabsPane = [];
+
+        if (state.views.length) {
+            state.views.forEach((viewObj) => {
+                tabs.push(
+                    <Tab
+                        key={viewObj.index}
+                        data-track-id={viewObj.trackId}
+                        ref={ref => viewObj.ref = ref}
+                        onClick={(e) => this.handleTabSelect(viewObj.index)}
+                        data-testid={viewObj.trackId}
+                    >
+                        {viewObj.title}
+                    </Tab>
+                )
+                tabsPane.push(
+                    <TabPanel key={viewObj.index}>
+                        <viewObj.view _vState={_vState} handleTabSelect={handleTabSelect} handlePostUpdate={getApplicationDetails}/>
+                    </TabPanel>
+                )
+            })
+        }
+
+        if (_vState.loading) {
+            return (
+                <Loading small />
+            )
+        }
+        return (
+            <Tabs onTabCloseRequest={() => {}}>
+                <TabList scrollDebounceWait={200}>
+                    {tabs}
+                </TabList>
+                <TabPanels>
+                    {tabsPane}
+                </TabPanels>
+            </Tabs>
+        )
 
         if (state.views.length) {
             state.views.forEach((viewObj) => {

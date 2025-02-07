@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {observable} from 'mobx';
 
-import BaseContainer from 'containers/base_container';
 import CAIApplicationDetail from 'containers/applications/ai_applications/c_ai_application_detail';
 
 class CAIApplicationCreate extends Component {
@@ -20,7 +19,9 @@ class CAIApplicationCreate extends Component {
     }
 	render() {
         const {_vState, handleBackButton} = this;
-		return (
+
+        return <CAIApplicationDetail _vState={_vState} />
+		/* return (
 			<BaseContainer
                 showRefresh={false}
                 showBackButton={true}
@@ -35,7 +36,7 @@ class CAIApplicationCreate extends Component {
 			>
                 <CAIApplicationDetail _vState={_vState}/>
 			</BaseContainer>
-		)
+		) */
 	}
 }
 

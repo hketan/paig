@@ -50,12 +50,12 @@ const VLayout = () => {
                   //isActive={isParentActive}
 
                   return menuItem.child ? (
-                    <div onClick={(e) => {
+                    <div key={index} onClick={(e) => {
                          if (menuToggleAttrName) {
                              UiState.menuToggle[menuToggleAttrName] = !UiState.menuToggle[menuToggleAttrName];
                          }
                      }}>
-                        <SideNavMenu key={index} renderIcon={Fade} title={menuItem.name} defaultExpanded={defaultExpanded}>
+                        <SideNavMenu renderIcon={Fade} title={menuItem.name} defaultExpanded={defaultExpanded}>
                           {menuItem.child.map((childItem, childIndex) => (
                             <SideNavMenuItem
                               key={childIndex}

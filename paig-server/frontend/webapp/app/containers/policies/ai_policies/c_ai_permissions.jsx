@@ -3,16 +3,16 @@ import {action, observable} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {withRouter} from 'react-router';
 
-import { Grid, Paper, Box }  from "@material-ui/core";
+// import { Grid, Paper, Box }  from "@material-ui/core";
 
-import BaseContainer from 'containers/base_container';
+// import BaseContainer from 'containers/base_container';
 import UiState from 'data/ui_state';
 import {FEATURE_PERMISSIONS} from 'utils/globals';
 import f from 'common-ui/utils/f';
-import {Loader, getSkeleton} from 'common-ui/components/generic_components';
+// import {Loader, getSkeleton} from 'common-ui/components/generic_components';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
 import CAiApplicationAccessForm from 'containers/policies/ai_policies/c_ai_application_access_form';
-import CAiApplicationAccessContentRestriction from 'containers/policies/ai_policies/c_ai_application_access_content_restriction';
+// import CAiApplicationAccessContentRestriction from 'containers/policies/ai_policies/c_ai_application_access_content_restriction';
 
 @inject('aiPoliciesStore', 'sensitiveDataStore')
 @observer
@@ -89,22 +89,29 @@ class CAIPermissions extends Component {
         const {application} = this.props._vState;
         return (
             <Fragment>
-                <Loader isLoading={this._vState.loading} loaderContent={getSkeleton('THREE_SLIM_LOADER')}>
+                {/* <Loader isLoading={this._vState.loading} loaderContent={getSkeleton('THREE_SLIM_LOADER')}> */}
                     {
                         application
                         ?
                             (
                                 <Fragment>
-                                    <Box component={Paper} className={`m-t-sm ${ id ? 'm-b-xl' : 'm-b-sm'}`} data-track-id="ai-app-global-access-policy-form">
-                                        <CAiApplicationAccessForm
+                                    <CAiApplicationAccessForm
+                                        application={application}
+                                        policy={this._vState.allPermissionPolicy}
+                                        permission={this.permission}
+                                        cPolicies={this.cPolicies}
+                                        postUpdateAllPermissionPolicy={this.postUpdateAllPermissionPolicy}
+                                    />
+                                    {/* <Box component={Paper} className={`m-t-sm ${ id ? 'm-b-xl' : 'm-b-sm'}`} data-track-id="ai-app-global-access-policy-form"> */}
+                                        {/* <CAiApplicationAccessForm
                                             application={application}
                                             policy={this._vState.allPermissionPolicy}
                                             permission={this.permission}
                                             cPolicies={this.cPolicies}
                                             postUpdateAllPermissionPolicy={this.postUpdateAllPermissionPolicy}
-                                        />
-                                    </Box>
-                                    <Box component={Paper} className="m-t-sm" data-track-id="ai-app-content-restriction">
+                                        /> */}
+                                    {/* </Box> */}
+                                    {/* <Box component={Paper} className="m-t-sm" data-track-id="ai-app-content-restriction">
                                         <CAiApplicationAccessContentRestriction
                                             application={application}
                                             permission={this.permission}
@@ -113,19 +120,20 @@ class CAIPermissions extends Component {
                                             handlePageChange={this.fetchPolicies}
                                             fetchPolicies={this.fetchPolicies}
                                         />
-                                    </Box>
+                                    </Box> */}
                                 </Fragment>
                             )
                         :
-                            (
+                            null
+                            /* (
                                 <Grid containers spacing={3}>
                                     <Grid item xs={12}>
                                         Application not found
                                     </Grid>
                                 </Grid>
-                            )
+                            ) */
                     }
-                </Loader>
+                {/* </Loader> */}
             </Fragment>
         );
     }

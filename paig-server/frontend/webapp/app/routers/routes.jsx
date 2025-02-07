@@ -32,6 +32,8 @@ import CReporting from 'containers/reports/c_reporting';
 import CSavedReportsListing from 'containers/reports/c_`saved_reports_listing'; */
 
 import CSensitiveData from 'containers/account/sensitive_data/c_sensitive_data';
+import CAIApplicationCreate from 'containers/applications/ai_applications/c_ai_application_create';
+import CAIApplicationMain from 'containers/applications/ai_applications/c_ai_application_main';
 
 history.listen((location, action) => {
     // scroll to top when route changes
@@ -58,6 +60,8 @@ const Routes = () => (
 		<Route exact path="/" component={RedirectToPath} />
 
 		<Route path="/dashboard" name="Dashboard" component={Dashboard} />
+		<Route path="/ai_application/create" name="Create Application" component={CAIApplicationCreate} />
+		<Route path="/ai_application/:id" name="AI Application Details" component={CAIApplicationMain} />
 		<Route path="/tags" name="Tags" component={CSensitiveData} />
 
         {/* <Route path="/dashboard" name="Dashboard" component={Authorization(CDashboard, [UI_CONSTANTS.DASHBOARD])} />

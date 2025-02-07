@@ -2,13 +2,14 @@ import React, {Component, Fragment} from 'react';
 import {observer} from 'mobx-react';
 import {withRouter} from 'react-router';
 
-import {Grid} from '@material-ui/core';
+//import {Grid} from '@material-ui/core';
+import {Loading} from '@carbon/react';
 
 import {FEATURE_PERMISSIONS} from 'utils/globals';
-import CAIApplicationForm from 'containers/applications/ai_applications/c_ai_application_form';
+// import CAIApplicationForm from 'containers/applications/ai_applications/c_ai_application_form';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
-import {Loader, getSkeleton} from 'common-ui/components/generic_components';
-import CAIPolicesDetail from 'containers/policies/ai_policies/c_ai_policies_detail';
+// import {Loader, getSkeleton} from 'common-ui/components/generic_components';
+//import CAIPolicesDetail from 'containers/policies/ai_policies/c_ai_policies_detail';
 
 @observer
 class CAIApplications extends Component {
@@ -33,7 +34,7 @@ class CAIApplications extends Component {
         const {_vState, handlePostUpdate} = this.props;
 		return (
             <Fragment>
-				<Loader isLoading={_vState.loading} loaderContent={getSkeleton('THREE_SLIM_LOADER')}>
+				{/* <Loader isLoading={_vState.loading} loaderContent={getSkeleton('THREE_SLIM_LOADER')}>
                     {
                         _vState.application == null
                         ? (
@@ -53,14 +54,19 @@ class CAIApplications extends Component {
                             />
                         )
                     }
-				</Loader>
+				</Loader> */}
                 {
                     permissionCheckerUtil.checkHasReadPermission(this.policyPermission) && (
-                        <Loader isLoading={_vState.loading} loaderContent={getSkeleton('THREE_SLIM_LOADER')}>
+                        <Fragment>
                             {
-                                _vState.application?.id && <CAIPolicesDetail application={_vState.application} handleTabSelect={this.props.handleTabSelect}/>
+                                _vState.loading &&
+                                <Loading small withOverlay={false} />
                             }
-                        </Loader>
+                            {
+                                !_vState.loading && _vState.application?.id && <div>asdf</div>
+                            }
+                            {/*<CAIPolicesDetail application={_vState.application} handleTabSelect={this.props.handleTabSelect}/> */}
+                        </Fragment>
                     )
                 }
             </Fragment>

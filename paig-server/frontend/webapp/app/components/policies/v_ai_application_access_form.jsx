@@ -1,20 +1,24 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component, Fragment, useState, useEffect} from 'react';
 import {compact} from 'lodash';
 import {observer} from 'mobx-react';
 
-import {Grid, Divider, Typography, Paper} from '@material-ui/core';
-import PersonIcon from '@material-ui/icons/Person';
-import PeopleIcon from '@material-ui/icons/People';
-import ContactsIcon from '@material-ui/icons/Contacts';
-import CloseIcon from '@material-ui/icons/Close';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import NotInterestedIcon from '@material-ui/icons/NotInterested';
+import { MultiSelect, Tag, Loading, ComboBox } from '@carbon/react';
 
-import {FormHorizontal, FormGroupSelect2} from 'common-ui/components/form_fields';
-import {TagChip} from 'common-ui/lib/fs_select/fs_select';
+// import {Grid, Divider, Typography, Paper} from '@material-ui/core';
+// import PersonIcon from '@material-ui/icons/Person';
+// import PeopleIcon from '@material-ui/icons/People';
+// import ContactsIcon from '@material-ui/icons/Contacts';
+// import CloseIcon from '@material-ui/icons/Close';
+// import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+// import NotInterestedIcon from '@material-ui/icons/NotInterested';
+
+// import {FormHorizontal, FormGroupSelect2} from 'common-ui/components/form_fields';
+// import {TagChip} from 'common-ui/lib/fs_select/fs_select';
 import {Utils} from 'common-ui/utils/utils';
 import { userGroupRolesLookups } from 'components/policies/field_lookups';
 import {MESSAGE_RESULT_TYPE} from 'utils/globals';
+
+import userStore from 'data/stores/s_user_store';
 
 const getIcon = type => {
   const common = { fontSize: "small" }
@@ -30,6 +34,170 @@ const getIcon = type => {
   }
 }
 
+export const MultiSearchableSelect = () => {
+  const [options, setOptions] = useState([]); // List of options
+  const [selectedItems, setSelectedItems] = useState([]); // Selected values
+  const [searchTerm, setSearchTerm] = useState(''); // User input
+  const [loading, setLoading] = useState(false);
+
+  // Fetch options from API when user types
+  const fetchOptions = async (query) => {
+    setLoading(true);
+    try {
+      const response = await userStore.getAllUsers({params: {username: searchTerm}});
+      console.log(response)
+      setOptions(response.models || []); // Adjust based on API response
+    } catch (error) {
+      console.error('API Error:', error);
+      setOptions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Debounce API call (fetch after user stops typing for 500ms)
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchOptions(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
+
+  // Handle item selection
+  /*const handleSelectionChange = ({ selectedItems }) => {
+    setSelectedItems(selectedItems);
+  };
+
+  // Handle custom input (Add if not in list)
+  const handleCustomInput = (event) => {
+    const inputValue = event.target.value.trim();
+    setSearchTerm(inputValue);
+
+    if (event.key === 'Enter' && inputValue) {
+      const newItem = { id: inputValue, text: inputValue };
+      if (!selectedItems.find((item) => item.id === inputValue)) {
+        setSelectedItems([...selectedItems, newItem]);
+      }
+      setSearchTerm(''); // Clear input field
+    }
+  };*/
+
+    const handleSelectionChange = ({ selectedItem, inputValue }) => {
+      if (!selectedItem) return;
+      if (!selectedItems.some((item) => item.id === selectedItem.id)) {
+        setSelectedItems([...selectedItems, selectedItem]);
+      }
+    };
+
+    // Handle typing (Triggers API search)
+    const handleTyping = (value) => {
+      setSearchTerm(event?.target?.value || '');
+    };
+
+    // Handle custom input (Allows adding new item)
+    const handleCustomInput = (event) => {
+      if (event.key === 'Enter' && searchTerm) {
+        const newItem = { id: searchTerm, username: searchTerm };
+        if (!selectedItems.some((item) => item.id === newItem.id)) {
+          setSelectedItems([...selectedItems, newItem]);
+        }
+        setSearchTerm('');
+      }
+    };
+
+    // Remove selected item
+    const removeItem = (id) => {
+      setSelectedItems(selectedItems.filter((item) => item.id !== id));
+    };
+
+  return (
+      <div style={{ maxWidth: '400px', position: 'relative' }}>
+
+        {loading && (
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            right: '10px',
+            transform: 'translateY(-50%)'
+          }}>
+            <Loading small withOverlay={false} />
+          </div>
+        )}
+
+        <ComboBox
+          items={options}
+          itemToString={(item) => (item ? item.username : '')} // API Data Formatting
+          placeholder="Search or type to add..."
+          allowCustomValue={true}
+          onInputChange={handleTyping} // Search while typing
+          onChange={handleSelectionChange} // Handle selection
+          onKeyDown={handleCustomInput} // Add custom items
+          disabled={loading} // Disable input while loading
+          itemToElement={(item) =>{
+              if (item) {
+                  return (
+                      <span className="test" style={{ color: 'red' }}>
+                          {item.username}
+                      </span>
+                  )
+              } else {
+                    return '';
+              }
+          }}
+        />
+        <div style={{ marginBottom: '10px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              {selectedItems.map((item) => (
+                <Tag key={item.id} onClose={() => removeItem(item.id)}>
+                  {item.username}
+                </Tag>
+              ))}
+            </div>
+      </div>
+  )
+
+ /*  return (
+    <div style={{ maxWidth: '400px', position: 'relative' }}>
+      { *//* Loader Indicator *//* }
+      {loading && (
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          right: '10px',
+          transform: 'translateY(-50%)'
+        }}>
+          <Loading small withOverlay={false} />
+        </div>
+      )}
+
+      { *//* Multi-Select Dropdown *//* }
+      <MultiSelect
+        id="multi-search"
+        label="select"
+        titleText="Search and Select"
+        items={loading ? [{ id: 'loading', username: 'Loading...' }] : options}
+        itemToString={(item) => (item ? item.username : '')}
+        placeholder="Search or type to add..."
+        onChange={handleSelectionChange}
+        initialSelectedItems={selectedItems}
+        selectionFeedback="top"
+        onInputChange={(event) => setSearchTerm(event.target.value)}
+        onKeyDown={handleCustomInput} // Handle custom input on Enter
+      />
+
+      { *//* Selected Items as Tags *//* }
+      <div style={{ marginTop: '10px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        {selectedItems.map((item) => (
+          <Tag key={item.id} onClose={() => setSelectedItems(selectedItems.filter((i) => i.id !== item.id))}>
+            {item.username}
+          </Tag>
+        ))}
+      </div>
+    </div>
+  ); */
+};
+
+
 @observer
 class PermissionRow extends Component {
   render () {
@@ -38,6 +206,12 @@ class PermissionRow extends Component {
     let userGroupRolesValue = aiPolicyFormUtil.getPrefillUsersGroupsRolesValues(field, splitDelimiter);
 
     const restrictionMap = aiPolicyFormUtil.getRestrictionMap();
+
+    return (
+        <div>
+            sdf
+        </div>
+    )
 
     return (
       <FormGroupSelect2
@@ -167,6 +341,19 @@ class PermissionRow extends Component {
 const VAIApplicationAccessForm = observer(({accessFields, editMode, form, aiPolicyFormUtil}) => {
 
   const splitDelimiter = "##__##";
+
+  return accessFields.slice(0, 1).map(field => {
+      return (
+          <MultiSearchableSelect />
+      )
+      return (
+          <PermissionRow
+              field={field}
+              splitDelimiter={splitDelimiter}
+              aiPolicyFormUtil={aiPolicyFormUtil}
+          />
+      )
+  })
 
   return (
       <FormHorizontal spacing={1}>

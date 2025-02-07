@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {observer, inject} from 'mobx-react';
 import {observable} from 'mobx';
 
-import { Grid, Button, Typography}  from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
+// import { Grid, Button, Typography}  from "@material-ui/core";
+// import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 
 import f from 'common-ui/utils/f';
-import {ActionButtonsWithPermission} from 'common-ui/components/action_buttons';
+// import {ActionButtonsWithPermission} from 'common-ui/components/action_buttons';
 import AIPolicyFormUtil from 'containers/policies/ai_policies/ai_policy_form_util';
 import VAIApplicationAccessForm from 'components/policies/v_ai_application_access_form';
 import {PENDO_GUIDE_NAME, triggerPendoFeedbackGuideManual} from 'components/pendo/pendo_initializer';
@@ -143,6 +143,16 @@ class CAiApplicationAccessForm extends Component {
 
     render() {
         const { policy, permission } = this.props;
+
+        return (
+            <VAIApplicationAccessForm
+                ref={ref => this.policyFormRef = ref}
+                editMode={this._vState.editMode}
+                form={this.form}
+                accessFields={this.accessFields}
+                aiPolicyFormUtil={this.aiPolicyFormUtil}
+            />
+        )
 
         return (
             <Grid container spacing={3} style={{padding: '5px 15px'}} data-testid="ai-app-access-card"
