@@ -55,7 +55,7 @@ class CGuardrailApplication extends Component {
         this.props.formUtil.setApps(apps);
     }
     render() {
-        let models = f.models(this.cApplications);
+        let models = []; f.models(this.cApplications);
 
         return (
             <Box component={Paper} elevation={0} p="15px" data-testid="ai-application-step">
