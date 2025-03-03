@@ -5,7 +5,7 @@ import ColumnResizer from 'column-resizer';
 
 import {
     Table, TableHead, TableHeader, TableRow, TableBody, TableCell, TableContainer, TableToolbar,
-    DataTable, DataTableSkeleton, Pagination, Row, Column
+    DataTable, DataTableSkeleton, Pagination, FlexGrid, Row, Column, Tile
 } from '@carbon/react';
 
 import UiState from 'data/ui_state';
@@ -107,23 +107,34 @@ class CommonTable extends Component {
         }
     }
     getNoData = () => {
+        const {customNoDataCaption} = this.props;
         let headerCount = this.getHeaderCount();
 
         return (
             <TableCell colSpan={headerCount} data-testid="table-no-data">
-                <Row>
-                    <Column sm={12} data-testid="no-data-text">
-                        <div className="message-box" style={{height: '300px'}}>
-                            <div className="tile">
-                                <div className="tile-icon">
-                                </div>
-                                <div className="tile-content">
-                                    {this.getNoDataText()}
-                                </div>
+                <FlexGrid className="data-table--empty-state">
+                    <Row>
+                        <Column sm={12} className="data-table--empty-state-col" data-testid="no-data-text">
+                            <div className="data-table--message-box">
+                                <Tile>
+                                    <div className="data-table--message-icon">
+                                    </div>
+                                    <div className="data-table--message-content">
+                                        <span className="data-table--message-text">
+                                            {this.getNoDataText()}
+                                        </span>
+                                        {
+                                            customNoDataCaption &&
+                                            <span className="data-table--message-caption">
+                                                {customNoDataCaption}
+                                            </span>
+                                        }
+                                    </div>
+                                </Tile>
                             </div>
-                        </div>
-                    </Column>
-                </Row>
+                        </Column>
+                    </Row>
+                </FlexGrid>
             </TableCell>
         )
     }
@@ -383,6 +394,7 @@ CommonTable.defaultProps = {
     renderCustomBody: null,
     noDataText: "No matching records found.",
     customNoData: null,
+    customNoDataCaption: null,
     resizable: false,
     showToolbar: false,
     toolbarContent: null,
