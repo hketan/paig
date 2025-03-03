@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {observer} from 'mobx-react';
+import {observable} from 'mobx';
 import ColumnResizer from 'column-resizer';
 
 import {
@@ -12,11 +13,21 @@ import f from 'common-ui/utils/f';
 
 @observer
 class CommonTable extends Component {
+    @observable _vState = {
+        sortedColumn: null,
+        sortDirection: null
+    }
     constructor(props) {
         super(props);
         this.tableId = props.tableId || "table";
         this.isColumnResizerLoading = null;
         //this.initializeSession();
+
+        if (props.sortBy && typeof props.sortBy === 'string') {
+            let sortBy = props.sortBy.split(',');
+            this._vState.sortedColumn = sortBy[0];
+            this._vState.sortDirection = sortBy.pop() == 'asc' ? 'ASC' : 'DESC';
+        }
     }
     initializeSession = () => {
         if(this.props.resizable){
@@ -116,39 +127,46 @@ class CommonTable extends Component {
             </TableCell>
         )
     }
-    getHeaders = ({headers, getHeaderProps}) => {
-        const {getHeaders} = this.props;
+    getHeaders = ({ headers, getHeaderProps }) => {
+        const { getHeaders, tableHeadProps, handleSort } = this.props;
 
-        if (!getHeaders) {
-            if (headers) {
-                return (
-                    <TableHead data-testid="thead">
-                        <TableRow>
-                            {
-                                headers.map(header => (
-                                    <TableHeader key={header.key} {...getHeaderProps({header})}>
-                                        {header.header}
-                                    </TableHeader>
-                                ))
-                            }
-                        </TableRow>
-                    </TableHead>
-                )
-            } else {
-                return null;
-            }
+        if (getHeaders) {
+            const headersCustom = getHeaders(headers);
+            this.headerCount = headersCustom.length;
+            return (
+                <TableHead data-testid="thead" {...tableHeadProps}>
+                    <TableRow>
+                        {headersCustom}
+                    </TableRow>
+                </TableHead>
+            );
         }
 
-        let headersCustom = getHeaders(headers);
-        this.headerCount = headersCustom.length;
+        if (!headers) return null;
 
         return (
-            <TableHead data-testid="thead">
+            <TableHead data-testid="thead" {...tableHeadProps}>
                 <TableRow>
-                    {headersCustom}
+                    {headers.map(header => (
+                        <TableHeader key={header.key} {...getHeaderProps({ header, isSortable: header.sortable })}
+                            onClick={() => {
+                                if (this._vState.sortedColumn === header.key) {
+                                    this._vState.sortDirection = this._vState.sortDirection === 'ASC' ? 'DESC' : 'ASC';
+                                } else {
+                                    this._vState.sortDirection = 'ASC';
+                                }
+                                this._vState.sortedColumn = header.key;
+                                handleSort?.(header.key, this._vState.sortDirection);
+                            }}
+                            sortDirection={this._vState.sortedColumn === header.key ? this._vState.sortDirection : null}
+                            isSortHeader={this._vState.sortedColumn === header.key}
+                        >
+                            {header.header}
+                        </TableHeader>
+                    ))}
                 </TableRow>
             </TableHead>
-        )
+        );
     }
     getRows = ({rows, getRowProps}) => {
         const {headers, getRowData, customNoData, renderCustomBody, isRowCustom} = this.props;
@@ -282,7 +300,8 @@ class CommonTable extends Component {
         return false;
     }
     render() {
-        const {title, headers, tableContainerProps, showToolbar, toolbarContent, resizable, tableProps, data, tableSkeletonProps} = this.props;
+        const {title, dataTableProps, tableToolbarProps, headers, tableContainerProps, showToolbar, toolbarContent,
+            resizable, tableProps, data, tableSkeletonProps} = this.props;
 
         let idTableAttr = {};
         if (resizable) {
@@ -293,7 +312,7 @@ class CommonTable extends Component {
         let isLoading = this.getIsLoading();
 
         return (
-            <DataTable rows={rows} headers={headers}>
+            <DataTable rows={rows} headers={headers} {...dataTableProps}>
                 {
                     ({
                         rows,
@@ -312,6 +331,7 @@ class CommonTable extends Component {
                                     <TableToolbar {...getToolbarProps()}
                                         aria-label="data table toolbar"
                                         data-testid="table-toolbar"
+                                        {...tableToolbarProps}
                                     >
                                         {this.props.toolbarContent}
                                     </TableToolbar>
@@ -367,11 +387,16 @@ CommonTable.defaultProps = {
     showToolbar: false,
     toolbarContent: null,
     tableContainerProps: {},
+    dataTableProps: {},
+    tableToolbarProps: {},
     tableProps: {},
+    tableHeadProps: {},
     tableSkeletonProps: {},
     pagination: true,
     defaultPageSizes: [15, 20, 50, 100],
-    paginationProps: {}
+    paginationProps: {},
+    sortBy: null,
+    handleSort: null
 }
 
 export default CommonTable;

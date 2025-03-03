@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
+import { inject } from "mobx-react";
 import { observable } from "mobx";
 
-import { TableToolbarContent } from '@carbon/react';
+import { TableToolbarContent, Row, Column } from '@carbon/react';
 
 import f from 'common-ui/utils/f';
 import { DEFAULTS } from 'common-ui/utils/globals';
@@ -19,7 +19,8 @@ class CSensitiveData extends Component {
 
         this.cSensitiveData = f.initCollection();
         this.cSensitiveData.params = {
-            size: DEFAULTS.DEFAULT_PAGE_SIZE
+            size: DEFAULTS.DEFAULT_PAGE_SIZE,
+            sort: 'name,asc'
         };
     }
 
@@ -43,39 +44,59 @@ class CSensitiveData extends Component {
     };
 
     handleSearch = () => {
-        this.cSensitiveData.params.name = this._vState.searchValue || undefined;
-        this.cSensitiveData.params.page = undefined;
+        Object.assign(this.cSensitiveData.params, {
+            name: this._vState.searchValue || undefined,
+            page: 0
+        });
+        this.fetchSensitiveData();
+    }
+    handleSort = (key, sortBy) => {
+        Object.assign(this.cSensitiveData.params, {
+            sort: `${key},${sortBy.toLowerCase()}`,
+            page: 0
+        });
         this.fetchSensitiveData();
     }
 
     render() {
         const headers = [{
             header: 'Name',
-            key: 'name'
+            key: 'name',
+            sortable: true
         }, {
             header: 'Description',
-            key: 'description'
+            key: 'description',
+            sortable: true
         }]
 
         return (
-            <Table
-                data={this.cSensitiveData}
-                headers={headers}
-                getRowData={null}
-                pageChange={this.handlePageChange}
-                showToolbar={true}
-                toolbarContent={
-                    <TableToolbarContent>
-                        <SearchTableToolbar
-                            placeholder="Search Tags"
-                            obj={this._vState}
-                            field="searchValue"
-                            onEnter={this.handleSearch}
-                            onClear={this.handleSearch}
+            <>
+                <Row>
+                    <Column>
+                        <Table
+                            data={this.cSensitiveData}
+                            headers={headers}
+                            getRowData={null}
+                            noDataText="No matching tags found"
+                            pageChange={this.handlePageChange}
+                            showToolbar={true}
+                            sortBy={this.cSensitiveData.params.sort}
+                            handleSort={this.handleSort}
+                            toolbarContent={
+                                <TableToolbarContent>
+                                    <SearchTableToolbar
+                                        placeholder="Search Tags"
+                                        obj={this._vState}
+                                        field="searchValue"
+                                        onEnter={this.handleSearch}
+                                        onClear={this.handleSearch}
+                                    />
+                                </TableToolbarContent>
+                            }
                         />
-                    </TableToolbarContent>
-                }
-            />
+                    </Column>
+                </Row>
+            </>
         );
     }
 }
