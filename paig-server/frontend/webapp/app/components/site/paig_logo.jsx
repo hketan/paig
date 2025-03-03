@@ -1,7 +1,6 @@
 import React from 'react';
 
-// import LinearProgress from '@material-ui/core/LinearProgress';
-
+import {ProgressBar} from '@carbon/react';
 
 const DarkPaigLogo = () => {
   return (
@@ -63,14 +62,12 @@ const DarkPaigBigLogo = () => {
     )
   }
 
-
-
 const PaigLoader = () => {
   return (
     <div className="loader-container">
       <div className="loader-inner paig-loader">
         <DarkPaigBigLogo />
-        {/* <LinearProgress className="m-t-sm" /> */}
+        <ProgressBar />
       </div>
     </div>
   )

@@ -35,10 +35,10 @@ import CSensitiveData from 'containers/account/sensitive_data/c_sensitive_data';
 import CAIApplicationCreate from 'containers/applications/ai_applications/c_ai_application_create';
 import CAIApplicationMain from 'containers/applications/ai_applications/c_ai_application_main';
 
-import CEvaluationForm from 'containers/audits/evaluation/c_evaluation_create_form';
-import CEvaluationConfigList from 'containers/audits/evaluation/c_evaluation_config_list';
-import CEvaluationReportsList from 'containers/audits/evaluation/c_evaluation_report_list';
-import CEvaluationReport from 'containers/audits/evaluation/c_evaluation_report';
+// import CEvaluationForm from 'containers/audits/evaluation/c_evaluation_create_form';
+// import CEvaluationConfigList from 'containers/audits/evaluation/c_evaluation_config_list';
+// import CEvaluationReportsList from 'containers/audits/evaluation/c_evaluation_report_list';
+// import CEvaluationReport from 'containers/audits/evaluation/c_evaluation_report';
 
 history.listen((location, action) => {
     // scroll to top when route changes
