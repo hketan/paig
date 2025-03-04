@@ -1,7 +1,5 @@
 import React from 'react';
 
-import LinearProgress from '@material-ui/core/LinearProgress';
-
 const LightLogo = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="152px" height="28px" viewBox="0 0 151 28" version="1.1">
@@ -163,7 +161,6 @@ const PrivaceraLoader = () => {
     <div className="loader-container">
       <div className="loader-inner">
         <DarkLogoBig />
-        <LinearProgress className="m-t-sm" />
       </div>
     </div>
   )

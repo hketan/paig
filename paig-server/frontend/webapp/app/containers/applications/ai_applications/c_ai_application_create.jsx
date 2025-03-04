@@ -11,32 +11,14 @@ class CAIApplicationCreate extends Component {
 	constructor(props) {
 		super(props);
 	}
-    handleRedirect = () => {
-        this.props.history.push('/ai_applications');
-    }
-    handleBackButton = () => {
-        this.handleRedirect();
-    }
 	render() {
-        const {_vState, handleBackButton} = this;
+        const {_vState} = this;
 
-        return <CAIApplicationDetail _vState={_vState} />
-		/* return (
-			<BaseContainer
-                showRefresh={false}
-                showBackButton={true}
-                backButtonProps={{
-                    size: 'small',
-                    onClick: handleBackButton
-                }}
-				titleColAttr={{
-					sm: 8,
-					md: 8
-				}}
-			>
-                <CAIApplicationDetail _vState={_vState}/>
-			</BaseContainer>
-		) */
+        return (
+            <CAIApplicationDetail
+                _vState={_vState}
+            />
+        )
 	}
 }
 

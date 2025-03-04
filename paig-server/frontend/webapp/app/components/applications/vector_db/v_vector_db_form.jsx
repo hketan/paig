@@ -1,12 +1,8 @@
 import React, {Fragment} from 'react';
 import { observer } from 'mobx-react';
 
-import {TextareaAutosize} from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import FormLabel from '@material-ui/core/FormLabel';
-
-import {Utils} from 'common-ui/utils/utils';
-import {FormGroupInput, FormGroupSwitch, FormGroupSelect2} from 'common-ui/components/form_fields';
+// import {Utils} from 'common-ui/utils/utils';
+// import {FormGroupInput, FormGroupSwitch, FormGroupSelect2} from 'common-ui/components/form_fields';
 import {STATUS} from 'common-ui/utils/globals';
 import {VECTOR_DB_TYPES} from 'utils/globals';
 
@@ -15,7 +11,7 @@ const VVectorDBForm = observer(({form, editMode}) => {
 
     return (
         <Fragment>
-            {
+            {/* {
                 !id.value || editMode
                 ?
                     <FormGroupSelect2
@@ -84,7 +80,7 @@ const VVectorDBForm = observer(({form, editMode}) => {
                     inputColAttr={{ xs: 12}}
                     data-testid="status"
                 />
-            </Grid>
+            </Grid> */}
         </Fragment>
     );
 })

@@ -2,20 +2,13 @@ import React, {Component, Fragment} from 'react';
 import {observer, inject} from 'mobx-react';
 import {observable} from 'mobx';
 
-import { Grid, Card, CardContent, Button, Typography, Paper, Box }  from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
-import FormLabel from '@material-ui/core/FormLabel';
-
 import UiState from 'data/ui_state';
-import VAIApplicationForm, {ai_application_form_def, application_guardrail_form_def} from 'components/applications/ai_applications/v_ai_application_form';
-import {configProperties} from 'utils/config_properties';
+//import VAIApplicationForm, {ai_application_form_def, application_guardrail_form_def} from 'components/applications/ai_applications/v_ai_application_form';
 import {DEPLOYMENT_TYPE} from 'utils/globals';
 import f from 'common-ui/utils/f';
 import {Utils} from 'common-ui/utils/utils';
-import {CanUpdate, ActionButtonsWithPermission} from 'common-ui/components/action_buttons';
+//import {CanUpdate, ActionButtonsWithPermission} from 'common-ui/components/action_buttons';
 import {createFSForm} from 'common-ui/lib/form/fs_form';
-import {FormGroupSwitch} from 'common-ui/components/form_fields';
-import OrderList from 'common-ui/components/order_list';
 
 @inject('aiApplicationStore')
 @observer
@@ -144,6 +137,8 @@ class CAIApplicationForm extends Component {
     render() {
         const {application, permission, handleCancel} = this.props;
         const {handleCreate, handleUpdate} = this;
+
+        return <div>asdf</div>
 
         return (
             <Fragment>

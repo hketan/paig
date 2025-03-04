@@ -16,7 +16,8 @@ import "common-ui/styles/css/loaders.css";
 import "common-ui/styles/css/theme_generic.css";
 import "common-ui/styles/css/common_generic.css";
 
-
 import "common-ui/styles/css/daterangepicker.css";
+
+import "styles/css/globals.scss";
 // import "common-ui/styles/css/saas_style.css";
-import "styles/css/styles.css";
+// import "styles/css/styles.css";

@@ -1,4 +1,37 @@
-@use '@carbon/react';
+@use '@carbon/react' with (
+  $use-flexbox-grid: true
+);
+
+@use '@carbon/react/scss/zone';
+
+@use '@carbon/styles/scss/theme';
+@use '@carbon/styles/scss/themes';
+
+@use '@carbon/type';
+// Include type reset
+@include type.reset();
+
+// Include default type styles, targets h1, h2, h3, etc
+@include type.default-type();
+
+// Include utility classes for type-related properties
+@include type.type-classes();
+
+:root[data-carbon-theme='g10'] {
+  @include theme.theme(themes.$g10);
+}
+
+:root[data-carbon-theme='g100'] {
+  @include theme.theme(themes.$g100);
+}
+
+
+.cds--g100 {
+  .cds--side-nav {
+    border-right: 1px solid var(--cds-border-subtle) // Light border for dark mode
+  }
+}
+
 
 /// Remove overrides once Carbon bugs are fixed upstream.
 /// Need grid option to not add page gutters at large viewports, to also use when nesting grids
@@ -62,4 +95,34 @@
     font-weight: var(--cds-body-01-font-weight, 400);
     letter-spacing: var(--cds-body-01-letter-spacing, 0.16px);
     line-height: var(--cds-body-01-line-height, 1.42857);
+}
+
+.multiline-ellipsis {
+  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* Number of lines */
+  overflow: hidden;
+  max-height: calc(1.2em * 3);
+  line-height: 1.2em;
+  word-break: break-word;
+}
+
+/* Fallback for non-webkit browsers (like Firefox) */
+@supports not (-webkit-line-clamp: 3) {
+  .multiline-ellipsis {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    max-height: calc(1.2em * 3);
+  }
+
+  .multiline-ellipsis::after {
+    content: "...";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: white; /* Adjust for background color */
+    padding-left: 5px;
+  }
 }

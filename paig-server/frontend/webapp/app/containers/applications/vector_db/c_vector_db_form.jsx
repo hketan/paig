@@ -2,13 +2,12 @@ import React, {Component, Fragment} from 'react';
 import {observer, inject} from 'mobx-react';
 import {observable} from 'mobx';
 
-import { Grid, Button, Typography, Paper, Box }  from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
+import {Tile, Form, Select, SelectItem, TextInput, Stack, TextArea, Toggle} from '@carbon/react';
 
 import UiState from 'data/ui_state';
-import VVectorDBForm, {vector_db_form_def} from 'components/applications/vector_db/v_vector_db_form';
+import /* VVectorDBForm, */ {vector_db_form_def} from 'components/applications/vector_db/v_vector_db_form';
 import f from 'common-ui/utils/f';
-import {CanUpdate, ActionButtonsWithPermission} from 'common-ui/components/action_buttons';
+// import {CanUpdate, ActionButtonsWithPermission} from 'common-ui/components/action_buttons';
 import {createFSForm} from 'common-ui/lib/form/fs_form';
 
 @inject('vectorDBStore')
@@ -81,8 +80,36 @@ class CVectorDBForm extends Component {
         const {handleCreate, handleUpdate} = this;
 
         return (
+            <Tile>
+                <h6 data-testid="info">Information</h6>
+                <br/>
+                <Form aria-label="sample form">
+                    <Stack gap={7}>
+                        <Select defaultValue="milvus">
+                          <SelectItem value="milvus" text="Milvus" />
+                          <SelectItem value="open-search" text="OpenSearch" />
+                        </Select>
+                        <TextInput
+                            labelText="Name"
+                            placeholder="Enter name"
+                        />
+                        <TextArea
+                            labelText="Description"
+                            placeholder="Enter description"
+                            maxCount={7}
+                        />
+                        <Toggle
+                            defaultToggled
+                            labelText="Enabled"
+                        />
+                    </Stack>
+                </Form>
+            </Tile>
+        )
+
+        return (
             <Fragment>
-                <Box component={Paper} className={`m-t-sm ${ model?.id ? 'm-b-md' : 'm-b-sm'}`}>
+                {/* <Box component={Paper} className={`m-t-sm ${ model?.id ? 'm-b-md' : 'm-b-sm'}`}>
                     <Grid container spacing={3} style={{padding: '5px 15px'}}>
                         <Grid item sm={6} xs={12}>
                             <Typography variant="h6" component="h2">
@@ -165,7 +192,7 @@ class CVectorDBForm extends Component {
                             </Grid>
                         </Grid>
                     </CanUpdate>
-                }
+                } */}
             </Fragment>
         );
     }

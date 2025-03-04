@@ -1,14 +1,15 @@
 import React, {Component, Fragment} from 'react';
 import {inject} from 'mobx-react';
 
-import BaseContainer from 'containers/base_container';
-import {FEATURE_PERMISSIONS} from 'utils/globals';
-import VVectorDB from 'components/applications/vector_db/v_vector_db';
+import {Row, Column} from '@carbon/react';
+
 import f from 'common-ui/utils/f';
 import {DEFAULTS} from 'common-ui/utils/globals';
-import {AddButtonWithPermission} from 'common-ui/components/action_buttons';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
-import {PaginationComponent} from 'common-ui/components/generic_components';
+// import {PaginationComponent} from 'common-ui/components/generic_components';
+import {AddButton} from 'common-ui/carbon_components/action_buttons';
+import {FEATURE_PERMISSIONS} from 'utils/globals';
+import VVectorDB from 'components/applications/vector_db/v_vector_db';
 
 @inject('vectorDBStore')
 class CVectorDB extends Component {
@@ -69,38 +70,34 @@ class CVectorDB extends Component {
 	render() {
 	    const {cVectorDBs, handleVectorDBCreate, handleVectorDBEdit, handleDeleteVectorDB} = this;
 
+		//handleRefresh={this.handleRefresh}
+
 		return (
-			<BaseContainer
-				handleRefresh={this.handleRefresh}
-				titleColAttr={{
-					sm: 8,
-					md: 8
-				}}
-				headerChildren={
-					<AddButtonWithPermission
-							colAttr={{
-							xs: 12,
-							sm: 4,
-							md: 4
-						}}
-						permission={this.permission}
-						label="CREATE VECTOR DB"
-						onClick={handleVectorDBCreate}
-						data-track-id="add-vector-db"
-					/>
-				}
-			>
+			<>
+			    <Row className="space-between">
+                    <Column>
+                    </Column>
+                    <AddButton
+                        colProps={{className: 'text-right'}}
+                        permission={this.permission}
+                        data-track-id="add-vector-db"
+                        data-testid="add-vector-db"
+                        onClick={handleVectorDBCreate}
+                    >
+                        CREATE VECTOR DB
+                    </AddButton>
+                </Row>
 			    <VVectorDB
 			        data={cVectorDBs}
 			        permission={this.permission}
 			        handleVectorDBEdit={handleVectorDBEdit}
 			        handleDeleteVectorDB={handleDeleteVectorDB}
 			    />
-			    <PaginationComponent
+			    {/* <PaginationComponent
                     promiseData={cVectorDBs}
                     callback={this.handlePageChange}
-                />
-			</BaseContainer>
+                /> */}
+			</>
 		)
 	}
 }

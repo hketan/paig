@@ -5,29 +5,10 @@ import {Provider} from 'mobx-react'
 import { withRouter } from "react-router";
 
 import {
-  Header,
-  HeaderContainer,
-  HeaderName,
-  HeaderNavigation,
-  HeaderMenuButton,
-  HeaderMenuItem,
-  HeaderGlobalBar,
-  HeaderGlobalAction,
-  Switcher,
-  SkipToContent,
-  SideNavMenu,
-  SideNavMenuItem,
-  SideNav,
-  SideNavItems,
-  SideNavLink,
-  HeaderSideNavItems,
-  StoryContent,
-  Fade,
-  Footer,
-  Content
+  Content,
+  Row,
+  Column
 } from '@carbon/react';
-
-import { Menu, UserAvatar, Close, SwitcherIcon } from '@carbon/icons-react';
 
 //import theme from 'components/site/theme';
 import {Routes} from 'routers/routes';
@@ -42,9 +23,9 @@ import {createRoutes} from 'common-ui/lib/RouteUtils';
 //import {permissionCheckerUtil} from 'common-ui/utils/permission_checker_util';
 //import "pdfmake/build/pdfmake";
 //import PDFUtil from 'components/reports/reports_pdfUtil';
-//import PendoInitializer from 'components/pendo/pendo_initializer';
+import PendoInitializer from 'components/pendo/pendo_initializer';
+import ThemeProviderComponent from 'components/site/theme_provider';
 
-import { DarkPaigLogo } from 'components/site/paig_logo';
 import VLayout from 'components/site/v_layout';
 
 /*if (PDFUtil && PDFUtil.loadFonts) {
@@ -186,19 +167,37 @@ class Root extends Component {
 
     return (
         <Provider { ...stores }>
+            <ThemeProviderComponent>
             {
                 state.loaded ?
                     (
                         <Fragment>
-                        <VLayout />
-                        <Content id="main-content" style={{ paddingLeft: '270px' }}>
-                          { state.loaded ? renderComponent : 'Loader' }
-                        </Content>
+                            <VLayout />
+                            <Content id="main-content" /*style={{ paddingLeft: '270px' }}*/>
+                              {
+                                state.loaded
+                                ?
+                                    (
+                                        <Row>
+                                            <Column lg={{span: 13, offset: 3}} >
+                                                {renderComponent}
+                                                {
+                                                  state.pendoApiKey &&
+                                                  <PendoInitializer apiKey={state.pendoApiKey} host={state.pendoHost} />
+                                                }
+                                            </Column>
+                                        </Row>
+                                    )
+                                :
+                                    <PaigLoader />
+                              }
+                            </Content>
                         </Fragment>
                     )
                 :
                 <div>Loader</div>
             }
+            </ThemeProviderComponent>
         </Provider>
     )
 
@@ -214,13 +213,7 @@ class Root extends Component {
             )}
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           >*/}
-            { state.loaded ? renderComponent : <PaigLoader /> }
-            {/*{
-              state.pendoApiKey &&
-              <PendoInitializer apiKey={state.pendoApiKey} host={state.pendoHost} />
-            }*/}
             {/*<Confirm ref={this.confirm} maxWidth="xs" />*/}
-            {/*<DevTools />*/}
           {/*</SnackbarStyleComponent>*/}
         </Provider>
       {/*</ThemeProvider>*/}

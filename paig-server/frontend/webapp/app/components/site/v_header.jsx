@@ -21,7 +21,7 @@ import { createFSForm } from 'common-ui/lib/form/fs_form';
 import FSModal from 'common-ui/lib/fs_modal';
 import UserManagementForm from 'components/user_management/v_user_management_form';
 import { user_form_def } from 'components/user_management/user_form_def';
-import { BookIcon } from './privacera_logo';
+// import { BookIcon } from './privacera_logo';
 import { DarkPaigLogo } from './paig_logo';
 
 @inject('userStore')

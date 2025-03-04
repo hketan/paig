@@ -114,7 +114,7 @@ class CommonTable extends Component {
             <TableCell colSpan={headerCount} data-testid="table-no-data">
                 <FlexGrid className="data-table--empty-state">
                     <Row>
-                        <Column sm={12} className="data-table--empty-state-col" data-testid="no-data-text">
+                        <Column lg={16} className="data-table--empty-state-col" data-testid="no-data-text">
                             <div className="data-table--message-box">
                                 <Tile>
                                     <div className="data-table--message-icon">

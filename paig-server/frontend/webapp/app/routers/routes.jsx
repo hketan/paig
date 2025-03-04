@@ -32,8 +32,12 @@ import CReporting from 'containers/reports/c_reporting';
 import CSavedReportsListing from 'containers/reports/c_`saved_reports_listing'; */
 
 import CSensitiveData from 'containers/account/sensitive_data/c_sensitive_data';
-import CAIApplicationCreate from 'containers/applications/ai_applications/c_ai_application_create';
+// import CAIApplicationForm from 'containers/applications/ai_applications/c_ai_application_form';
 import CAIApplicationMain from 'containers/applications/ai_applications/c_ai_application_main';
+import CAIApplications from 'containers/applications/ai_applications/c_ai_applications';
+
+import CVectorDB from 'containers/applications/vector_db/c_vector_db';
+import CVectorDBForm from 'containers/applications/vector_db/c_vector_db_form';
 
 // import CEvaluationForm from 'containers/audits/evaluation/c_evaluation_create_form';
 // import CEvaluationConfigList from 'containers/audits/evaluation/c_evaluation_config_list';
@@ -65,8 +69,13 @@ const Routes = () => (
 		<Route exact path="/" component={RedirectToPath} />
 
 		<Route path="/dashboard" name="Dashboard" component={Dashboard} />
-		<Route path="/ai_application/create" name="Create Application" component={CAIApplicationCreate} />
+		{/* <Route path="/ai_application/create" name="Create Application" component={CAIApplicationForm} /> */}
 		<Route path="/ai_application/:id" name="AI Application Details" component={CAIApplicationMain} />
+		<Route path="/ai_applications" name="AI Applications" component={CAIApplications} />
+
+		<Route path="/vector_db/create" name="Create Vector DB" component={CVectorDBForm} />
+		<Route path="/vector_db" name="Vector DB" component={CVectorDB} />
+
 		<Route path="/tags" name="Tags" component={CSensitiveData} />
 
         {/* <Route path="/dashboard" name="Dashboard" component={Authorization(CDashboard, [UI_CONSTANTS.DASHBOARD])} />

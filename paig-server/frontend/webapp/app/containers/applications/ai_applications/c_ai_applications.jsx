@@ -1,15 +1,15 @@
 import React, {Component, Fragment} from 'react';
 import {inject} from 'mobx-react';
 
-import BaseContainer from 'containers/base_container';
-import {FEATURE_PERMISSIONS} from 'utils/globals';
-import UiState from 'data/ui_state';
-import VAIApplications from 'components/applications/ai_applications/v_ai_applications';
+import {Row, Column} from '@carbon/react';
+
 import f from 'common-ui/utils/f';
 import {DEFAULTS} from 'common-ui/utils/globals';
-import {AddButtonWithPermission} from 'common-ui/components/action_buttons';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
-import {PaginationComponent} from 'common-ui/components/generic_components';
+// import {PaginationComponent} from 'common-ui/components/generic_components';
+import {AddButton} from 'common-ui/carbon_components/action_buttons';
+import {FEATURE_PERMISSIONS} from 'utils/globals';
+import VAIApplications from 'components/applications/ai_applications/v_ai_applications';
 
 @inject('aiApplicationStore')
 class CAIApplications extends Component {
@@ -71,38 +71,37 @@ class CAIApplications extends Component {
 	render() {
 	    const {cAIApplications, permission, handleApplicationEdit, handleDeleteApplication} = this;
 
+	    /*
+	    handleRefresh={this.handleRefresh}
+
+	    */
+
 		return (
-			<BaseContainer
-				handleRefresh={this.handleRefresh}
-				titleColAttr={{
-					sm: 8,
-					md: 8
-				}}
-				headerChildren={
-					<AddButtonWithPermission
-						data-track-id="add-application"
-						colAttr={{
-							xs: 12,
-							sm: 4,
-							md: 4
-						}}
-						permission={this.permission}
-						label="CREATE APPLICATION"
-						onClick={this.handleApplicationCreate}
-					/>
-				}
-			>
+			<>
+			    <Row className="space-between">
+                    <Column>
+                    </Column>
+                    <AddButton
+                        colProps={{className: 'text-right'}}
+                        permission={this.permission}
+                        data-track-id="add-application"
+                        data-testid="add-application"
+                        onClick={this.handleApplicationCreate}
+                    >
+                        CREATE APPLICATION
+                    </AddButton>
+			    </Row>
 			    <VAIApplications
 			        data={cAIApplications}
 			        permission={this.permission}
 			        handleApplicationEdit={handleApplicationEdit}
 			        handleDeleteApplication={handleDeleteApplication}
 			    />
-			    <PaginationComponent
+			    {/*<PaginationComponent
                     promiseData={cAIApplications}
                     callback={this.handlePageChange}
-                />
-			</BaseContainer>
+                /> */}
+			</>
 		)
 	}
 }
