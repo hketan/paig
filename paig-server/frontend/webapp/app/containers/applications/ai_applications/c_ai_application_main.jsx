@@ -319,7 +319,7 @@ class CAIApplicationMain extends Component {
 }
 
 CAIApplicationMain.defaultProps = {
-    view: UI_CONSTANTS.APPLICATIONS,
+    view: UI_CONSTANTS.PAIG_NAVIGATOR,
     _vName: 'c_ai_applications_main'
 };
 
