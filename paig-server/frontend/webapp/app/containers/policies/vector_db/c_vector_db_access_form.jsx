@@ -2,11 +2,7 @@ import React, {Component} from 'react';
 import {observer, inject} from 'mobx-react';
 import {observable} from 'mobx';
 
-import { Grid, Button, Typography}  from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
-
 import f from 'common-ui/utils/f';
-import {ActionButtonsWithPermission} from 'common-ui/components/action_buttons';
 import {createFSForm} from 'common-ui/lib/form/fs_form';
 import VVectorDBAccessForm from 'components/policies/v_vector_db_access_form';
 import {vector_db_form_def} from 'components/applications/vector_db/v_vector_db_form';
@@ -28,10 +24,7 @@ class CVectorDBAccessForm extends Component {
         }
     }
     handleEdit = () => {
-        this._vState.editMode = true;
-    }
-    handleCancelEdit = () => {
-        this._vState.editMode = false;
+        //this._vState.editMode = true;
     }
     handleUpdate = async () => {
         const { vectorDBModel, postPermissionUpdate } = this.props;
@@ -56,25 +49,21 @@ class CVectorDBAccessForm extends Component {
         const { permission, vectorDBModel } = this.props;
 
         return (
+            <>
+                <VVectorDBAccessForm
+                    ref={ref => this.policyFormRef = ref}
+                    editMode={this._vState.editMode}
+                    form={this.form}
+                    permission={permission}
+                    onEditClick={this.handleEdit}
+                />
+            </>
+        )
+
+        return (
             <Grid container spacing={3} style={{padding: '5px 15px'}} data-testid="access-card"
                 data-track-id="vector-db-access-limited"
             >
-                <Grid item sm={8} xs={12}>
-                    <Typography variant="body1">
-                        {vectorDBModel?.name}
-                    </Typography>
-                </Grid>
-                <Grid item sm={4} xs={12} className="text-right">
-                    {
-                        !this._vState.editMode &&
-                        <div style={{marginBottom: '7px'}}>
-                            <ActionButtonsWithPermission
-                                permission={permission}
-                                onEditClick={this.handleEdit}
-                                hideDelete={true}
-                            />
-                        </div>
-                    }
                     {
                         this._vState.editMode &&
                         <div>
@@ -102,7 +91,6 @@ class CVectorDBAccessForm extends Component {
                             >CANCEL</Button>
                         </div>
                     }
-                </Grid>
                 <VVectorDBAccessForm
                     ref={ref => this.policyFormRef = ref}
                     editMode={this._vState.editMode}

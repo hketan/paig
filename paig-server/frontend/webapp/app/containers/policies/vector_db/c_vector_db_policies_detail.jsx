@@ -4,23 +4,15 @@ import {observable} from 'mobx';
 import { withRouter } from 'react-router';
 import { cloneDeep } from 'lodash';
 
-import {Grid, Typography, Box, Badge, Tooltip, Card} from '@material-ui/core';
-import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
-import GroupIcon from '@material-ui/icons/Group';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import CancelIcon from '@material-ui/icons/Cancel';
-import CardContent from '@material-ui/core/CardContent';
-import TableCell from '@material-ui/core/TableCell';
-import ClearIcon from '@material-ui/icons/Clear';
-import DoneIcon from '@material-ui/icons/Done';
+import {FlexGrid, Row, Column, TableCell} from '@carbon/react';
+import {UserMultiple, Filter, Rag, CheckmarkFilled, Misuse} from '@carbon/icons-react';
 
 import f from 'common-ui/utils/f';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
-import { AddButtonWithPermission } from 'common-ui/components/action_buttons';
 import { STATUS } from 'common-ui/utils/globals';
 import {FEATURE_PERMISSIONS} from 'utils/globals';
 import VectorDBPolicyFormUtil from 'containers/policies/vector_db/vector_db_policy_form_util';
-import Table from 'common-ui/components/table';
+import Table from 'common-ui/carbon_components/table';
 
 @inject('vectorDBPolicyStore', 'aiApplicationStore')
 @observer
@@ -74,7 +66,7 @@ class CVectorDBPoliciesDetail extends Component {
     );
   };
 
-	getAIApplications = () => {
+  getAIApplications = () => {
     f.beforeCollectionFetch(this.cAIApplications)
     this.props.aiApplicationStore.getAIApplications({
       params: this.cAIApplications.params
@@ -103,6 +95,21 @@ class CVectorDBPoliciesDetail extends Component {
   render () {
     const {cContentRestrictionData, cAIApplications, permission, handleApplicationRedirect, handlePageChange} = this;
     const { handleTabSelect } = this.props;
+
+    return (
+        <Permissions
+            vectorDBModel={this.props.vectorDBModel}
+            accessPolicy={this._vState.accessPolicy}
+            contentRestrictionData={cContentRestrictionData}
+            permission={permission}
+            handleTabSelect={handleTabSelect}
+
+            cAIApplications={cAIApplications}
+            handleApplicationRedirect={handleApplicationRedirect}
+            handlePageChange={handlePageChange}
+        />
+    )
+
     return (
       <Fragment>
         <Grid container spacing={1} className="m-b-sm" data-testid="permission-card" data-track-id="vector-db-permissions">
@@ -139,8 +146,51 @@ class CVectorDBPoliciesDetail extends Component {
   }
 }
 
-const Permissions = observer(({vectorDBModel, contentRestrictionData, permission, handleTabSelect}) => {
+const Permissions = observer(({vectorDBModel, contentRestrictionData, permission, handleTabSelect,
+    cAIApplications, handleApplicationRedirect, handlePageChange
+}) => {
   let totalCount = f.pageState(contentRestrictionData).totalElements;
+
+  return (
+      <>
+        <br/>
+        <FlexGrid narrow>
+            <Row>
+                <Column data-testid="permission-card">
+                    <h5 data-testid="permission-info">Permissions</h5>
+                    <div className="d-flex align-items-center space-between m-t-md">
+                        <div data-testid="cont-rest-title">
+                          <Rag /> RAG Filtering Permissions
+                        </div>
+                        <div data-testid="sim-icon">
+                            <Filter />
+                        </div>
+                    </div>
+                    <div className="d-flex align-items-center space-between m-t-md">
+                        <div data-testid="cont-rest-title">
+                          <UserMultiple /> User/Group Access-Limited Retrieval
+                        </div>
+                        <div data-testid="sim-icon">
+                            {
+                                vectorDBModel.groupEnforcement === STATUS.enabled.value
+                                ? <CheckmarkFilled className="text-success" data-testid="check-icon"/>
+                                : <Misuse data-testid="cancel-icon"/>
+                            }
+                        </div>
+                    </div>
+                </Column>
+                <Column>
+                    <h5 data-testid="application-info">Applications Overview</h5>
+                    <ApplicationOverview
+                        cAIApplicationsData={cAIApplications}
+                        handleApplicationRedirect={handleApplicationRedirect}
+                        handlePageChange={handlePageChange}
+                    />
+                </Column>
+            </Row>
+        </FlexGrid>
+      </>
+  )
 
   return (
     <Fragment>
@@ -218,14 +268,24 @@ const ApplicationOverview = observer(({cAIApplicationsData, handleApplicationRed
         </a>
       </TableCell>,
       <TableCell key={2}>
-        {
+        {/* {
           application.status == STATUS.enabled.value
           ? <DoneIcon data-testid="application-enabled" className="text-success" />
           : <ClearIcon data-testid="application-disabled" color="secondary" />
-        }
+        } */}
       </TableCell>
     ];
   };
+
+  return (
+      <Table
+        data={cAIApplicationsData}
+        getHeaders={getHeaders}
+        getRowData={getRowData}
+        pageChange={handlePageChange}
+      />
+  )
+
   return (
     <Fragment>
       <CardContent data-testid="application-overview-card">

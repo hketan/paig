@@ -1,10 +1,10 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {observer} from 'mobx-react';
 import {withRouter} from 'react-router';
 
 import {FEATURE_PERMISSIONS} from 'utils/globals';
 import CVectorDBForm from 'containers/applications/vector_db/c_vector_db_form';
-// import CVectorDBPolicesDetail from 'containers/policies/vector_db/c_vector_db_policies_detail';
+import CVectorDBPoliciesDetail from 'containers/policies/vector_db/c_vector_db_policies_detail';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
 import {SkeletonTextLoader} from 'common-ui/carbon_components/loader';
 
@@ -30,19 +30,19 @@ class CVectorDBDetail extends Component {
 	    const {handleCancel, handlePostCreate} = this;
         const {_vState, handlePostUpdate} = this.props;
 		return (
-            <Fragment>
-                <SkeletonTextLoader
-                    isLoading={_vState.loading}
-                    lineCount={6}
-                >
-                    {
-                        _vState.model == null
-                        ? (
-                            <div>
-                                Vector DB not found
-                            </div>
-                        )
-                        : (
+            <SkeletonTextLoader
+                isLoading={_vState.loading}
+                lineCount={6}
+            >
+                {
+                    _vState.model == null
+                    ? (
+                        <div>
+                            Vector DB not found
+                        </div>
+                    )
+                    : (
+                        <>
                             <CVectorDBForm
                                 editMode={false}
                                 permission={this.permission}
@@ -51,19 +51,17 @@ class CVectorDBDetail extends Component {
                                 handlePostCreate={handlePostCreate}
                                 handlePostUpdate={handlePostUpdate}
                             />
-                        )
-                    }
-                </SkeletonTextLoader>
-                {/*
-                    permissionCheckerUtil.checkHasReadPermission(this.policyPermission) && (
-                        <Loader isLoading={_vState.loading} loaderContent={getSkeleton('THREE_SLIM_LOADER')}>
                             {
-                                _vState.model?.id && <CVectorDBPolicesDetail vectorDBModel={_vState.model} handleTabSelect={this.props.handleTabSelect}/>
+                                permissionCheckerUtil.checkHasReadPermission(this.policyPermission) &&
+                                <CVectorDBPoliciesDetail
+                                    vectorDBModel={_vState.model}
+                                    handleTabSelect={this.props.handleTabSelect}
+                                />
                             }
-                        </Loader>
+                        </>
                     )
-                */}
-            </Fragment>
+                }
+            </SkeletonTextLoader>
 		)
 	}
 }

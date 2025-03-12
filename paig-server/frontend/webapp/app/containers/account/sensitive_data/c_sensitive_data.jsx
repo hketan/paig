@@ -70,33 +70,31 @@ class CSensitiveData extends Component {
         }]
 
         return (
-            <>
-                <Row>
-                    <Column>
-                        <Table
-                            data={this.cSensitiveData}
-                            headers={headers}
-                            getRowData={null}
-                            noDataText="No matching tags found"
-                            pageChange={this.handlePageChange}
-                            showToolbar={true}
-                            sortBy={this.cSensitiveData.params.sort}
-                            handleSort={this.handleSort}
-                            toolbarContent={
-                                <TableToolbarContent>
-                                    <SearchTableToolbar
-                                        placeholder="Search Tags"
-                                        obj={this._vState}
-                                        field="searchValue"
-                                        onEnter={this.handleSearch}
-                                        onClear={this.handleSearch}
-                                    />
-                                </TableToolbarContent>
-                            }
-                        />
-                    </Column>
-                </Row>
-            </>
+            <Row>
+                <Column>
+                    <Table
+                        data={this.cSensitiveData}
+                        headers={headers}
+                        getRowData={null}
+                        noDataText="No matching tags found"
+                        pageChange={this.handlePageChange}
+                        showToolbar={true}
+                        sortBy={this.cSensitiveData.params.sort}
+                        handleSort={this.handleSort}
+                        toolbarContent={
+                            <TableToolbarContent>
+                                <SearchTableToolbar
+                                    placeholder="Search Tags"
+                                    obj={this._vState}
+                                    field="searchValue"
+                                    onEnter={this.handleSearch}
+                                    onClear={this.handleSearch}
+                                />
+                            </TableToolbarContent>
+                        }
+                    />
+                </Column>
+            </Row>
         );
     }
 }

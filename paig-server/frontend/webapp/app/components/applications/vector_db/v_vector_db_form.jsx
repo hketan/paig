@@ -45,7 +45,7 @@ const VVectorDBForm = observer(({form, _vState, handleCreate, handleUpdate, hand
 
     return (
         <Tile>
-            <h6 data-testid="info">Information</h6>
+            <h5 data-testid="info">Information</h5>
             <br/>
             <Layer>
                 <Form aria-label="sample form">

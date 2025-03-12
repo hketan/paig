@@ -6,7 +6,7 @@ import {withRouter} from 'react-router';
 import {FEATURE_PERMISSIONS} from 'utils/globals';
 import f from 'common-ui/utils/f';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
-// import CVectorDBAccessForm from 'containers/policies/vector_db/c_vector_db_access_form';
+import CVectorDBAccessForm from 'containers/policies/vector_db/c_vector_db_access_form';
 import CVectorDBAccessContentRestriction from 'containers/policies/vector_db/c_vector_db_access_content_restriction';
 import {SkeletonTextLoader} from 'common-ui/carbon_components/loader';
 
@@ -81,14 +81,23 @@ class CVectorDBPermissions extends Component {
                     () => {
                         if (vectorDBModel) {
                             return (
-                                <CVectorDBAccessContentRestriction
-                                    vectorDBModel={vectorDBModel}
-                                    permission={this.permission}
-                                    cPolicies={this.cPolicies}
-                                    cMetaData={this.cMetaData}
-                                    handlePageChange={this.fetchPolicies}
-                                    fetchPolicies={this.fetchPolicies}
-                                />
+                                <>
+                                    <div className="m-b-md">
+                                        <CVectorDBAccessForm
+                                            vectorDBModel={vectorDBModel}
+                                            permission={this.permission}
+                                            postPermissionUpdate={this.postPermissionUpdate}
+                                        />
+                                    </div>
+                                    <CVectorDBAccessContentRestriction
+                                        vectorDBModel={vectorDBModel}
+                                        permission={this.permission}
+                                        cPolicies={this.cPolicies}
+                                        cMetaData={this.cMetaData}
+                                        handlePageChange={this.fetchPolicies}
+                                        fetchPolicies={this.fetchPolicies}
+                                    />
+                                </>
                             )
                         }
 

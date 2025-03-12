@@ -53,7 +53,7 @@ class CVectorDBMain extends Component {
 		if (this.props.match.params.id) {
 			this.getVectorDBDetails(this.props.match.params.id);
 		} else {
-		    this._vState.model = {};
+		    this._vState.model = null;
 			this._vState.loading = false;
 		}
     }

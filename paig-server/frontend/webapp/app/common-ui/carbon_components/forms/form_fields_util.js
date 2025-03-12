@@ -1,5 +1,10 @@
 const getInputProps = ({fieldObj, value, onChange, invalid, invalidText}) => {
-    let inputProps = {};
+    let inputProps = {
+        value,
+        onChange,
+        invalid,
+        invalidText
+    };
 
     if (fieldObj) {
         inputProps.value = value || fieldObj.value;
@@ -22,7 +27,10 @@ const getToggleValue = (fieldObj, status) => {
 }
 
 const getToggleProps = ({fieldObj, toggled, onToggle, invalid, invalidText}) => {
-    let toggleProps={}
+    let toggleProps={
+        toggled,
+        onToggle
+    }
 
     if (fieldObj) {
         toggleProps.toggled = toggled != null ? toggled : ['true', '1', 'enable', 'enabled'].includes('' + fieldObj.value);
