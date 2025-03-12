@@ -20,9 +20,17 @@ class CVectorDBForm extends Component {
         super(props);
 
         this.form = createFSForm(vector_db_form_def);
+        if (props.editMode != null) {
+            this._vState.editMode = props.editMode;
+        }
     }
     componentDidMount() {
-        if (this.props.match.params.id) {
+        const {model} = this.props;
+        if (model) {
+            this._vState.model = model;
+            this.form.refresh(model);
+            this._vState.loading = false;
+        } else if (this.props.match?.params?.id) {
             this.getVectorDBDetails(this.props.match.params.id);
         } else {
             this._vState.model = null;
@@ -96,7 +104,7 @@ class CVectorDBForm extends Component {
             >
                 {
                     () => {
-                        if (!this.props.match.params.id || this._vState.model) {
+                        if (!this.props.match?.params?.id || this._vState.model) {
                             return (
                                 <VVectorDBForm
                                     form={this.form}

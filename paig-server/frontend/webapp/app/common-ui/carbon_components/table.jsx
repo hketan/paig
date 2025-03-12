@@ -159,7 +159,7 @@ class CommonTable extends Component {
             <TableHead data-testid="thead" {...tableHeadProps}>
                 <TableRow>
                     {headers.map(header => (
-                        <TableHeader key={header.key} {...getHeaderProps({ header, isSortable: header.sortable })}
+                        <TableHeader {...header} {...getHeaderProps({ header, isSortable: header.sortable })}
                             onClick={() => {
                                 if (this._vState.sortedColumn === header.key) {
                                     this._vState.sortDirection = this._vState.sortDirection === 'ASC' ? 'DESC' : 'ASC';
@@ -323,7 +323,7 @@ class CommonTable extends Component {
         let isLoading = this.getIsLoading();
 
         return (
-            <DataTable rows={rows} headers={headers} {...dataTableProps}>
+            <DataTable rows={rows} headers={headers || []} {...dataTableProps}>
                 {
                     ({
                         rows,

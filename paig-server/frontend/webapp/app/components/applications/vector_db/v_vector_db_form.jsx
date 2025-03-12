@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
-import {Tile, Form, Stack, FormGroup, Button} from '@carbon/react';
+import {Tile, Form, Stack, FormGroup, Button, Layer} from '@carbon/react';
 
 import {Utils} from 'common-ui/utils/utils';
 import {STATUS} from 'common-ui/utils/globals';
@@ -47,65 +47,67 @@ const VVectorDBForm = observer(({form, _vState, handleCreate, handleUpdate, hand
         <Tile>
             <h6 data-testid="info">Information</h6>
             <br/>
-            <Form aria-label="sample form">
-                <Stack gap={7}>
-                    <FormSelect
-                        label="Type"
-                        data={Object.values(VECTOR_DB_TYPES)}
-                        fieldObj={type}
-                        labelKey="LABEL"
-                        valueKey="TYPE"
-                        placeholder="Select Type"
-                        readOnly={!_vState.editMode}
-                        data-testid="type"
-                    />
-                    <FormTextInput
-                        required={true}
-                        fieldObj={name}
-                        label="Name"
-                        placeholder="Enter name"
-                        readOnly={!!id.value || !_vState.editMode}
-                        data-testid="name"
-                    />
-                    <FormTextArea
-                        fieldObj={description}
-                        label="Description"
-                        placeholder="Enter description"
-                        data-testid="desc"
-                        readOnly={!_vState.editMode}
-                        rows={2}
-                    />
-                    <FormToggle
-                        label="Enabled"
-                        labelA=""
-                        labelB=""
-                        fieldObj={status}
-                        readOnly={!_vState.editMode}
-                        data-testid="status"
-                    />
+            <Layer>
+                <Form aria-label="sample form">
+                    <Stack gap={7}>
+                        <FormSelect
+                            label="Type"
+                            data={Object.values(VECTOR_DB_TYPES)}
+                            fieldObj={type}
+                            labelKey="LABEL"
+                            valueKey="TYPE"
+                            placeholder="Select Type"
+                            readOnly={!_vState.editMode}
+                            data-testid="type"
+                        />
+                        <FormTextInput
+                            required={true}
+                            fieldObj={name}
+                            label="Name"
+                            placeholder="Enter name"
+                            readOnly={!!id.value || !_vState.editMode}
+                            data-testid="name"
+                        />
+                        <FormTextArea
+                            fieldObj={description}
+                            label="Description"
+                            placeholder="Enter description"
+                            data-testid="desc"
+                            readOnly={!_vState.editMode}
+                            rows={2}
+                        />
+                        <FormToggle
+                            label="Enabled"
+                            labelA=""
+                            labelB=""
+                            fieldObj={status}
+                            readOnly={!_vState.editMode}
+                            data-testid="status"
+                        />
 
-                    {
-                        _vState.editMode &&
-                        <FormGroup legendText="">
-                            <Button
-                                className="m-r-md"
-                                disabled={_vState.saving}
-                                {...saveButtonProps}
-                            >
-                              {saveButton}
-                            </Button>
-                            <Button
-                                kind="secondary"
-                                onClick={handleCancel}
-                                data-testid="cancel-btn"
-                                data-track-id="create-vector-db-cancel-btn"
-                            >
-                              Cancel
-                            </Button>
-                        </FormGroup>
-                    }
-                </Stack>
-            </Form>
+                        {
+                            _vState.editMode &&
+                            <FormGroup legendText="">
+                                <Button
+                                    className="m-r-md"
+                                    disabled={_vState.saving}
+                                    {...saveButtonProps}
+                                >
+                                  {saveButton}
+                                </Button>
+                                <Button
+                                    kind="secondary"
+                                    onClick={handleCancel}
+                                    data-testid="cancel-btn"
+                                    data-track-id="create-vector-db-cancel-btn"
+                                >
+                                  Cancel
+                                </Button>
+                            </FormGroup>
+                        }
+                    </Stack>
+                </Form>
+            </Layer>
         </Tile>
     );
 })

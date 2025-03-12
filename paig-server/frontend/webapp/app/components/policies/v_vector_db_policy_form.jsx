@@ -2,25 +2,26 @@ import React, {Fragment, Component} from 'react';
 import {observer} from 'mobx-react';
 import { compact } from 'lodash';
 
-import {TableContainer, Table, TableHead, TableRow, TableBody,
-    TableCell, Divider, Grid
-} from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import CloseIcon from '@material-ui/icons/Close';
-import PersonIcon from '@material-ui/icons/Person';
-import PeopleIcon from '@material-ui/icons/People';
-import ContactsIcon from '@material-ui/icons/Contacts';
+// import {TableContainer, Table, TableHead, TableRow, TableBody,
+//     TableCell, Divider, Grid
+// } from '@material-ui/core';
+// import Typography from '@material-ui/core/Typography';
+// import Tooltip from '@material-ui/core/Tooltip';
+// import CloseIcon from '@material-ui/icons/Close';
+// import PersonIcon from '@material-ui/icons/Person';
+// import PeopleIcon from '@material-ui/icons/People';
+// import ContactsIcon from '@material-ui/icons/Contacts';
 
-import { userGroupRolesLookups, metaDataLookUps, metaDataValueLookUps } from 'components/policies/field_lookups';
-import {TagChip} from 'common-ui/lib/fs_select/fs_select';
+// import { userGroupRolesLookups, metaDataLookUps, metaDataValueLookUps } from 'components/policies/field_lookups';
+// import {TagChip} from 'common-ui/lib/fs_select/fs_select';
 import {Utils} from 'common-ui/utils/utils';
-import {FormHorizontal, FormGroupInput, FormGroupSelect2, ValidationAsterisk} from 'common-ui/components/form_fields';
+// import {FormHorizontal, FormGroupInput, FormGroupSelect2, ValidationAsterisk} from 'common-ui/components/form_fields';
 import { STATUS } from 'common-ui/utils/globals';
 
 const TagValue = observer(({form, vectorDBPolicyFormUtil}) => {
     const {metadataKey, metadataValue} = form.fields;
     
+    return null;
     return (
         <Fragment>
             <TableCell className="permission-inputs">
@@ -78,6 +79,7 @@ const TagValue = observer(({form, vectorDBPolicyFormUtil}) => {
 @observer
 class GrantAccess extends Component {
     render() {
+        return null;
         const {form, vectorDBPolicyFormUtil} = this.props;
 
         const data = form.toJSON();
@@ -240,6 +242,7 @@ class GrantAccess extends Component {
 @observer
 class DenyAccess extends Component {
     render() {
+        return null;
         const {form, vectorDBPolicyFormUtil} = this.props;
         const data = form.toJSON();
         const { ROLE_USER_GROUP } = vectorDBPolicyFormUtil.getPermissionErrorTypes();
@@ -387,6 +390,7 @@ class DenyAccess extends Component {
 }
 
 const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
+  return null;
   const {name, description} = form.fields;
 
   return (
@@ -487,13 +491,13 @@ const getIcon = type => {
   const common = { fontSize: "small" }
   switch(type) {
     case 'users':
-      return <PersonIcon {...common} />;
+      return null;// <PersonIcon {...common} />;
     case "groups":
-      return <PeopleIcon {...common} />
+      return null;// <PeopleIcon {...common} />
     case "roles":
-      return <ContactsIcon {...common} />
+      return null;// <ContactsIcon {...common} />
     case "others":
-      return <PeopleIcon {...common} />
+      return null;// <PeopleIcon {...common} />
   }
 }
 

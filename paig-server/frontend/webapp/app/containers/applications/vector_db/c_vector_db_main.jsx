@@ -2,18 +2,13 @@ import React, { Component, Fragment } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
-import { Tabs, Tab, Grid, Box } from '@material-ui/core';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import DeleteIcon from '@material-ui/icons/Delete';
+import {Loading, Tabs, TabList, Tab, TabPanels, TabPanel} from '@carbon/react';
 
 import f from 'common-ui/utils/f';
 import UiState from 'data/ui_state';
 import { UI_CONSTANTS, FEATURE_PERMISSIONS } from 'utils/globals';
-import BaseContainer from 'containers/base_container';
 import CVectorDBDetail from 'containers/applications/vector_db/c_vector_db_detail';
 import CVectorDBPermissions from 'containers/policies/vector_db/c_vector_db_permissions';
-import { TabPanel } from 'common-ui/components/generic_components';
-import { AddButtonWithPermission, AddButton, CanDelete } from 'common-ui/components/action_buttons';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
 
 @inject('vectorDBStore')
@@ -37,13 +32,15 @@ class CVectorDBMain extends Component {
         view: CVectorDBDetail,
         tab: `${UI_CONSTANTS.VECTOR_DB}.${UI_CONSTANTS.VECTOR_DB}`,
         index: 0,
-        testId: 'vector-db-overview-tab'
+        testId: 'vector-db-overview-tab',
+        trackId: 'vector-db-overview-tab'
     }, {
         title: "Permissions",
         view: CVectorDBPermissions,
         tab: `${UI_CONSTANTS.VECTOR_DB}.${UI_CONSTANTS.VECTOR_DB_PERMISSIONS}`,
         index: 1,
-        testId: 'vector-db-permissions-tab'
+        testId: 'vector-db-permissions-tab',
+        trackId: 'vector-db-permissions-tab'
     }]
 
     constructor(props) {
@@ -131,76 +128,39 @@ class CVectorDBMain extends Component {
             state.views.forEach((viewObj) => {
                 tabs.push(
                     <Tab
-                        label={viewObj.title}
                         key={viewObj.index}
+                        ref={ref => viewObj.ref = ref}
                         onClick={(e) => this.handleTabSelect(viewObj.index)}
                         data-testid={viewObj.testId}
-                    />
+                        data-track-id={viewObj.trackId}
+                    >
+                        {viewObj.title}
+                    </Tab>
                 )
                 tabsPane.push(
-                    <TabPanel key={viewObj.index} value={this.tabsState.defaultState} index={viewObj.index} p={0} mt="10px" renderAll={false}>
-                        <viewObj.view _vState={_vState} handleTabSelect={handleTabSelect} handlePostUpdate={getVectorDBDetails}/>
+                    <TabPanel key={viewObj.index}>
+                        <viewObj.view _vState={_vState} handleTabSelect={handleTabSelect} handlePostUpdate={getVectorDBDetails} />
                     </TabPanel>
                 )
             })
         }
 
+        if (_vState.loading) {
+            return (
+                <Loading small />
+            )
+        }
+
         return (
-            <BaseContainer
-                showRefresh={false}
-                showBackButton={true}
-                backButtonProps={{
-                    size: 'small',
-                    onClick: handleBackButton
-                }}
-                titleColAttr={{
-                    sm: 10,
-                    md: 10
-                }}
-                nameProps={{maxWidth: '100%'}}
-                title={(
-					<Fragment>
-						{_vState.model && 
-                            <Box className='ellipsize' component="div" >
-                                VectorDB Details - {_vState.model.name}
-                            </Box>
-                        }
-					</Fragment>
-				)} 
-                headerChildren={
-                    this.tabsState.defaultState === 0 && _vState.model?.id
-                    ?
-                        (
-                            <AddButtonWithPermission
-                                colAttr={{
-                                    xs: 12,
-                                    sm: 2,
-                                    md: 2
-                                }}
-                                size="small"
-                                variant="outlined"
-                                className="m-l-sm pull-right"
-                                label={
-                                    <Fragment>
-                                        <DeleteIcon color="primary" fontSize="inherit" />
-                                        &nbsp;Delete
-                                    </Fragment>
-                                }
-                                permission={this.permission}
-                                onClick={this.handleDelete}
-                            />
-                        )
-                    : null
-                }
-            >   
-                <div className='m-b-md'>
-                    <Tabs indicatorColor="primary" textColor="primary" value={this.tabsState.defaultState} scrollButtons="auto" variant="scrollable" className="tabs-view">
-                        {tabs}
-                    </Tabs>
-                </div>
+            <Tabs onTabCloseRequest={() => {}}>
+                <TabList contained scrollDebounceWait={200} aria-label="tabs">
+                    {tabs}
+                </TabList>
+                <TabPanels>
                     {tabsPane}
-            </BaseContainer>
-        );
+                </TabPanels>
+            </Tabs>
+        )
     }
 }
 

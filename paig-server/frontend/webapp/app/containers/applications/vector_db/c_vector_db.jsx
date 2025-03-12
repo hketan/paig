@@ -43,6 +43,9 @@ class CVectorDB extends Component {
     handleVectorDBEdit = (id) => {
         this.props.history.push('/vector_db/' + id);
     }
+    handleVectorDBDetail = (id) => {
+        this.props.history.push('/vector_db/' + id + '/details');
+    }
     handleDeleteVectorDB = (model) => {
         f._confirm.show({
             title: 'Confirm Delete',
@@ -56,7 +59,7 @@ class CVectorDB extends Component {
                 models: this.cVectorDBs
             })
                 .then(() => {
-                    f.notifySuccess(`The Vector DB ${model.name} deleted successfully`);
+                    //f.notifySuccess(`The Vector DB ${model.name} deleted successfully`);
                     confirm.hide();
                     f.handlePagination(this.cVectorDBs, this.cVectorDBs.params);
                     this.handleRefresh();
@@ -68,7 +71,7 @@ class CVectorDB extends Component {
         this.handleRefresh();
     }
 	render() {
-	    const {cVectorDBs, handleVectorDBCreate, handleVectorDBEdit, handleDeleteVectorDB} = this;
+	    const {cVectorDBs, handleVectorDBCreate, handleVectorDBEdit, handleVectorDBDetail, handleDeleteVectorDB} = this;
 
 		//handleRefresh={this.handleRefresh}
 
@@ -91,6 +94,7 @@ class CVectorDB extends Component {
 			        data={cVectorDBs}
 			        permission={this.permission}
 			        handleVectorDBEdit={handleVectorDBEdit}
+			        handleVectorDBDetail={handleVectorDBDetail}
 			        handleDeleteVectorDB={handleDeleteVectorDB}
 			    />
 			    {/* <PaginationComponent

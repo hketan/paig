@@ -3,20 +3,15 @@ import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { cloneDeep } from 'lodash';
 
-import {Grid, Typography} from '@material-ui/core';
-
 import UiState from 'data/ui_state';
-import VVectorDBPolicyForm, { vector_db_policy_form_def } from 'components/policies/v_vector_db_policy_form';
+import /* VVectorDBPolicyForm, */ { vector_db_policy_form_def } from 'components/policies/v_vector_db_policy_form';
 import VectorDBPolicyFormUtil from 'containers/policies/vector_db/vector_db_policy_form_util';
-import { metaDataLookUps } from 'components/policies/field_lookups';
+// import { metaDataLookUps } from 'components/policies/field_lookups';
 import VVectorDBAccessContentRestriction from 'components/policies/v_vector_db_access_content_restriction'
-import {FormGroupSelect2} from 'common-ui/components/form_fields';
-import { SearchField } from 'common-ui/components/filters';
 import { createFSForm } from 'common-ui/lib/form/fs_form';
 import f from 'common-ui/utils/f';
 import { STATUS } from 'common-ui/utils/globals';
-import FSModal from 'common-ui/lib/fs_modal';
-import { AddButtonWithPermission } from 'common-ui/components/action_buttons';
+// import FSModal from 'common-ui/lib/fs_modal';
 
 @inject('vectorDBPolicyStore')
 @observer
@@ -162,6 +157,18 @@ class CVectorDBAccessContentRestriction extends Component {
     render() {
         const {_vState, handleSearch, handleMetaDataFilter, vectorDBPolicyFormUtil} = this;
         const {cPolicies, cMetaData, handlePageChange, permission} = this.props;
+
+        return (
+            <VVectorDBAccessContentRestriction
+                permission={permission}
+                cPolicies={cPolicies}
+                cMetaData={cMetaData}
+                handlePageChange={handlePageChange}
+                handleStatusUpdate={this.handleStatusUpdate}
+                handlePolicyEdit={this.handlePolicyEdit}
+                handlePolicyDelete={this.handlePolicyDelete}
+            />
+        );
 
         return (
             <Fragment>

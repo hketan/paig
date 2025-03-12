@@ -10,7 +10,7 @@ import {SkeletonTextLoader} from 'common-ui/carbon_components/loader';
 @observer
 class VVectorDB extends Component {
     render() {
-        const {data, permission, handleVectorDBEdit, handleDeleteVectorDB} = this.props;
+        const {data, permission, handleVectorDBEdit, handleVectorDBDetail, handleDeleteVectorDB} = this.props;
 
         return (
             <SkeletonTextLoader
@@ -26,7 +26,7 @@ class VVectorDB extends Component {
                                         return (
                                             <Column key={model.id} lg={5} md={4} sm={4} className="m-b-md">
                                                 <Tile data-track-id="vector-db-grid" style={{height: '170px'}}>
-                                                    <h6 data-testid="name">{model.name}</h6>
+                                                    <h5 data-testid="name">{model.name}</h5>
                                                     <br />
                                                     <div data-testid="desc" className="multiline-ellipsis" style={{height: '55px'}}>
                                                         <span>{model.description}</span>
@@ -50,7 +50,7 @@ class VVectorDB extends Component {
                                                             <Link
                                                                 href="void:0"
                                                                 className="align-items-center"
-                                                                onClick={e => handleVectorDBEdit(model.id)}
+                                                                onClick={e => handleVectorDBDetail(model.id)}
                                                             >
                                                                 <span className="m-r-sm">Detail</span> <ArrowRight aria-label="Detail" />
                                                             </Link>

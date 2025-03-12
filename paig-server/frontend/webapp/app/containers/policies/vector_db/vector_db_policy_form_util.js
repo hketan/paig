@@ -1,5 +1,6 @@
 import { isEmpty, uniqBy, compact, uniq } from "lodash";
 import { observable, action, ObservableMap } from "mobx";
+
 import { PROMPT_REPLY_TYPE } from 'utils/globals';
 
 class VectorDBPolicyFormUtil {

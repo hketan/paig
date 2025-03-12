@@ -3,15 +3,12 @@ import {action, observable} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {withRouter} from 'react-router';
 
-import { Grid, Paper, Box }  from '@material-ui/core';
-
-import BaseContainer from 'containers/base_container';
 import {FEATURE_PERMISSIONS} from 'utils/globals';
 import f from 'common-ui/utils/f';
-import {Loader, getSkeleton} from 'common-ui/components/generic_components';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
-import CVectorDBAccessForm from 'containers/policies/vector_db/c_vector_db_access_form';
+// import CVectorDBAccessForm from 'containers/policies/vector_db/c_vector_db_access_form';
 import CVectorDBAccessContentRestriction from 'containers/policies/vector_db/c_vector_db_access_content_restriction';
+import {SkeletonTextLoader} from 'common-ui/carbon_components/loader';
 
 @inject('vectorDBPolicyStore')
 @observer
@@ -74,6 +71,37 @@ class CVectorDBPermissions extends Component {
     render() {
         const {id} = this.props?.match?.params || {};
         const {model: vectorDBModel} = this.props._vState;
+
+        return (
+            <SkeletonTextLoader
+                isLoading={this._vState.loading}
+                lineCount={6}
+            >
+                {
+                    () => {
+                        if (vectorDBModel) {
+                            return (
+                                <CVectorDBAccessContentRestriction
+                                    vectorDBModel={vectorDBModel}
+                                    permission={this.permission}
+                                    cPolicies={this.cPolicies}
+                                    cMetaData={this.cMetaData}
+                                    handlePageChange={this.fetchPolicies}
+                                    fetchPolicies={this.fetchPolicies}
+                                />
+                            )
+                        }
+
+                        return (
+                            <div>
+                                Vector DB not found
+                            </div>
+                        )
+                    }
+                }
+            </SkeletonTextLoader>
+        )
+
         return (
             <Fragment>
                 <Loader isLoading={this._vState.loading} loaderContent={getSkeleton('THREE_SLIM_LOADER')}>
@@ -105,11 +133,9 @@ class CVectorDBPermissions extends Component {
                             )
                         :
                             (
-                                <Grid containers spacing={3}>
-                                    <Grid item xs={12}>
+                                <div>
                                         Vector DB not found
-                                    </Grid>
-                                </Grid>
+                                </div>
                             )
                     }
                 </Loader>

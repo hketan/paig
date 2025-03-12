@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
 
-import {TableRow, TableCell, Switch, Chip} from '@material-ui/core';
-import Tooltip from '@material-ui/core/Tooltip';
-import PersonIcon from '@material-ui/icons/Person';
-import PeopleIcon from '@material-ui/icons/People';
+// import {TableRow, TableCell, Switch, Chip} from '@material-ui/core';
+// import Tooltip from '@material-ui/core/Tooltip';
+// import PersonIcon from '@material-ui/icons/Person';
+// import PeopleIcon from '@material-ui/icons/People';
+
+import {TableCell, Tag, Toggle, OverflowMenu, OverflowMenuItem} from '@carbon/react';
+import {User, UserMultiple} from '@carbon/icons-react';
 
 import f from 'common-ui/utils/f';
-import Table from 'common-ui/components/table';
+import Table from 'common-ui/carbon_components/table';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
-import { ActionButtonsWithPermission } from 'common-ui/components/action_buttons';
+// import { ActionButtonsWithPermission } from 'common-ui/components/action_buttons';
 
 class VVectorDBAccessContentRestriction extends Component {
     getMetaDataDescription = (name) => {
@@ -45,20 +48,20 @@ class VVectorDBAccessContentRestriction extends Component {
     }
     getHeaders = () => {
         const {permission, showStatusColumn} = this.props;
+
         const headers = [
-            // <TableCell key="description" width="200px">Description</TableCell>,
-            <TableCell key="metadataKey" width="200px">Vector DB Metadata</TableCell>,
-            <TableCell key="metadataValue" className="tag-value-cell" width="200px">Value</TableCell>,
-            <TableCell key="grantedAccess" width="300px">Granted Access</TableCell>,
-            <TableCell key="deniedAccess">Denied Access</TableCell>
-        ]
+            { header: 'Vector DB Metadata', key: 'metadataKey', width: '200px' },
+            { header: 'Value', key: 'metadataValue', /* className: 'tag-value-cell', */ width: '200px' },
+            { header: 'Granted Access', key: 'grantedAccess', width: '300px' },
+            { header: 'Denied Access', key: 'deniedAccess' }
+        ];
 
         if (showStatusColumn) {
-            headers.push(<TableCell key="status" width="70px">Status</TableCell>)
+            headers.push({ header: 'Status', key: 'status', width: '70px' });
         }
 
         if (permissionCheckerUtil.hasUpdateOrDeletePermission(permission)) {
-            headers.push(<TableCell key="action" width="90px">Actions</TableCell>)
+            headers.push({ header: '', key: 'action', width: '90px' });
         }
         return headers;
     }
@@ -74,6 +77,104 @@ class VVectorDBAccessContentRestriction extends Component {
         if (model.metadataValue) {
             metaData += ` = ${model.metadataValue}`;
         }
+
+        const rows = [
+            <TableCell key="metadataKey">
+                <Tag
+                    type="cool-gray"
+                    size="md"
+                >
+                    {model.metadataKey}
+                </Tag>
+            </TableCell>,
+            <TableCell key="metadataValue">
+                <Tag
+                    type="cool-gray"
+                    size="md"
+                >
+                    {model.metadataValue}
+                </Tag>
+            </TableCell>,
+            <TableCell key="grantedAccess">
+                {
+                    allowedUserGroups.map((userGroup) => {
+                        return userGroup.value.map((value, index) => {
+                            return (
+                                <Tag
+                                    key={value + index}
+                                    type="cool-gray"
+                                    size="md"
+                                    renderIcon={userGroup.label == 'users' ? User : UserMultiple}
+                                >
+                                    {value}
+                                </Tag>
+                            )
+                        })
+                    })
+                }
+            </TableCell>,
+            <TableCell key="grantedAccess">
+                {
+                    deniedUserGroups.map((userGroup) => {
+                        return userGroup.value.map((value, index) => {
+                            return (
+                                <Tag
+                                    key={value + index}
+                                    type="cool-gray"
+                                    size="md"
+                                    renderIcon={userGroup.label == 'users' ? User : UserMultiple}
+                                >
+                                    {value}
+                                </Tag>
+                            )
+                        })
+                    })
+                }
+            </TableCell>
+        ]
+
+        if (showStatusColumn) {
+            rows.push(
+                <TableCell key="status">
+                    <Toggle
+                        id="status"
+                        labelText=""
+                        labelA=""
+                        labelB=""
+                        toggled={!!model.status}
+                        onToggle={(val) => handleStatusUpdate(+val, model)}
+                        disabled={!permissionCheckerUtil.checkHasUpdatePermission(permission)}
+                        data-testid="vector-db-status-switch"
+                    />
+                </TableCell>
+            )
+        }
+
+        if (permissionCheckerUtil.hasUpdateOrDeletePermission(permission)) {
+            rows.push(
+                <TableCell key="action">
+                    <OverflowMenu aria-label="vector-db-policy-action-menu" flipped={true}>
+                        <OverflowMenuItem
+                            itemText="Edit"
+                            aria-label="Edit"
+                            onClick={e => handlePolicyEdit(model)}
+                            data-testid="vectordb-policy-edit"
+                            data-track-id="vectordb-policy-edit"
+                        />
+                        <OverflowMenuItem
+                            isDelete
+                            aria-label="Edit"
+                            itemText="Delete"
+                            onClick={e => handlePolicyDelete(model)}
+                            data-testid="vectordb-policy-delete"
+                            data-track-id="vectordb-policy-delete"
+                        />
+                    </OverflowMenu>
+                </TableCell>
+            )
+        }
+
+        return rows;
 
         return (
             <TableRow
@@ -150,11 +251,11 @@ class VVectorDBAccessContentRestriction extends Component {
                 {
                     permissionCheckerUtil.hasUpdateOrDeletePermission(permission) &&
                     <TableCell>
-                        <ActionButtonsWithPermission
+                        {/* <ActionButtonsWithPermission
                             permission={permission}
                             onEditClick={() => handlePolicyEdit(model)}
                             onDeleteClick={() => handlePolicyDelete(model)}
-                        />
+                        /> */}
                     </TableCell>
                 }
             </TableRow>
@@ -162,14 +263,14 @@ class VVectorDBAccessContentRestriction extends Component {
     }
     render() {
         const {cPolicies, handlePageChange} = this.props;
+
+        const headers = this.getHeaders();
+
         return (
             <Table
-                tableClassName="permission-table-globals"
                 data={cPolicies}
-                getHeaders={this.getHeaders}
+                headers={headers}
                 getRowData={this.getRowData}
-                isRowCustom={true}
-                hasElevation={false}
                 pageChange={handlePageChange}
                 noDataText="No RAG contextual data filtering found."
             />

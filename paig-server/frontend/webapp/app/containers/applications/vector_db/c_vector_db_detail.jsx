@@ -2,13 +2,11 @@ import React, {Component, Fragment} from 'react';
 import {observer} from 'mobx-react';
 import {withRouter} from 'react-router';
 
-import {Grid} from '@material-ui/core';
-
 import {FEATURE_PERMISSIONS} from 'utils/globals';
 import CVectorDBForm from 'containers/applications/vector_db/c_vector_db_form';
-import CVectorDBPolicesDetail from 'containers/policies/vector_db/c_vector_db_policies_detail';
+// import CVectorDBPolicesDetail from 'containers/policies/vector_db/c_vector_db_policies_detail';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
-import {Loader, getSkeleton} from 'common-ui/components/generic_components';
+import {SkeletonTextLoader} from 'common-ui/carbon_components/loader';
 
 @observer
 class CVectorDBDetail extends Component {
@@ -32,17 +30,21 @@ class CVectorDBDetail extends Component {
 	    const {handleCancel, handlePostCreate} = this;
         const {_vState, handlePostUpdate} = this.props;
 		return (
-            <Fragment item xs={12} md={6}>
-                <Loader isLoading={_vState.loading} loaderContent={getSkeleton('THREE_SLIM_LOADER')}>
+            <Fragment>
+                <SkeletonTextLoader
+                    isLoading={_vState.loading}
+                    lineCount={6}
+                >
                     {
                         _vState.model == null
                         ? (
-                            <Grid item xs={12} md={6}>
+                            <div>
                                 Vector DB not found
-                            </Grid>
+                            </div>
                         )
                         : (
                             <CVectorDBForm
+                                editMode={false}
                                 permission={this.permission}
                                 model={_vState.model}
                                 handleCancel={handleCancel}
@@ -51,8 +53,8 @@ class CVectorDBDetail extends Component {
                             />
                         )
                     }
-                </Loader>
-                {
+                </SkeletonTextLoader>
+                {/*
                     permissionCheckerUtil.checkHasReadPermission(this.policyPermission) && (
                         <Loader isLoading={_vState.loading} loaderContent={getSkeleton('THREE_SLIM_LOADER')}>
                             {
@@ -60,7 +62,7 @@ class CVectorDBDetail extends Component {
                             }
                         </Loader>
                     )
-                }
+                */}
             </Fragment>
 		)
 	}

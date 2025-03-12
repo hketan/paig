@@ -38,6 +38,7 @@ import CAIApplications from 'containers/applications/ai_applications/c_ai_applic
 
 import CVectorDB from 'containers/applications/vector_db/c_vector_db';
 import CVectorDBForm from 'containers/applications/vector_db/c_vector_db_form';
+import CVectorDBMain from 'containers/applications/vector_db/c_vector_db_main';
 
 // import CEvaluationForm from 'containers/audits/evaluation/c_evaluation_create_form';
 // import CEvaluationConfigList from 'containers/audits/evaluation/c_evaluation_config_list';
@@ -74,7 +75,7 @@ const Routes = () => (
 		<Route path="/ai_applications" name="AI Applications" component={CAIApplications} />
 
 		<Route path="/vector_db/create" name="Create VectorDB" component={CVectorDBForm} />
-		<Route path="/vector_db/:id/detail" name="VectorDB Details" component={CVectorDBForm} />
+		<Route path="/vector_db/:id/details" name="VectorDB Details" component={CVectorDBMain} />
 		<Route path="/vector_db/:id" name="Update VectorDB" component={CVectorDBForm} />
 		<Route path="/vector_db" name="Vector DB" component={CVectorDB} />
 
