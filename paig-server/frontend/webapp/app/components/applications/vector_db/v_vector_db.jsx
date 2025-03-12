@@ -24,7 +24,7 @@ class VVectorDB extends Component {
                                 {
                                     f.models(data).map(model => {
                                         return (
-                                            <Column key={model.id} lg={5} md={4} sm={4}>
+                                            <Column key={model.id} lg={5} md={4} sm={4} className="m-b-md">
                                                 <Tile data-track-id="vector-db-grid" style={{height: '170px'}}>
                                                     <h6 data-testid="name">{model.name}</h6>
                                                     <br />

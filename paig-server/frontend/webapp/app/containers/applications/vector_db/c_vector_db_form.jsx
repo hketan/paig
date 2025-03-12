@@ -1,39 +1,46 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {observer, inject} from 'mobx-react';
 import {observable} from 'mobx';
 
-import {Tile, Form, Select, SelectItem, TextInput, Stack, TextArea, Toggle} from '@carbon/react';
-
-import UiState from 'data/ui_state';
-import /* VVectorDBForm, */ {vector_db_form_def} from 'components/applications/vector_db/v_vector_db_form';
+import VVectorDBForm, {vector_db_form_def} from 'components/applications/vector_db/v_vector_db_form';
 import f from 'common-ui/utils/f';
-// import {CanUpdate, ActionButtonsWithPermission} from 'common-ui/components/action_buttons';
 import {createFSForm} from 'common-ui/lib/form/fs_form';
+import {SkeletonTextLoader} from 'common-ui/carbon_components/loader';
 
 @inject('vectorDBStore')
 @observer
 class CVectorDBForm extends Component {
     @observable _vState = {
-        editMode: false,
-        saving: false
+        editMode: true,
+        saving: false,
+        model: null,
+        loading: true
     }
     constructor(props) {
         super(props);
 
-        const model = props.model || {};
-
         this.form = createFSForm(vector_db_form_def);
-
-        if (model.id) {
-            this.form.refresh(model);
+    }
+    componentDidMount() {
+        if (this.props.match.params.id) {
+            this.getVectorDBDetails(this.props.match.params.id);
+        } else {
+            this._vState.model = null;
+            this._vState.loading = false;
         }
     }
-    handleEdit = () => {
-        this._vState.editMode = true;
-    }
-    handleCancelEdit = () => {
-        this._vState.editMode = false;
-        this.form.refresh(this.props.model);
+    getVectorDBDetails = (id) => {
+        this._vState.loading = true;
+        this.props.vectorDBStore.getVectorDBById(id)
+            .then((response) => {
+                this._vState.model = response;
+                this._vState.loading = false;
+
+                this.form.refresh(response);
+            }, f.handleError(null, () => {
+                this._vState.loading = false;
+                this._vState.model = null;
+            }));
     }
 
     handleCreate = async () => {
@@ -48,8 +55,9 @@ class CVectorDBForm extends Component {
             this._vState.saving = true;
 
             let response = await this.props.vectorDBStore.createVectorDB(data);
-            f.notifySuccess("The Vector DB created successfully");
-            this.props.handlePostCreate?.(response);
+            //f.notifySuccess("The Vector DB created successfully");
+            //this.props.handlePostCreate?.(response);
+            this.props.history.push(`/vector_db`);
         } catch(e) {
             this._vState.saving = false;
             f.handleError()(e);
@@ -67,133 +75,47 @@ class CVectorDBForm extends Component {
         try {
             this._vState.saving = true;
             await this.props.vectorDBStore.updateVectorDB(data)
-            f.notifySuccess("The Vector DB updated successfully");
-            this.props.handlePostUpdate?.(data.id);
+            //f.notifySuccess("The Vector DB updated successfully");
+            //this.props.handlePostUpdate?.(data.id);
         } catch(e) {
             this._vState.saving = false;
             f.handleError()(e);
         }
     }
+    handleCancel = () => {
+        this.props.history.goBack();
+    }
 
     render() {
-        const {model, permission, handleCancel} = this.props;
-        const {handleCreate, handleUpdate} = this;
+        const {handleCreate, handleUpdate, handleCancel} = this;
 
         return (
-            <Tile>
-                <h6 data-testid="info">Information</h6>
-                <br/>
-                <Form aria-label="sample form">
-                    <Stack gap={7}>
-                        <Select defaultValue="milvus">
-                          <SelectItem value="milvus" text="Milvus" />
-                          <SelectItem value="open-search" text="OpenSearch" />
-                        </Select>
-                        <TextInput
-                            labelText="Name"
-                            placeholder="Enter name"
-                        />
-                        <TextArea
-                            labelText="Description"
-                            placeholder="Enter description"
-                            maxCount={7}
-                        />
-                        <Toggle
-                            defaultToggled
-                            labelText="Enabled"
-                        />
-                    </Stack>
-                </Form>
-            </Tile>
-        )
-
-        return (
-            <Fragment>
-                {/* <Box component={Paper} className={`m-t-sm ${ model?.id ? 'm-b-md' : 'm-b-sm'}`}>
-                    <Grid container spacing={3} style={{padding: '5px 15px'}}>
-                        <Grid item sm={6} xs={12}>
-                            <Typography variant="h6" component="h2">
-                                Information
-                            </Typography>
-                        </Grid>
-                        <Grid item sm={6} xs={12} className="text-right">
-                            {
-                                model?.id != null && !this._vState.editMode &&
-                                <div style={{marginBottom: '7px'}}>
-                                    <ActionButtonsWithPermission
-                                        permission={permission}
-                                        onEditClick={this.handleEdit}
-                                        hideDelete={true}
-                                    />
-                                </div>
-                            }
-                            {
-                                this._vState.editMode &&
-                                <div>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        className="m-r-sm"
-                                        size="small"
-                                        disabled={this._vState.saving}
-                                        onClick={handleUpdate}
-                                        data-testid="edit-save-btn"
-                                    >
-                                        {
-                                            this._vState.saving &&
-                                            <CircularProgress size="15px" className="m-r-xs" />
-                                        }
-                                        SAVE
-                                    </Button>
-                                    <Button
-                                        variant="outlined"
-                                        color="primary"
-                                        size="small"
-                                        onClick={this.handleCancelEdit}
-                                        data-testid="edit-cancel-btn"
-                                    >CANCEL</Button>
-                                </div>
-                            }
-                        </Grid>
-                        <VVectorDBForm
-                            form={this.form}
-                            editMode={this._vState.editMode}
-                        />
-                    </Grid>
-                </Box>
+            <SkeletonTextLoader
+                isLoading={this._vState.loading}
+                lineCount={6}
+            >
                 {
-                    model?.id == null &&
-                    <CanUpdate permission={permission}>
-                        <Grid container spacing={3} className="m-t-md">
-                            <Grid item xs={12}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    className="m-r-sm"
-                                    disabled={this._vState.saving}
-                                    onClick={handleCreate}
-                                    data-testid="create-app-btn"
-                                    data-track-id="create-vector-db-save-btn"
-                                >
-                                    {
-                                        this._vState.saving &&
-                                        <CircularProgress size="18px" className="m-r-xs" />
-                                    }
-                                    CREATE
-                                </Button>
-                                <Button
-                                    data-testid="cancel-btn"
-                                    variant="contained"
-                                    onClick={handleCancel}
-                                    data-track-id="create-vector-db-cancel-btn"
-                                >
-                                    CANCEL
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </CanUpdate>
-                } */}
-            </Fragment>
+                    () => {
+                        if (!this.props.match.params.id || this._vState.model) {
+                            return (
+                                <VVectorDBForm
+                                    form={this.form}
+                                    _vState={this._vState}
+                                    handleCreate={handleCreate}
+                                    handleUpdate={handleUpdate}
+                                    handleCancel={handleCancel}
+                                />
+                            )
+                        }
+
+                        return (
+                            <div>
+                                <h4>Vector DB not found</h4>
+                            </div>
+                        )
+                    }
+                }
+            </SkeletonTextLoader>
         );
     }
 }

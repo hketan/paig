@@ -73,7 +73,9 @@ const Routes = () => (
 		<Route path="/ai_application/:id" name="AI Application Details" component={CAIApplicationMain} />
 		<Route path="/ai_applications" name="AI Applications" component={CAIApplications} />
 
-		<Route path="/vector_db/create" name="Create Vector DB" component={CVectorDBForm} />
+		<Route path="/vector_db/create" name="Create VectorDB" component={CVectorDBForm} />
+		<Route path="/vector_db/:id/detail" name="VectorDB Details" component={CVectorDBForm} />
+		<Route path="/vector_db/:id" name="Update VectorDB" component={CVectorDBForm} />
 		<Route path="/vector_db" name="Vector DB" component={CVectorDB} />
 
 		<Route path="/tags" name="Tags" component={CSensitiveData} />

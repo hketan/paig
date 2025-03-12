@@ -78,7 +78,7 @@ class CVectorDB extends Component {
                     <Column>
                     </Column>
                     <AddButton
-                        colProps={{className: 'text-right'}}
+                        colProps={{className: 'text-right m-b-md'}}
                         permission={this.permission}
                         data-track-id="add-vector-db"
                         data-testid="add-vector-db"
