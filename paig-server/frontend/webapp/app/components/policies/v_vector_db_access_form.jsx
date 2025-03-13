@@ -15,7 +15,7 @@ const VVectorDBAccessForm = observer(({form, editMode, permission, onEditClick})
         <Layer>
             <Form aria-label="sample form">
                 <Stack gap={7}>
-                    <FormGroup>
+                    <FormGroup legendText="">
                         <FormToggle
                             label="User/Group Access-Limited Retrieval"
                             labelA="Disabled"

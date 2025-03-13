@@ -182,7 +182,7 @@ class VVectorDBAccessContentRestriction extends Component {
                 getRowData={this.getRowData}
                 pageChange={handlePageChange}
                 noDataText="No RAG contextual data filtering found."
-                showToolbar={true}
+                showToolbar={false}
                 toolbarContent={
                     <TableToolbarContent>
 

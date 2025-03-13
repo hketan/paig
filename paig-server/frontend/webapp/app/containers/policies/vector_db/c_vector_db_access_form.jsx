@@ -51,7 +51,6 @@ class CVectorDBAccessForm extends Component {
         return (
             <>
                 <VVectorDBAccessForm
-                    ref={ref => this.policyFormRef = ref}
                     editMode={this._vState.editMode}
                     form={this.form}
                     permission={permission}

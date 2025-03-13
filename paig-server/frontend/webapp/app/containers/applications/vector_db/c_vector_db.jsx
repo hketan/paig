@@ -10,6 +10,7 @@ import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
 import {AddButton} from 'common-ui/carbon_components/action_buttons';
 import {FEATURE_PERMISSIONS} from 'utils/globals';
 import VVectorDB from 'components/applications/vector_db/v_vector_db';
+import {DangerModal} from 'common-ui/carbon_components/modal/danger_modal';
 
 @inject('vectorDBStore')
 class CVectorDB extends Component {
@@ -47,6 +48,21 @@ class CVectorDB extends Component {
         this.props.history.push('/vector_db/' + id + '/details');
     }
     handleDeleteVectorDB = (model) => {
+        this.deleteModalRef?.openModal({
+            label: 'Delete Vector DB',
+            content: <Fragment>Are you sure you want to delete <b>{model.name}</b>?</Fragment>,
+        }).then((confirm) => {
+            this.props.vectorDBStore.deleteVectorDB(model.id, {
+                models: this.cVectorDBs
+            }).then(() => {
+                //f.notifySuccess(`The Vector DB ${model.name} deleted successfully`);
+                confirm.hide();
+                f.handlePagination(this.cVectorDBs, this.cVectorDBs.params);
+                this.handleRefresh();
+            }, f.handleError(null, null, {confirm}));
+        }, () => {});
+
+        return;
         f._confirm.show({
             title: 'Confirm Delete',
 			children: <Fragment>Are you sure you want to delete <b>{model.name}</b> vector DB?</Fragment>,
@@ -96,6 +112,10 @@ class CVectorDB extends Component {
 			        handleVectorDBEdit={handleVectorDBEdit}
 			        handleVectorDBDetail={handleVectorDBDetail}
 			        handleDeleteVectorDB={handleDeleteVectorDB}
+			    />
+			    <DangerModal
+			        ref={ref => this.deleteModalRef = ref}
+			        title="Confirm Delete"
 			    />
 			    {/* <PaginationComponent
                     promiseData={cVectorDBs}

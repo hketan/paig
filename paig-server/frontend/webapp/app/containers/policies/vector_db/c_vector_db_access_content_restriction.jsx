@@ -11,6 +11,7 @@ import VVectorDBAccessContentRestriction from 'components/policies/v_vector_db_a
 import { createFSForm } from 'common-ui/lib/form/fs_form';
 import f from 'common-ui/utils/f';
 import { STATUS } from 'common-ui/utils/globals';
+import {DangerModal} from 'common-ui/carbon_components/modal/danger_modal';
 // import FSModal from 'common-ui/lib/fs_modal';
 
 @inject('vectorDBPolicyStore')
@@ -125,19 +126,18 @@ class CVectorDBAccessContentRestriction extends Component {
     handlePolicyDelete = model => {
         const {cPolicies} = this.props;
 
-        //"{model.description || model.name}"
-        f._confirm.confirmDelete({
-          children: <Fragment>Are you sure you want to <b>Delete</b> the restriction?</Fragment>,
-        })
-        .then((confirm) => {
-          this.props.vectorDBPolicyStore.deletePolicy(model.id, model.vectorDBId, {
+        this.deleteModalRef?.openModal({
+            label: 'Delete RAG Contextual Data Filtering',
+            content: <Fragment>Are you sure you want to <b>delete</b>?</Fragment>,
+        }).then((confirm) => {
+            this.props.vectorDBPolicyStore.deletePolicy(model.id, model.vectorDBId, {
                 models: cPolicies
             })
             .then(() => {
-              confirm.hide();
-              f.handlePagination(cPolicies, cPolicies.params);
-              this.props.fetchPolicies();
-              f.notifySuccess('Restriction has been deleted.');
+                //f.notifySuccess('Restriction has been deleted.');
+                confirm.hide();
+                f.handlePagination(cPolicies, cPolicies.params);
+                this.props.fetchPolicies();
             }, f.handleError(null, null, {confirm}));
         }, () => {});
     }
@@ -159,15 +159,21 @@ class CVectorDBAccessContentRestriction extends Component {
         const {cPolicies, cMetaData, handlePageChange, permission} = this.props;
 
         return (
-            <VVectorDBAccessContentRestriction
-                permission={permission}
-                cPolicies={cPolicies}
-                cMetaData={cMetaData}
-                handlePageChange={handlePageChange}
-                handleStatusUpdate={this.handleStatusUpdate}
-                handlePolicyEdit={this.handlePolicyEdit}
-                handlePolicyDelete={this.handlePolicyDelete}
-            />
+            <>
+                <VVectorDBAccessContentRestriction
+                    permission={permission}
+                    cPolicies={cPolicies}
+                    cMetaData={cMetaData}
+                    handlePageChange={handlePageChange}
+                    handleStatusUpdate={this.handleStatusUpdate}
+                    handlePolicyEdit={this.handlePolicyEdit}
+                    handlePolicyDelete={this.handlePolicyDelete}
+                />
+                <DangerModal
+                    ref={ref => this.deleteModalRef = ref}
+                    title="Confirm Delete"
+                />
+            </>
         );
 
         return (
