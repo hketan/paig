@@ -65,7 +65,7 @@ class CVectorDBForm extends Component {
             let response = await this.props.vectorDBStore.createVectorDB(data);
             //f.notifySuccess("The Vector DB created successfully");
             //this.props.handlePostCreate?.(response);
-            this.props.history.push(`/vector_db`);
+            this.props.history.push(`/vector_db/${response.id}/details`);
         } catch(e) {
             this._vState.saving = false;
             f.handleError()(e);
@@ -85,6 +85,7 @@ class CVectorDBForm extends Component {
             await this.props.vectorDBStore.updateVectorDB(data)
             //f.notifySuccess("The Vector DB updated successfully");
             //this.props.handlePostUpdate?.(data.id);
+            this.handleCancel();
         } catch(e) {
             this._vState.saving = false;
             f.handleError()(e);
@@ -118,7 +119,7 @@ class CVectorDBForm extends Component {
 
                         return (
                             <div>
-                                <h4>Vector DB not found</h4>
+                                <h4>VectorDB not found</h4>
                             </div>
                         )
                     }

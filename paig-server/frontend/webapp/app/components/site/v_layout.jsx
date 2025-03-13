@@ -34,7 +34,7 @@ const VLayout = () => {
     const { getSideNavTheme } = useContext(ThemeContext);
 
     return (
-        <Theme theme={getSideNavTheme()}>
+        <Theme theme={getSideNavTheme()} style={{position: 'fixed', zIndex: '2'}}>
             <HeaderContainer
                 render={
                     ({ isSideNavExpanded, onClickSideNavExpand }) => (

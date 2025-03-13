@@ -1,7 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import {inject} from 'mobx-react';
 
-import {Row, Column} from '@carbon/react';
+import {Row, Column, IconButton} from '@carbon/react';
+import {Renew} from '@carbon/icons-react';
 
 import f from 'common-ui/utils/f';
 import {DEFAULTS} from 'common-ui/utils/globals';
@@ -93,8 +94,18 @@ class CVectorDB extends Component {
 
 		return (
 			<>
-			    <Row className="space-between">
+			    <Row className="space-between align-items-center">
                     <Column>
+                        <h4>VectorDB
+                            <IconButton
+                                label="Refresh"
+                                kind="ghost"
+                                size="sm"
+                                onClick={this.handleRefresh}
+                            >
+                                <Renew />
+                            </IconButton>
+                        </h4>
                     </Column>
                     <AddButton
                         colProps={{className: 'text-right m-b-md'}}
@@ -103,16 +114,18 @@ class CVectorDB extends Component {
                         data-testid="add-vector-db"
                         onClick={handleVectorDBCreate}
                     >
-                        CREATE VECTOR DB
+                        Create VectorDB
                     </AddButton>
                 </Row>
-			    <VVectorDB
-			        data={cVectorDBs}
-			        permission={this.permission}
-			        handleVectorDBEdit={handleVectorDBEdit}
-			        handleVectorDBDetail={handleVectorDBDetail}
-			        handleDeleteVectorDB={handleDeleteVectorDB}
-			    />
+			    <Row>
+                    <VVectorDB
+                        data={cVectorDBs}
+                        permission={this.permission}
+                        handleVectorDBEdit={handleVectorDBEdit}
+                        handleVectorDBDetail={handleVectorDBDetail}
+                        handleDeleteVectorDB={handleDeleteVectorDB}
+                    />
+                </Row>
 			    <DangerModal
 			        ref={ref => this.deleteModalRef = ref}
 			        title="Confirm Delete"

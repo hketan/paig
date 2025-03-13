@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
-import {Loading, Tabs, TabList, Tab, TabPanels, TabPanel} from '@carbon/react';
+import {Loading, Tabs, TabList, Tab, TabPanels, TabPanel, Row, Column, Button, Breadcrumb, BreadcrumbItem} from '@carbon/react';
 
 import f from 'common-ui/utils/f';
 import UiState from 'data/ui_state';
@@ -118,6 +118,9 @@ class CVectorDBMain extends Component {
                     }, f.handleError(null, null, {confirm}));
             }, () => {});
     }
+    handleEdit = () => {
+        this.props.history.push(`/vector_db/${this._vState.model.id}`);
+    }
 
     render() {
         const {state, _vState, handleBackButton, handleTabSelect, getVectorDBDetails}  = this;
@@ -152,14 +155,39 @@ class CVectorDBMain extends Component {
         }
 
         return (
-            <Tabs onTabCloseRequest={() => {}}>
-                <TabList contained scrollDebounceWait={200} aria-label="tabs">
-                    {tabs}
-                </TabList>
-                <TabPanels>
-                    {tabsPane}
-                </TabPanels>
-            </Tabs>
+            <>
+                <div style={{height: '90px'}}>
+                    <Row>
+                        <Column>
+                            <Breadcrumb noTrailingSlash>
+                                <BreadcrumbItem href="#/vector_db">VectorDB</BreadcrumbItem>
+                                <BreadcrumbItem href="#" isCurrentPage>Details</BreadcrumbItem>
+                            </Breadcrumb>
+                        </Column>
+                    </Row>
+                    <Row className="space-between align-items-center m-t-sm">
+                        <Column>
+                            <h4>{this._vState.model?.name}</h4>
+                        </Column>
+                        <Column>
+                            {
+                                this._vState.model &&
+                                <Button kind="tertiary" className="pull-right" onClick={this.handleEdit}>
+                                    Edit VectorDB
+                                </Button>
+                            }
+                        </Column>
+                    </Row>
+                </div>
+                <Tabs onTabCloseRequest={() => {}}>
+                    <TabList contained scrollDebounceWait={200} aria-label="tabs">
+                        {tabs}
+                    </TabList>
+                    <TabPanels>
+                        {tabsPane}
+                    </TabPanels>
+                </Tabs>
+            </>
         )
     }
 }

@@ -158,23 +158,26 @@ class CommonTable extends Component {
         return (
             <TableHead data-testid="thead" {...tableHeadProps}>
                 <TableRow>
-                    {headers.map(header => (
-                        <TableHeader {...header} {...getHeaderProps({ header, isSortable: header.sortable })}
-                            onClick={() => {
-                                if (this._vState.sortedColumn === header.key) {
-                                    this._vState.sortDirection = this._vState.sortDirection === 'ASC' ? 'DESC' : 'ASC';
-                                } else {
-                                    this._vState.sortDirection = 'ASC';
-                                }
-                                this._vState.sortedColumn = header.key;
-                                handleSort?.(header.key, this._vState.sortDirection);
-                            }}
-                            sortDirection={this._vState.sortedColumn === header.key ? this._vState.sortDirection : null}
-                            isSortHeader={this._vState.sortedColumn === header.key}
-                        >
-                            {header.header}
-                        </TableHeader>
-                    ))}
+                    {headers.map(header => {
+                        const {sortable, ...rest} = header
+                        return (
+                            <TableHeader {...rest} {...getHeaderProps({ header, isSortable: sortable })}
+                                onClick={() => {
+                                    if (this._vState.sortedColumn === header.key) {
+                                        this._vState.sortDirection = this._vState.sortDirection === 'ASC' ? 'DESC' : 'ASC';
+                                    } else {
+                                        this._vState.sortDirection = 'ASC';
+                                    }
+                                    this._vState.sortedColumn = header.key;
+                                    handleSort?.(header.key, this._vState.sortDirection);
+                                }}
+                                sortDirection={this._vState.sortedColumn === header.key ? this._vState.sortDirection : null}
+                                isSortHeader={this._vState.sortedColumn === header.key}
+                            >
+                                {header.header}
+                            </TableHeader>
+                       )
+                    })}
                 </TableRow>
             </TableHead>
         );
@@ -240,12 +243,16 @@ class CommonTable extends Component {
         )
     }
     getPagination = () => {
-        const {data, pagination, paginationProps, defaultPageSizes} = this.props;
+        const {data, pagination, paginationProps, defaultPageSizes, showPaginationForSinglePage} = this.props;
         if (!pagination || !f.isPromise(data) || !f.pageState(data)) {
             return null;
         }
 
         let pageState = f.pageState(data);
+
+         if (!showPaginationForSinglePage && pageState.totalPages < 2) {
+             return;
+         }
 
         return (
             <Pagination
@@ -336,7 +343,7 @@ class CommonTable extends Component {
                         getTableContainerProps
                     }) =>
                         (
-                            <TableContainer title={title} {...getTableContainerProps()} {...tableContainerProps}>
+                            <TableContainer title={title} className="full-width" {...getTableContainerProps()} {...tableContainerProps}>
                                 {
                                     showToolbar &&
                                     <TableToolbar {...getToolbarProps()}
@@ -405,6 +412,7 @@ CommonTable.defaultProps = {
     tableHeadProps: {},
     tableSkeletonProps: {},
     pagination: true,
+    showPaginationForSinglePage: false,
     defaultPageSizes: [15, 20, 50, 100],
     paginationProps: {},
     sortBy: null,

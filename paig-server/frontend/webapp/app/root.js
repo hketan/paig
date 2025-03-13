@@ -178,15 +178,13 @@ class Root extends Component {
                                 state.loaded
                                 ?
                                     (
-                                        <Row>
-                                            <Column lg={{span: 13, offset: 3}} >
-                                                {renderComponent}
-                                                {
-                                                  state.pendoApiKey &&
-                                                  <PendoInitializer apiKey={state.pendoApiKey} host={state.pendoHost} />
-                                                }
-                                            </Column>
-                                        </Row>
+                                        <Column lg={{offset: 3}} >
+                                            {renderComponent}
+                                            {
+                                              state.pendoApiKey &&
+                                              <PendoInitializer apiKey={state.pendoApiKey} host={state.pendoHost} />
+                                            }
+                                        </Column>
                                     )
                                 :
                                     <PaigLoader />

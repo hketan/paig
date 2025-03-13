@@ -36,7 +36,7 @@ class CVectorDBPoliciesDetail extends Component {
       vectorDB: props.vectorDBModel.name,
       exactMatch: true,
       page: 0,
-      size: 10
+      size: 15
     }
   }
 
@@ -277,14 +277,17 @@ const ApplicationOverview = observer(({cAIApplicationsData, handleApplicationRed
     ];
   };
 
-  return (
-      <Table
-        data={cAIApplicationsData}
-        getHeaders={getHeaders}
-        getRowData={getRowData}
-        pageChange={handlePageChange}
-      />
-  )
+    return (
+        <Table
+            data={cAIApplicationsData}
+            getHeaders={getHeaders}
+            getRowData={getRowData}
+            pageChange={handlePageChange}
+            tableContainerProps={{
+                className: 'm-t-sm'
+            }}
+        />
+    )
 
   return (
     <Fragment>

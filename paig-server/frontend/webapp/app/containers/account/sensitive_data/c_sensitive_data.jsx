@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { inject } from "mobx-react";
 import { observable } from "mobx";
 
-import { TableToolbarContent, Row, Column } from '@carbon/react';
+import { TableToolbarContent, Row, Column, IconButton } from '@carbon/react';
+import {Renew} from '@carbon/icons-react';
 
 import f from 'common-ui/utils/f';
 import { DEFAULTS } from 'common-ui/utils/globals';
@@ -70,31 +71,49 @@ class CSensitiveData extends Component {
         }]
 
         return (
-            <Row>
-                <Column>
-                    <Table
-                        data={this.cSensitiveData}
-                        headers={headers}
-                        getRowData={null}
-                        noDataText="No matching tags found"
-                        pageChange={this.handlePageChange}
-                        showToolbar={true}
-                        sortBy={this.cSensitiveData.params.sort}
-                        handleSort={this.handleSort}
-                        toolbarContent={
-                            <TableToolbarContent>
-                                <SearchTableToolbar
-                                    placeholder="Search Tags"
-                                    obj={this._vState}
-                                    field="searchValue"
-                                    onEnter={this.handleSearch}
-                                    onClear={this.handleSearch}
-                                />
-                            </TableToolbarContent>
-                        }
-                    />
-                </Column>
-            </Row>
+            <>
+                <div /* style={{height: '90px'}} */>
+                    <Row className="m-b-md">
+                        <Column>
+                            <h4>Tags
+                                <IconButton
+                                    label="Refresh"
+                                    kind="ghost"
+                                    size="sm"
+                                    onClick={this.handleRefresh}
+                                >
+                                    <Renew />
+                                </IconButton>
+                            </h4>
+                        </Column>
+                    </Row>
+                </div>
+                <Row>
+                    <Column>
+                        <Table
+                            data={this.cSensitiveData}
+                            headers={headers}
+                            getRowData={null}
+                            noDataText="No matching tags found"
+                            pageChange={this.handlePageChange}
+                            showToolbar={true}
+                            sortBy={this.cSensitiveData.params.sort}
+                            handleSort={this.handleSort}
+                            toolbarContent={
+                                <TableToolbarContent>
+                                    <SearchTableToolbar
+                                        placeholder="Search Tags"
+                                        obj={this._vState}
+                                        field="searchValue"
+                                        onEnter={this.handleSearch}
+                                        onClear={this.handleSearch}
+                                    />
+                                </TableToolbarContent>
+                            }
+                        />
+                    </Column>
+                </Row>
+            </>
         );
     }
 }

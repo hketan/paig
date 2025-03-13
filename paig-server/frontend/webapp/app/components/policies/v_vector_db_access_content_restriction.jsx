@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {TableCell, Tag, Toggle, TableToolbarContent, OverflowMenu, OverflowMenuItem} from '@carbon/react';
+import {TableCell, Tag, Toggle, TableToolbarContent, OverflowMenu, OverflowMenuItem, Layer, Button} from '@carbon/react';
 import {User, UserMultiple} from '@carbon/icons-react';
 
 import f from 'common-ui/utils/f';
@@ -176,19 +176,26 @@ class VVectorDBAccessContentRestriction extends Component {
         const headers = this.getHeaders();
 
         return (
+            <Layer>
             <Table
                 data={cPolicies}
                 headers={headers}
                 getRowData={this.getRowData}
                 pageChange={handlePageChange}
                 noDataText="No RAG contextual data filtering found."
-                showToolbar={false}
+                tableContainerProps={{
+                    title: 'RAG Contextual Data Filtering'
+                }}
+                showToolbar={true}
                 toolbarContent={
                     <TableToolbarContent>
-
+                        <Button>
+                            Add Data Filtering
+                        </Button>
                     </TableToolbarContent>
                 }
             />
+            </Layer>
         )
     }
 }

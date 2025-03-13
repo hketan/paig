@@ -20,7 +20,7 @@ const SIDEBAR_MENU = [{
         childrenRoutes: ["/ai_applications/", "/ai_application/create", "/ai_application/:id"]
     }, {
         to: "/vector_db",
-        name: "Vector DB",
+        name: "VectorDB",
         isChild: true,
         sidebar: UI_CONSTANTS.VECTOR_DB,
         childrenRoutes: ["/vector_db/", "/vector_db/create", "/vector_db/:id"]
