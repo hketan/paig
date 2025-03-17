@@ -3,6 +3,8 @@ import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { cloneDeep } from 'lodash';
 
+import {HeaderPanel, Tile, Button, FormGroup, ButtonSet} from '@carbon/react';
+
 import UiState from 'data/ui_state';
 import /* VVectorDBPolicyForm, */ { vector_db_policy_form_def } from 'components/policies/v_vector_db_policy_form';
 import VectorDBPolicyFormUtil from 'containers/policies/vector_db/vector_db_policy_form_util';
@@ -18,7 +20,8 @@ import {DangerModal} from 'common-ui/carbon_components/modal/danger_modal';
 @observer
 class CVectorDBAccessContentRestriction extends Component {
     @observable _vState = {
-        metadataKey: null
+        metadataKey: null,
+        editMode: false
     }
     constructor(props) {
         super(props);
@@ -111,10 +114,11 @@ class CVectorDBAccessContentRestriction extends Component {
         this.addPolicyModalRef.hide();
     }
     handleAdd = () => {
-        const {vectorDBModel} = this.props;
-        this.addPolicyModalRef.show({
-          title: `Add/Edit RAG Contextual Data Filtering to "${vectorDBModel.name}"`
-        });
+//         const {vectorDBModel} = this.props;
+//         this.addPolicyModalRef.show({
+//           title: `Add/Edit RAG Contextual Data Filtering to "${vectorDBModel.name}"`
+//         });
+        this._vState.editMode = true;
     }
     handlePolicyEdit = model => {
         const { vectorDBModel } = this.props;
@@ -166,9 +170,34 @@ class CVectorDBAccessContentRestriction extends Component {
                     cMetaData={cMetaData}
                     handlePageChange={handlePageChange}
                     handleStatusUpdate={this.handleStatusUpdate}
+                    handleAdd={this.handleAdd}
                     handlePolicyEdit={this.handlePolicyEdit}
                     handlePolicyDelete={this.handlePolicyDelete}
                 />
+                <HeaderPanel expanded={this._vState.editMode} style={{width: this._vState.editMode ? '300px' : ''}}>
+                    <Tile>
+                        <FormGroup legendText="">
+                        </FormGroup>
+                        <ButtonSet>
+                            <Button
+                                data-testid="vectordb-policy-save-btn"
+                                data-track-id="vectordb-policy-save-btn"
+                                disabled={this._vState.saving}
+                                //onClick={this.handleUpdate}
+                            >
+                                Save
+                            </Button>
+                            <Button
+                                kind="secondary"
+                                data-testid="vectordb-policy-cancel-btn"
+                                data-track-id="vectordb-policy-cancel-btn"
+                                //onClick={this.handleCancelEdit}
+                            >
+                                Cancel
+                            </Button>
+                        </ButtonSet>
+                    </Tile>
+                </HeaderPanel>
                 <DangerModal
                     ref={ref => this.deleteModalRef = ref}
                     title="Confirm Delete"

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {observer, inject} from 'mobx-react';
 import {observable} from 'mobx';
 
+import {HeaderPanel, Tile, Button, FormGroup, ButtonSet} from '@carbon/react';
+
 import f from 'common-ui/utils/f';
 import {createFSForm} from 'common-ui/lib/form/fs_form';
 import VVectorDBAccessForm from 'components/policies/v_vector_db_access_form';
@@ -18,13 +20,18 @@ class CVectorDBAccessForm extends Component {
         super(props);
 
         this.form = createFSForm(vector_db_form_def);
+        this.displayForm = createFSForm(vector_db_form_def);
 
         if (props.vectorDBModel) {
             this.form.refresh(props.vectorDBModel);
+            this.displayForm.refresh(props.vectorDBModel);
         }
     }
     handleEdit = () => {
-        //this._vState.editMode = true;
+        this._vState.editMode = true;
+    }
+    handleCancelEdit = () => {
+        this._vState.editMode = false;
     }
     handleUpdate = async () => {
         const { vectorDBModel, postPermissionUpdate } = this.props;
@@ -34,11 +41,11 @@ class CVectorDBAccessForm extends Component {
         this._vState.saving = true;
         this.props.vectorDBStore.updateVectorDB(data)
             .then((response) => {
-                f.notifySuccess('Permission updated successfully.');
+                //f.notifySuccess('Permission updated successfully.');
                 this._vState.editMode = false;
                 this._vState.saving = false;
                 postPermissionUpdate(response);
-                this.form.refresh(response);
+                this.displayForm.refresh(response);
             }, (e) => {
                 this._vState.saving = false;
                 f.handleError()(e);
@@ -51,11 +58,40 @@ class CVectorDBAccessForm extends Component {
         return (
             <>
                 <VVectorDBAccessForm
-                    editMode={this._vState.editMode}
-                    form={this.form}
+                    editMode={false}
+                    form={this.displayForm}
                     permission={permission}
                     onEditClick={this.handleEdit}
                 />
+                <HeaderPanel expanded={this._vState.editMode} style={{width: this._vState.editMode ? '300px' : ''}}>
+                    <Tile>
+                        <FormGroup legendText="">
+                            <VVectorDBAccessForm
+                                editMode={true}
+                                form={this.form}
+                                permission={permission}
+                            />
+                        </FormGroup>
+                        <ButtonSet>
+                            <Button
+                                data-testid="edit-save-btn"
+                                data-track-id="access-form-edit-save-btn"
+                                disabled={this._vState.saving}
+                                onClick={this.handleUpdate}
+                            >
+                                Save
+                            </Button>
+                            <Button
+                                kind="secondary"
+                                data-testid="edit-cancel-btn"
+                                data-track-id="access-form-edit-cancel-btn"
+                                onClick={this.handleCancelEdit}
+                            >
+                                Cancel
+                            </Button>
+                        </ButtonSet>
+                    </Tile>
+                </HeaderPanel>
             </>
         )
 
@@ -63,33 +99,33 @@ class CVectorDBAccessForm extends Component {
             <Grid container spacing={3} style={{padding: '5px 15px'}} data-testid="access-card"
                 data-track-id="vector-db-access-limited"
             >
-                    {
-                        this._vState.editMode &&
-                        <div>
-                            <Button
-                                data-testid="edit-save-btn"
-                                variant="contained"
-                                color="primary"
-                                className="m-r-sm"
-                                size="small"
-                                disabled={this._vState.saving}
-                                onClick={this.handleUpdate}
-                            >
-                                {
-                                    this._vState.saving &&
-                                    <CircularProgress size="15px" className="m-r-xs" />
-                                }
-                                SAVE
-                            </Button>
-                            <Button
-                                data-testid="edit-cancel-btn"
-                                variant="outlined"
-                                color="primary"
-                                size="small"
-                                onClick={this.handleCancelEdit}
-                            >CANCEL</Button>
-                        </div>
-                    }
+                {
+                    this._vState.editMode &&
+                    <div>
+                        <Button
+                            data-testid="edit-save-btn"
+                            variant="contained"
+                            color="primary"
+                            className="m-r-sm"
+                            size="small"
+                            disabled={this._vState.saving}
+                            onClick={this.handleUpdate}
+                        >
+                            {
+                                this._vState.saving &&
+                                <CircularProgress size="15px" className="m-r-xs" />
+                            }
+                            SAVE
+                        </Button>
+                        <Button
+                            data-testid="edit-cancel-btn"
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            onClick={this.handleCancelEdit}
+                        >CANCEL</Button>
+                    </div>
+                }
                 <VVectorDBAccessForm
                     ref={ref => this.policyFormRef = ref}
                     editMode={this._vState.editMode}

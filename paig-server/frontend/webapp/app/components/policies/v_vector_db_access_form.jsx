@@ -17,6 +17,7 @@ const VVectorDBAccessForm = observer(({form, editMode, permission, onEditClick})
                 <Stack gap={7}>
                     <FormGroup legendText="">
                         <FormToggle
+                            id={''+editMode}
                             label="User/Group Access-Limited Retrieval"
                             labelA="Disabled"
                             labelB="Enabled"
@@ -32,15 +33,18 @@ const VVectorDBAccessForm = observer(({form, editMode, permission, onEditClick})
                             }}
                             readOnly={!editMode}
                         />
-                        <CustomButton
-                            addCol={false}
-                            kind="ghost"
-                            className="pull-right"
-                            permission={permission}
-                            onClick={onEditClick}
-                        >
-                            Edit
-                        </CustomButton>
+                        {
+                            !editMode &&
+                            <CustomButton
+                                addCol={false}
+                                kind="ghost"
+                                className="pull-right"
+                                permission={permission}
+                                onClick={onEditClick}
+                            >
+                                Edit
+                            </CustomButton>
+                        }
                     </FormGroup>
                 </Stack>
             </Form>

@@ -171,7 +171,7 @@ class VVectorDBAccessContentRestriction extends Component {
         return rows;
     }
     render() {
-        const {cPolicies, handlePageChange} = this.props;
+        const {cPolicies, handleAdd, handlePageChange} = this.props;
 
         const headers = this.getHeaders();
 
@@ -189,7 +189,10 @@ class VVectorDBAccessContentRestriction extends Component {
                 showToolbar={true}
                 toolbarContent={
                     <TableToolbarContent>
-                        <Button>
+                        <Button
+                            data-track-id="vector-db-add-data-filtering"
+                            onClick={handleAdd}
+                        >
                             Add Data Filtering
                         </Button>
                     </TableToolbarContent>
