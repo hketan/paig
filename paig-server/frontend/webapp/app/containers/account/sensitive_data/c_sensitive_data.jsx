@@ -72,7 +72,27 @@ class CSensitiveData extends Component {
 
         return (
             <>
-                <div /* style={{height: '90px'}} */>
+                <div className="header-container" style={{minHeight: '90px'}}>
+                    <Row style={{minHeight: '18px'}}>
+                    </Row>
+                    <div className="page-header m-t-sm d-flex gap-10">
+                        <div className="page-title">
+                            <h4>Tags
+                                <IconButton
+                                    label="Refresh"
+                                    kind="ghost"
+                                    size="sm"
+                                    onClick={this.handleRefresh}
+                                >
+                                    <Renew />
+                                </IconButton>
+                            </h4>
+                        </div>
+                        <div className="page-action">
+                        </div>
+                    </div>
+                </div>
+                {/* <div>
                     <Row className="m-b-md">
                         <Column>
                             <h4>Tags
@@ -87,7 +107,7 @@ class CSensitiveData extends Component {
                             </h4>
                         </Column>
                     </Row>
-                </div>
+                </div> */}
                 <Row>
                     <Column>
                         <Table

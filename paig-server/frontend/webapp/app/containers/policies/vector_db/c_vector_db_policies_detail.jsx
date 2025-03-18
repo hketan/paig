@@ -154,7 +154,7 @@ const Permissions = observer(({vectorDBModel, contentRestrictionData, permission
   return (
       <>
         <br/>
-        <FlexGrid narrow>
+        <div>
             <Row>
                 <Column data-testid="permission-card">
                     <h5 data-testid="permission-info">Permissions</h5>
@@ -188,7 +188,7 @@ const Permissions = observer(({vectorDBModel, contentRestrictionData, permission
                     />
                 </Column>
             </Row>
-        </FlexGrid>
+        </div>
       </>
   )
 

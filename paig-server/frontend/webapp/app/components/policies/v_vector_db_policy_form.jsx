@@ -393,6 +393,7 @@ class DenyAccess extends Component {
     }
 }
 
+let metadataKeyRef = null;
 let metadataValueRef = null;
 const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
     const {metadataKey, metadataValue} = form.fields;
@@ -402,18 +403,25 @@ const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
             <Form aria-label="sample form">
                 <Stack gap={7}>
                     <SelectComboBox
+                        ref={ref => metadataKeyRef = ref}
                         label="Vector DB Metadata"
                         valueKey="label"
                         fetchOnLoad={true}
                         value={metadataKey.value}
                         data-testid="metadataKey"
                         fetchOptions={(searchString, callback) => {
-                            metaDataLookUps(searchString, options => callback(options));
+                            metaDataLookUps(searchString, callback);
                         }}
                         onChange={(item) => {
-                            metadataValue.value = item.inputValue || item.selectedItem?.label || '';
-                            vectorDBPolicyFormUtil.setMetaDataChange(metadataValue.value)
+                            metadataValue.value = ""
+                            metadataKey.value = item.inputValue || item.selectedItem?.label || '';
+                            vectorDBPolicyFormUtil.setMetaDataChange(metadataKey.value)
                             metadataValueRef?.loadOptions?.();
+                        }}
+                        onInputChange={(item) => {
+                            console.log(item)
+                            metadataKey.value = item;
+                            metadataKeyRef?.loadOptions?.(metadataKey.value);
                         }}
                     />
                     <SelectComboBox

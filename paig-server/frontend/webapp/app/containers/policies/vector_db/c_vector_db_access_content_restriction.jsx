@@ -132,7 +132,13 @@ class CVectorDBAccessContentRestriction extends Component {
 
         this.deleteModalRef?.openModal({
             label: 'Delete RAG Contextual Data Filtering',
-            content: <Fragment>Are you sure you want to <b>delete</b>?</Fragment>,
+            title: 'Confirm Delete',
+            content: (
+                <Fragment>
+                    Deleting Data filtering will remove all associated grant and deny access. This action cannot be undone.
+                </Fragment>
+            ),
+
         }).then((confirm) => {
             this.props.vectorDBPolicyStore.deletePolicy(model.id, model.vectorDBId, {
                 models: cPolicies
@@ -205,7 +211,6 @@ class CVectorDBAccessContentRestriction extends Component {
                 </HeaderPanel>
                 <DangerModal
                     ref={ref => this.deleteModalRef = ref}
-                    title="Confirm Delete"
                 />
             </>
         );

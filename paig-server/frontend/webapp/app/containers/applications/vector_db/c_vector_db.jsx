@@ -51,7 +51,12 @@ class CVectorDB extends Component {
     handleDeleteVectorDB = (model) => {
         this.deleteModalRef?.openModal({
             label: 'Delete Vector DB',
-            content: <Fragment>Are you sure you want to delete <b>{model.name}</b>?</Fragment>,
+            title: 'Confirm Delete',
+            content: (
+                <Fragment>
+                    Deleting {model.name} will remove all associated policies, and data. This action cannot be undone.
+                </Fragment>
+            ),
         }).then((confirm) => {
             this.props.vectorDBStore.deleteVectorDB(model.id, {
                 models: this.cVectorDBs
@@ -94,7 +99,37 @@ class CVectorDB extends Component {
 
 		return (
 			<>
-			    <Row className="space-between align-items-center">
+			    <div className="header-container" style={{minHeight: '90px'}}>
+                    <Row style={{minHeight: '18px'}}>
+                    </Row>
+                    <div className="page-header m-t-sm d-flex gap-10">
+                        <div className="page-title">
+                            <h4>
+                                VectorDB
+                                <IconButton
+                                    label="Refresh"
+                                    kind="ghost"
+                                    size="sm"
+                                    onClick={this.handleRefresh}
+                                >
+                                    <Renew />
+                                </IconButton>
+                            </h4>
+                        </div>
+                        <div className="page-action">
+                            <AddButton
+                                colProps={{className: 'text-right m-b-md'}}
+                                permission={this.permission}
+                                data-track-id="add-vector-db"
+                                data-testid="add-vector-db"
+                                onClick={handleVectorDBCreate}
+                            >
+                                Create VectorDB
+                            </AddButton>
+                        </div>
+                    </div>
+                </div>
+			    {/* <Row className="space-between align-items-center">
                     <Column>
                         <h4>VectorDB
                             <IconButton
@@ -116,19 +151,17 @@ class CVectorDB extends Component {
                     >
                         Create VectorDB
                     </AddButton>
-                </Row>
-			    <Row>
-                    <VVectorDB
-                        data={cVectorDBs}
-                        permission={this.permission}
-                        handleVectorDBEdit={handleVectorDBEdit}
-                        handleVectorDBDetail={handleVectorDBDetail}
-                        handleDeleteVectorDB={handleDeleteVectorDB}
-                    />
-                </Row>
+                </Row> */}
+                <VVectorDB
+                    data={cVectorDBs}
+                    permission={this.permission}
+                    handleVectorDBEdit={handleVectorDBEdit}
+                    handleVectorDBDetail={handleVectorDBDetail}
+                    handleDeleteVectorDB={handleDeleteVectorDB}
+                />
+
 			    <DangerModal
 			        ref={ref => this.deleteModalRef = ref}
-			        title="Confirm Delete"
 			    />
 			    {/* <PaginationComponent
                     promiseData={cVectorDBs}
