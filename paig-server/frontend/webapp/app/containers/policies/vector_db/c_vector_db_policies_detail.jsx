@@ -153,41 +153,40 @@ const Permissions = observer(({vectorDBModel, contentRestrictionData, permission
 
   return (
       <>
-        <br/>
-        <div>
-            <Row>
-                <Column data-testid="permission-card">
-                    <h5 data-testid="permission-info">Permissions</h5>
-                    <div className="d-flex align-items-center space-between m-t-md">
-                        <div data-testid="cont-rest-title">
-                          <Rag /> RAG Filtering Permissions
-                        </div>
-                        <div data-testid="sim-icon">
-                            <Filter />
-                        </div>
-                    </div>
-                    <div className="d-flex align-items-center space-between m-t-md">
-                        <div data-testid="cont-rest-title">
-                          <UserMultiple /> User/Group Access-Limited Retrieval
-                        </div>
-                        <div data-testid="sim-icon">
-                            {
-                                vectorDBModel.groupEnforcement === STATUS.enabled.value
-                                ? <CheckmarkFilled className="text-success" data-testid="check-icon"/>
-                                : <Misuse data-testid="cancel-icon"/>
-                            }
-                        </div>
-                    </div>
-                </Column>
-                <Column>
-                    <h5 data-testid="application-info">Applications Overview</h5>
-                    <ApplicationOverview
-                        cAIApplicationsData={cAIApplications}
-                        handleApplicationRedirect={handleApplicationRedirect}
-                        handlePageChange={handlePageChange}
-                    />
-                </Column>
-            </Row>
+        <div className='m-t-lg'>
+        <Row>
+            <Column data-testid="permission-card">
+              <h5 data-testid="permission-info">Permissions</h5>
+              <div className="d-flex align-items-center space-between m-t-md">
+                  <div data-testid="cont-rest-title">
+                    <Rag /> RAG Filtering Permissions
+                  </div>
+                  <div data-testid="sim-icon">
+                      <Filter />
+                  </div>
+              </div>
+              <div className="d-flex align-items-center space-between m-t-md">
+                  <div data-testid="cont-rest-title">
+                    <UserMultiple /> User/Group Access-Limited Retrieval
+                  </div>
+                  <div data-testid="sim-icon">
+                      {
+                          vectorDBModel.groupEnforcement === STATUS.enabled.value
+                          ? <CheckmarkFilled className="text-success" data-testid="check-icon"/>
+                          : <Misuse data-testid="cancel-icon"/>
+                      }
+                  </div>
+              </div>
+            </Column>
+            <Column>
+                <h5 data-testid="application-info">Applications Overview</h5>
+                <ApplicationOverview
+                    cAIApplicationsData={cAIApplications}
+                    handleApplicationRedirect={handleApplicationRedirect}
+                    handlePageChange={handlePageChange}
+                />
+            </Column>
+        </Row>
         </div>
       </>
   )
