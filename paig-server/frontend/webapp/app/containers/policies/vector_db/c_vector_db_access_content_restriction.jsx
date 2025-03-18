@@ -180,16 +180,20 @@ class CVectorDBAccessContentRestriction extends Component {
                     handlePolicyEdit={this.handlePolicyEdit}
                     handlePolicyDelete={this.handlePolicyDelete}
                 />
-                <HeaderPanel expanded={this._vState.editMode} style={{width: this._vState.editMode ? '300px' : ''}}>
+                <HeaderPanel expanded={this._vState.editMode} style={{width: this._vState.editMode ? '500px' : ''}}>
                     <Tile>
-                        <FormGroup legendText="">
-                            <VVectorDBPolicyForm
-                                ref={ref => this.policyFormRef = ref}
-                                form={this.form}
-                                vectorDBPolicyFormUtil={vectorDBPolicyFormUtil}
-                            />
-                        </FormGroup>
-                        <ButtonSet>
+                        <div className="header-panel-title">
+                        </div>
+                        <div className="header-panel-content">
+                            <FormGroup legendText="">
+                                <VVectorDBPolicyForm
+                                    ref={ref => this.policyFormRef = ref}
+                                    form={this.form}
+                                    vectorDBPolicyFormUtil={vectorDBPolicyFormUtil}
+                                />
+                            </FormGroup>
+                        </div>
+                        <div className="header-panel-footer m-b-md" style={{bottom: 0, position: 'fixed'}}>
                             <Button
                                 data-testid="vectordb-policy-save-btn"
                                 data-track-id="vectordb-policy-save-btn"
@@ -206,7 +210,7 @@ class CVectorDBAccessContentRestriction extends Component {
                             >
                                 Cancel
                             </Button>
-                        </ButtonSet>
+                        </div>
                     </Tile>
                 </HeaderPanel>
                 <DangerModal

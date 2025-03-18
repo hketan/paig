@@ -4,20 +4,8 @@ import { compact } from 'lodash';
 
 import {Layer, Form, Stack} from '@carbon/react';
 
-// import {TableContainer, Table, TableHead, TableRow, TableBody,
-//     TableCell, Divider, Grid
-// } from '@material-ui/core';
-// import Typography from '@material-ui/core/Typography';
-// import Tooltip from '@material-ui/core/Tooltip';
-// import CloseIcon from '@material-ui/icons/Close';
-// import PersonIcon from '@material-ui/icons/Person';
-// import PeopleIcon from '@material-ui/icons/People';
-// import ContactsIcon from '@material-ui/icons/Contacts';
-
 import { userGroupRolesLookups, metaDataLookUps, metaDataValueLookUps } from 'components/policies/field_lookups';
-// import {TagChip} from 'common-ui/lib/fs_select/fs_select';
 import {Utils} from 'common-ui/utils/utils';
-// import {FormHorizontal, FormGroupInput, FormGroupSelect2, ValidationAsterisk} from 'common-ui/components/form_fields';
 import { STATUS } from 'common-ui/utils/globals';
 import {SelectBox} from 'common-ui/carbon_components/select/select_box';
 import {SelectComboBox} from 'common-ui/carbon_components/select/select_combo_box';
@@ -419,7 +407,6 @@ const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
                             metadataValueRef?.loadOptions?.();
                         }}
                         onInputChange={(item) => {
-                            console.log(item)
                             metadataKey.value = item;
                             metadataKeyRef?.loadOptions?.(metadataKey.value);
                         }}
@@ -438,11 +425,9 @@ const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
                             }
                         }}
                         onChange={(item) => {
-                            console.log(item)
                             metadataValue.value = item.inputValue || item.selectedItem?.label || '';
                         }}
                         onInputChange={(item) => {
-                            console.log(item)
                             metadataValue.value = item;
                         }}
                     />
