@@ -180,9 +180,10 @@ class CVectorDBAccessContentRestriction extends Component {
                     handlePolicyEdit={this.handlePolicyEdit}
                     handlePolicyDelete={this.handlePolicyDelete}
                 />
-                <HeaderPanel expanded={this._vState.editMode} style={{width: this._vState.editMode ? '500px' : ''}}>
-                    <Tile>
+                <HeaderPanel expanded={this._vState.editMode} style={{width: this._vState.editMode ? '500px' : ''}} className='sidepanel-shadow'>
+                    <Tile className='sidebar-form'>
                         <div className="header-panel-title">
+                            <h4>Add Data Filtering</h4>
                         </div>
                         <div className="header-panel-content">
                             <FormGroup legendText="">
@@ -193,7 +194,7 @@ class CVectorDBAccessContentRestriction extends Component {
                                 />
                             </FormGroup>
                         </div>
-                        <div className="header-panel-footer m-b-md" style={{bottom: 0, position: 'fixed'}}>
+                        <div className="header-panel-footer">
                             <Button
                                 data-testid="vectordb-policy-save-btn"
                                 data-track-id="vectordb-policy-save-btn"

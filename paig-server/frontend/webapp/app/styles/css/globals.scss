@@ -159,7 +159,7 @@
     margin-inline-end: 0.5rem;
   }
 
-  &__item--icon a.cds--side-nav__link {
+  &__item.cds--side-nav__item--icon a.cds--side-nav__link {
     padding-inline-start: 3.5rem;
   }
 
@@ -169,15 +169,51 @@
   }
 }
 .page-header {
-  align-items: baseline;
 
   .page-title {
     flex: 2 1 0%;
     min-width: 0;
     margin-bottom: 16px;
+    min-height: 32px;
   }
 
   .page-action {
     display: flex;
   }
+}
+
+.sidebar-form {
+  flex: 0 1 20%; /* Can shrink to 0px, but grows up to 20% */
+  min-height: 0; /* Ensures proper shrinking */
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+
+  .header-panel-title {
+    flex: 0 1 50px; /* Can shrink to 0px, but grows up to 50px, title only desc goes in content */
+    min-height: 0; /* Ensures proper shrinking */
+    padding: 32px;
+  }
+
+  .header-panel-content {
+    flex: 1; /* Grows to fill available space */
+    overflow: auto; /* Allows scrolling if content is too large */
+    padding: 32px;
+  }
+
+  .header-panel-footer {
+    flex: 0 0 50px; /* Fixed height (adjust as needed) */
+    background: lightgray;
+
+    button {
+      max-width: 50%;
+      min-height: 4rem;
+      min-width: 50%;
+      position: relative;
+    }
+  }
+}
+.sidepanel-shadow{
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }

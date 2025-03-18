@@ -172,7 +172,7 @@ class CVectorDBMain extends Component {
                         <div className="page-action">
                             {
                                 this._vState.model &&
-                                <Button kind="tertiary" className="pull-right" onClick={this.handleEdit}>
+                                <Button kind="tertiary" onClick={this.handleEdit}>
                                     Edit VectorDB
                                 </Button>
                             }
