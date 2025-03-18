@@ -156,8 +156,8 @@ class CVectorDBMain extends Component {
 
         return (
             <>
-                <div style={{height: '90px'}}>
-                    <Row>
+                <div className="header-container" style={{minHeight: '90px'}}>
+                    <Row style={{minHeight: '18px'}}>
                         <Column>
                             <Breadcrumb noTrailingSlash>
                                 <BreadcrumbItem href="#/vector_db">VectorDB</BreadcrumbItem>
@@ -165,19 +165,19 @@ class CVectorDBMain extends Component {
                             </Breadcrumb>
                         </Column>
                     </Row>
-                    <Row className="space-between align-items-center m-t-sm">
-                        <Column>
+                    <div className="page-header m-t-sm d-flex gap-10">
+                        <div className="page-title">
                             <h4>{this._vState.model?.name}</h4>
-                        </Column>
-                        <Column>
+                        </div>
+                        <div className="page-action">
                             {
                                 this._vState.model &&
                                 <Button kind="tertiary" className="pull-right" onClick={this.handleEdit}>
                                     Edit VectorDB
                                 </Button>
                             }
-                        </Column>
-                    </Row>
+                        </div>
+                    </div>
                 </div>
                 <Tabs onTabCloseRequest={() => {}}>
                     <TabList contained scrollDebounceWait={200} aria-label="tabs">

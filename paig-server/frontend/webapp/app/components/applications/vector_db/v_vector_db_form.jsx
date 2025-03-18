@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import { observer } from 'mobx-react';
 
 import {Tile, Form, Stack, FormGroup, Button, Layer} from '@carbon/react';
@@ -43,8 +43,10 @@ const VVectorDBForm = observer(({form, _vState, handleCreate, handleUpdate, hand
         });
     }
 
+    const Wrapper = _vState.editMode ? Tile : Fragment;
+
     return (
-        <Tile>
+        <Wrapper>
             <h5 data-testid="info">Information</h5>
             <br/>
             <Layer>
@@ -108,7 +110,7 @@ const VVectorDBForm = observer(({form, _vState, handleCreate, handleUpdate, hand
                     </Stack>
                 </Form>
             </Layer>
-        </Tile>
+        </Wrapper>
     );
 })
 

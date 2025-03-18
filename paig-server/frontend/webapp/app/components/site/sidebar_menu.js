@@ -1,16 +1,13 @@
 import React from 'react';
 
-//import SettingsIcon from '@material-ui/icons/Settings';
-//import SecurityIcon from '@material-ui/icons/Security';
-//import ControlCameraRoundedIcon from '@material-ui/icons/ControlCameraRounded';
+import {IbmConsultingAdvantageApplication, Aperture, ManageProtection, CloudServiceManagement} from '@carbon/icons-react';
 
 import { UI_CONSTANTS } from 'utils/globals';
-//import { CodeWindowIcon } from './privacera_logo';
 
 const SIDEBAR_MENU = [{
     menuToggleAttrName: "paig_navigator",
     name: "Paig Navigator",
-    //  icon: <CodeWindowIcon className="list-svg-icon" />,
+    icon: IbmConsultingAdvantageApplication,
     sidebar: UI_CONSTANTS.PAIG_NAVIGATOR,
     child: [{
         to: "/ai_applications",
@@ -28,7 +25,7 @@ const SIDEBAR_MENU = [{
 }, {
     menuToggleAttrName: "paig_lens",
     name: "Paig Lens",
-    //icon: <ControlCameraRoundedIcon className="nav-rotated-icon" />,
+    icon: Aperture,
     sidebar: UI_CONSTANTS.PAIG_LENS,
     child: [{
         to: "/dashboard",
@@ -63,7 +60,7 @@ const SIDEBAR_MENU = [{
 }, {
     menuToggleAttrName: "paig_guard",
     name: "Paig Guard",
-    //icon: <SecurityIcon className="list-svg-icon" />,
+    icon: ManageProtection,
     sidebar: UI_CONSTANTS.PAIG_GUARD,
     child: [{
     to: "/tags",
@@ -79,7 +76,7 @@ const SIDEBAR_MENU = [{
 }, {
     menuToggleAttrName: "settings",
     name: "Settings",
-    //icon: <SettingsIcon className="list-svg-icon" />,
+    icon: CloudServiceManagement,
     sidebar: UI_CONSTANTS.SETTINGS,
     child: [{
         to: "/users",

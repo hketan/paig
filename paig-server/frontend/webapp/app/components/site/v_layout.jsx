@@ -85,7 +85,7 @@ const VLayout = () => {
                                                         UiState.menuToggle[menuToggleAttrName] = !UiState.menuToggle[menuToggleAttrName];
                                                     }
                                                 }}>
-                                                    <SideNavMenu renderIcon={Fade} title={menuItem.name} defaultExpanded={defaultExpanded}>
+                                                    <SideNavMenu renderIcon={menuItem.icon} title={menuItem.name} defaultExpanded={defaultExpanded}>
                                                         {menuItem.child.map((childItem, childIndex) => (
                                                             <SideNavMenuItem
                                                                 key={childIndex}

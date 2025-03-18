@@ -401,16 +401,17 @@ const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
         <Layer>
             <Form aria-label="sample form">
                 <Stack gap={7}>
-                    <SelectBox
+                    <SelectComboBox
                         label="Vector DB Metadata"
                         valueKey="label"
                         fetchOnLoad={true}
                         value={metadataKey.value}
+                        data-testid="metadataKey"
                         fetchOptions={(searchString, callback) => {
                             metaDataLookUps(searchString, options => callback(options));
                         }}
-                        onChange={(e) => {
-                            metadataValue.value = e.target.value;
+                        onChange={(item) => {
+                            metadataValue.value = item.inputValue || item.selectedItem?.label || '';
                             vectorDBPolicyFormUtil.setMetaDataChange(metadataValue.value)
                             metadataValueRef?.loadOptions?.();
                         }}

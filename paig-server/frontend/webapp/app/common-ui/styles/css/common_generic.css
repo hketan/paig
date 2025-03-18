@@ -630,6 +630,10 @@
     display: flex !important; /* missing bootstrap style */
 }
 
+.gap-10 {
+    gap: 10px;
+}
+
 .flex-end {
     justify-content: flex-end;
 }

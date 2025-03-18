@@ -126,3 +126,20 @@
     padding-left: 5px;
   }
 }
+
+.cds--side-nav__submenu, .cds--side-nav__menu a.cds--side-nav__link {
+    min-block-size: 2.75rem;
+}
+
+.cds--side-nav__icon:not(.cds--side-nav__submenu-chevron) {
+    margin-inline-end: 0.5rem
+}
+
+.cds--side-nav__item.cds--side-nav__item--icon a.cds--side-nav__link {
+    padding-inline-start: 3.5rem;
+}
+
+.cds--side-nav__icon > svg:not(.cds--side-nav__submenu-chevron) {
+    inline-size: 1.15rem;
+    block-size: 1.15rem;
+}
