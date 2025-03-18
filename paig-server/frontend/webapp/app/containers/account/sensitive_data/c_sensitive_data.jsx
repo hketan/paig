@@ -77,16 +77,15 @@ class CSensitiveData extends Component {
                     </Row>
                     <div className="page-header m-t-sm d-flex gap-10">
                         <div className="page-title">
-                            <h4>Tags
+                            <h3 className="d-flex align-center">Tags
                                 <IconButton
                                     label="Refresh"
                                     kind="ghost"
-                                    size="sm"
                                     onClick={this.handleRefresh}
                                 >
-                                    <Renew />
+                                    <Renew size={20} />
                                 </IconButton>
-                            </h4>
+                            </h3>
                         </div>
                         <div className="page-action">
                         </div>
