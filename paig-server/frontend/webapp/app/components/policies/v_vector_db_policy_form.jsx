@@ -2,6 +2,8 @@ import React, {Fragment, Component} from 'react';
 import {observer} from 'mobx-react';
 import { compact } from 'lodash';
 
+import {Layer, Form, Stack} from '@carbon/react';
+
 // import {TableContainer, Table, TableHead, TableRow, TableBody,
 //     TableCell, Divider, Grid
 // } from '@material-ui/core';
@@ -12,11 +14,13 @@ import { compact } from 'lodash';
 // import PeopleIcon from '@material-ui/icons/People';
 // import ContactsIcon from '@material-ui/icons/Contacts';
 
-// import { userGroupRolesLookups, metaDataLookUps, metaDataValueLookUps } from 'components/policies/field_lookups';
+import { userGroupRolesLookups, metaDataLookUps, metaDataValueLookUps } from 'components/policies/field_lookups';
 // import {TagChip} from 'common-ui/lib/fs_select/fs_select';
 import {Utils} from 'common-ui/utils/utils';
 // import {FormHorizontal, FormGroupInput, FormGroupSelect2, ValidationAsterisk} from 'common-ui/components/form_fields';
 import { STATUS } from 'common-ui/utils/globals';
+import {SelectBox} from 'common-ui/carbon_components/select/select_box';
+import {SelectComboBox} from 'common-ui/carbon_components/select/select_combo_box';
 
 const TagValue = observer(({form, vectorDBPolicyFormUtil}) => {
     const {metadataKey, metadataValue} = form.fields;
@@ -389,9 +393,54 @@ class DenyAccess extends Component {
     }
 }
 
+let metadataValueRef = null;
 const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
-  return null;
-  const {name, description} = form.fields;
+    const {metadataKey, metadataValue} = form.fields;
+
+    return (
+        <Layer>
+            <Form aria-label="sample form">
+                <Stack gap={7}>
+                    <SelectBox
+                        label="Vector DB Metadata"
+                        valueKey="label"
+                        fetchOnLoad={true}
+                        value={metadataKey.value}
+                        fetchOptions={(searchString, callback) => {
+                            metaDataLookUps(searchString, options => callback(options));
+                        }}
+                        onChange={(e) => {
+                            metadataValue.value = e.target.value;
+                            vectorDBPolicyFormUtil.setMetaDataChange(metadataValue.value)
+                            metadataValueRef?.loadOptions?.();
+                        }}
+                    />
+                    <SelectComboBox
+                        ref={ref => metadataValueRef = ref}
+                        label="Value"
+                        valueKey="label"
+                        fetchOnLoad={true}
+                        value={metadataValue.value}
+                        data-testid="metadataValue"
+                        allowCustomValue={true}
+                        fetchOptions={(searchString, callback) => {
+                            if (metadataKey.value) {
+                                metaDataValueLookUps(searchString, callback, undefined, {metadataName: metadataKey.value});
+                            }
+                        }}
+                        onChange={(item) => {
+                            console.log(item)
+                            metadataValue.value = item.inputValue || item.selectedItem?.label || '';
+                        }}
+                        onInputChange={(item) => {
+                            console.log(item)
+                            metadataValue.value = item;
+                        }}
+                    />
+                </Stack>
+            </Form>
+        </Layer>
+    )
 
   return (
     <FormHorizontal alignItems="flex-start">

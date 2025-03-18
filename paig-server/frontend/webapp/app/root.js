@@ -173,7 +173,7 @@ class Root extends Component {
                     (
                         <Fragment>
                             <VLayout />
-                            <Content id="main-content" /*style={{ paddingLeft: '270px' }}*/>
+                            <Content id="main-content" style={{ paddingLeft: '20px', paddingRight: '20px' }} >
                               {
                                 state.loaded
                                 ?

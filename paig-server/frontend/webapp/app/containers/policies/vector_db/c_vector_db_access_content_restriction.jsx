@@ -6,7 +6,7 @@ import { cloneDeep } from 'lodash';
 import {HeaderPanel, Tile, Button, FormGroup, ButtonSet} from '@carbon/react';
 
 import UiState from 'data/ui_state';
-import /* VVectorDBPolicyForm, */ { vector_db_policy_form_def } from 'components/policies/v_vector_db_policy_form';
+import VVectorDBPolicyForm, { vector_db_policy_form_def } from 'components/policies/v_vector_db_policy_form';
 import VectorDBPolicyFormUtil from 'containers/policies/vector_db/vector_db_policy_form_util';
 // import { metaDataLookUps } from 'components/policies/field_lookups';
 import VVectorDBAccessContentRestriction from 'components/policies/v_vector_db_access_content_restriction'
@@ -111,7 +111,7 @@ class CVectorDBAccessContentRestriction extends Component {
     }
     handleReject = () => {
         this.vectorDBPolicyFormUtil.resetForm();
-        this.addPolicyModalRef.hide();
+        this._vState.editMode = false;
     }
     handleAdd = () => {
 //         const {vectorDBModel} = this.props;
@@ -177,6 +177,11 @@ class CVectorDBAccessContentRestriction extends Component {
                 <HeaderPanel expanded={this._vState.editMode} style={{width: this._vState.editMode ? '300px' : ''}}>
                     <Tile>
                         <FormGroup legendText="">
+                            <VVectorDBPolicyForm
+                                ref={ref => this.policyFormRef = ref}
+                                form={this.form}
+                                vectorDBPolicyFormUtil={vectorDBPolicyFormUtil}
+                            />
                         </FormGroup>
                         <ButtonSet>
                             <Button
@@ -191,7 +196,7 @@ class CVectorDBAccessContentRestriction extends Component {
                                 kind="secondary"
                                 data-testid="vectordb-policy-cancel-btn"
                                 data-track-id="vectordb-policy-cancel-btn"
-                                //onClick={this.handleCancelEdit}
+                                onClick={this.handleReject}
                             >
                                 Cancel
                             </Button>
