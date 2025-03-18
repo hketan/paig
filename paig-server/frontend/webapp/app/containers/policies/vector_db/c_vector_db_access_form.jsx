@@ -63,8 +63,15 @@ class CVectorDBAccessForm extends Component {
                     permission={permission}
                     onEditClick={this.handleEdit}
                 />
-                <HeaderPanel expanded={this._vState.editMode} style={{width: this._vState.editMode ? '300px' : ''}}>
-                    <Tile>
+                <HeaderPanel expanded={this._vState.editMode} style={{width: this._vState.editMode ? '450px' : ''}}>
+                <Tile className='sidebar-form'>
+                        <div className="header-panel-title">
+                            <h4>Edit Access Control</h4>
+                        </div>
+                        <div className="header-panel-content">
+                        <div className="header-panel-description">
+                            Manage data retrieval permissions based on user and group access levels.
+                        </div>
                         <FormGroup legendText="">
                             <VVectorDBAccessForm
                                 editMode={true}
@@ -72,7 +79,8 @@ class CVectorDBAccessForm extends Component {
                                 permission={permission}
                             />
                         </FormGroup>
-                        <ButtonSet>
+                        </div>
+                        <div className="header-panel-footer">
                             <Button
                                 data-testid="edit-save-btn"
                                 data-track-id="access-form-edit-save-btn"
@@ -89,7 +97,7 @@ class CVectorDBAccessForm extends Component {
                             >
                                 Cancel
                             </Button>
-                        </ButtonSet>
+                        </div>
                     </Tile>
                 </HeaderPanel>
             </>

@@ -83,6 +83,7 @@ class CVectorDBPermissions extends Component {
                             return (
                                 <>
                                     <div className="m-b-md">
+                                        <h4 className='m-b-md'>Access Control Settings</h4>
                                         <CVectorDBAccessForm
                                             vectorDBModel={vectorDBModel}
                                             permission={this.permission}

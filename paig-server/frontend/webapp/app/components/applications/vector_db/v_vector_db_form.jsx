@@ -47,8 +47,7 @@ const VVectorDBForm = observer(({form, _vState, handleCreate, handleUpdate, hand
 
     return (
         <Wrapper>
-            <h5 data-testid="info">Information</h5>
-            <br/>
+            <h4 className='m-b-md' data-testid="info">Information</h4>
             <Layer>
                 <Form aria-label="sample form">
                     <Stack gap={7}>
