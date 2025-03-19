@@ -119,7 +119,7 @@ class CommonTable extends Component {
                             <div className="data-table--message-box">
                                 <Tile>
                                     <div className="data-table--message-icon">
-                                        <KubernetesPod size={100} />
+                                        <KubernetesPod size={50} />
                                     </div>
                                     <div className="data-table--message-content">
                                         <span className="data-table--message-text">

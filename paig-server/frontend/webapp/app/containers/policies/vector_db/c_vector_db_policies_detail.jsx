@@ -162,7 +162,7 @@ const Permissions = observer(({vectorDBModel, contentRestrictionData, permission
                     <Rag /> RAG Filtering Permissions
                   </div>
                   <div data-testid="sim-icon">
-                      <Filter />
+                      <Filter size="20" />
                   </div>
               </div>
               <div className="d-flex align-items-center space-between m-t-md">
@@ -172,8 +172,8 @@ const Permissions = observer(({vectorDBModel, contentRestrictionData, permission
                   <div data-testid="sim-icon">
                       {
                           vectorDBModel.groupEnforcement === STATUS.enabled.value
-                          ? <CheckmarkFilled className="text-success" data-testid="check-icon"/>
-                          : <Misuse data-testid="cancel-icon"/>
+                          ? <CheckmarkFilled className="text-success" data-testid="check-icon" size="20" />
+                          : <Misuse data-testid="cancel-icon" size="20" />
                       }
                   </div>
               </div>
