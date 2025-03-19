@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {observer, inject} from 'mobx-react';
 import {observable} from 'mobx';
 
+import {Breadcrumb, BreadcrumbItem, Row, Column} from '@carbon/react';
+
 import VVectorDBForm, {vector_db_form_def} from 'components/applications/vector_db/v_vector_db_form';
 import f from 'common-ui/utils/f';
 import {createFSForm} from 'common-ui/lib/form/fs_form';
@@ -99,32 +101,56 @@ class CVectorDBForm extends Component {
         const {handleCreate, handleUpdate, handleCancel} = this;
 
         return (
-            <SkeletonTextLoader
-                isLoading={this._vState.loading}
-                lineCount={6}
-            >
+            <>
                 {
-                    () => {
-                        if (!this.props.match?.params?.id || this._vState.model) {
+                    this._vState.editMode &&
+                    <div className="header-container" style={{minHeight: '90px'}}>
+                        <Row style={{minHeight: '18px'}}>
+                            <Column>
+                                <Breadcrumb noTrailingSlash>
+                                    <BreadcrumbItem href="#/vector_db">VectorDB</BreadcrumbItem>
+                                    <BreadcrumbItem isCurrentPage>
+                                        {
+                                            this.props.match?.params?.id ? 'Edit' : 'Create'
+                                        }
+                                    </BreadcrumbItem>
+                                </Breadcrumb>
+                            </Column>
+                        </Row>
+                        <div className="page-header m-t-sm d-flex gap-10">
+                            <div className="page-title">
+                                <h3>{this._vState.model?.name || 'Create New VectorDB'}</h3>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <SkeletonTextLoader
+                    isLoading={this._vState.loading}
+                    lineCount={6}
+                >
+                    {
+                        () => {
+                            if (!this.props.match?.params?.id || this._vState.model) {
+                                return (
+                                    <VVectorDBForm
+                                        form={this.form}
+                                        _vState={this._vState}
+                                        handleCreate={handleCreate}
+                                        handleUpdate={handleUpdate}
+                                        handleCancel={handleCancel}
+                                    />
+                                )
+                            }
+
                             return (
-                                <VVectorDBForm
-                                    form={this.form}
-                                    _vState={this._vState}
-                                    handleCreate={handleCreate}
-                                    handleUpdate={handleUpdate}
-                                    handleCancel={handleCancel}
-                                />
+                                <div>
+                                    <h4>VectorDB not found</h4>
+                                </div>
                             )
                         }
-
-                        return (
-                            <div>
-                                <h4>VectorDB not found</h4>
-                            </div>
-                        )
                     }
-                }
-            </SkeletonTextLoader>
+                </SkeletonTextLoader>
+            </>
         );
     }
 }

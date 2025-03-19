@@ -25,7 +25,7 @@ export function userGroupRolesLookups(searchString, callback, uniqKey="uniq", ad
       source.cancel();
     })
   }
-  const headers = UiState.getHeaderWithTenantId();
+  const headers = {};//UiState.getHeaderWithTenantId();
 
   const userSource = getAxiosSourceToken();
   const groupSource = getAxiosSourceToken();

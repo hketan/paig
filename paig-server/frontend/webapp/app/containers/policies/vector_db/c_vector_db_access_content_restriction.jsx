@@ -14,6 +14,7 @@ import { createFSForm } from 'common-ui/lib/form/fs_form';
 import f from 'common-ui/utils/f';
 import { STATUS } from 'common-ui/utils/globals';
 import {DangerModal} from 'common-ui/carbon_components/modal/danger_modal';
+import {DefaultModal} from 'common-ui/carbon_components/modal/default_modal';
 // import FSModal from 'common-ui/lib/fs_modal';
 
 @inject('vectorDBPolicyStore')
@@ -35,6 +36,27 @@ class CVectorDBAccessContentRestriction extends Component {
         const {disabled, enabled} = STATUS;
         const statusObj = disabled.value === value ? disabled : enabled;
         //"{model.description}"
+
+        this.statusModalRef?.openModal({
+            title: 'Update RAG Contextual Data Filtering',
+            primaryButtonText: statusObj.label,
+            content: (
+                <Fragment>
+                    Are you sure you want to <b>{statusObj.label}</b> the Data Filtering?
+                </Fragment>
+            )
+        }).then((confirm) => {
+            model.status = value;
+            this.props.vectorDBPolicyStore.updatePolicy(model.id, model.vectorDBId, model)
+            .then(() => {
+                confirm.hide();
+                this.props.fetchPolicies();
+                //f.notifySuccess(`Data Filtering ${statusObj.name} successfully.`);
+            }, f.handleError(null, null, {confirm}));
+        }, () => {})
+
+
+        return;
         f._confirm.show({
             title: `Update Restriction Status`,
             children: <Fragment>Are you sure you want to <b>{statusObj.label}</b> the restriction status?</Fragment>,
@@ -216,6 +238,9 @@ class CVectorDBAccessContentRestriction extends Component {
                 </HeaderPanel>
                 <DangerModal
                     ref={ref => this.deleteModalRef = ref}
+                />
+                <DefaultModal
+                    ref={ref => this.statusModalRef = ref}
                 />
             </>
         );

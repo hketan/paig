@@ -161,13 +161,13 @@ class CVectorDBMain extends Component {
                         <Column>
                             <Breadcrumb noTrailingSlash>
                                 <BreadcrumbItem href="#/vector_db">VectorDB</BreadcrumbItem>
-                                <BreadcrumbItem href="#" isCurrentPage>Details</BreadcrumbItem>
+                                <BreadcrumbItem isCurrentPage>Details</BreadcrumbItem>
                             </Breadcrumb>
                         </Column>
                     </Row>
                     <div className="page-header m-t-sm d-flex gap-10">
                         <div className="page-title">
-                            <h4>{this._vState.model?.name}</h4>
+                            <h3>{this._vState.model?.name}</h3>
                         </div>
                         <div className="page-action">
                             {

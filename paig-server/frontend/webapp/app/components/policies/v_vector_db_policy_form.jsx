@@ -381,6 +381,13 @@ class DenyAccess extends Component {
     }
 }
 
+const AllowDeniedBox = observer(({form, vectorDBPolicyFormUtil, type}) => {
+    return null;
+    return (
+        null
+    )
+});
+
 let metadataKeyRef = null;
 let metadataValueRef = null;
 const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
@@ -407,8 +414,10 @@ const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
                             metadataValueRef?.loadOptions?.();
                         }}
                         onInputChange={(item) => {
-                            metadataKey.value = item;
-                            metadataKeyRef?.loadOptions?.(metadataKey.value);
+                            if (metadataKey.value !== item) {
+                                metadataKey.value = item;
+                                metadataKeyRef?.loadOptions?.(metadataKey.value);
+                            }
                         }}
                     />
                     <SelectComboBox

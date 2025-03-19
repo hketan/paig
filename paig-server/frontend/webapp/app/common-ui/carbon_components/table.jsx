@@ -7,6 +7,7 @@ import {
     Table, TableHead, TableHeader, TableRow, TableBody, TableCell, TableContainer, TableToolbar,
     DataTable, DataTableSkeleton, Pagination, FlexGrid, Row, Column, Tile
 } from '@carbon/react';
+import {KubernetesPod} from '@carbon/icons-react';
 
 import UiState from 'data/ui_state';
 import f from 'common-ui/utils/f';
@@ -118,6 +119,7 @@ class CommonTable extends Component {
                             <div className="data-table--message-box">
                                 <Tile>
                                     <div className="data-table--message-icon">
+                                        <KubernetesPod size={100} />
                                     </div>
                                     <div className="data-table--message-content">
                                         <span className="data-table--message-text">
