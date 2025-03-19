@@ -72,7 +72,7 @@ const VVectorDBForm = observer(({form, _vState, handleCreate, handleUpdate, hand
                         <FormTextArea
                             fieldObj={description}
                             label="Description"
-                            placeholder="Enter description"
+                            placeholder={_vState.editMode ? 'Enter a description' : 'No description added'}
                             data-testid="desc"
                             readOnly={!_vState.editMode}
                             rows={2}
