@@ -116,6 +116,7 @@ class CSensitiveData extends Component {
                             noDataText="No matching tags found"
                             pageChange={this.handlePageChange}
                             showToolbar={true}
+                            showPaginationForSinglePage={true}
                             sortBy={this.cSensitiveData.params.sort}
                             handleSort={this.handleSort}
                             toolbarContent={
