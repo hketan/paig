@@ -95,14 +95,14 @@ class CVectorDBAccessContentRestriction extends Component {
         const {cPolicies} = this.props;
         const { vectorDBModel } = this.props;
         const valid = await this.vectorDBPolicyFormUtil.formValidation();
-        const modal = this.addPolicyModalRef;
+        //const modal = this.addPolicyModalRef;
         if (valid && vectorDBModel.id) {
 
-            modal && modal.okBtnDisabled(true);
+            //modal && modal.okBtnDisabled(true);
             // For save policies assign others option value to groups;
             let data = this.reAssignOthersOptionToGroups();
             data.vectorDBId = vectorDBModel.id;
-            data.tenantId = UiState.getTenantId();
+            //data.tenantId = UiState.getTenantId();
 
             if (this.form.model) {
                 data = Object.assign({}, this.form.model || {}, data);
@@ -112,22 +112,20 @@ class CVectorDBAccessContentRestriction extends Component {
                 this.props.vectorDBPolicyStore.updatePolicy(data.id, vectorDBModel.id, data)
                     .then(() => {
                         this.vectorDBPolicyFormUtil.resetForm();
-                        modal && modal.hide();
+//                         modal && modal.hide();
                         this.props.fetchPolicies();
-                        f.notifySuccess(`Restriction updated successfully.`);
-                    }, f.handleError(cPolicies, null, {
-                        modal
-                    }));
+                        this._vState.editMode = false;
+                        //f.notifySuccess(`Restriction updated successfully.`);
+                    });
             } else {
                 this.props.vectorDBPolicyStore.createPolicy(vectorDBModel.id, data)
                     .then(() => {
                         this.vectorDBPolicyFormUtil.resetForm();
-                        modal && modal.hide();
+//                         modal && modal.hide();
                         this.props.fetchPolicies();
-                        f.notifySuccess(`Restriction added successfully.`);
-                    }, f.handleError(cPolicies, null, {
-                        modal
-                    }));
+                        this._vState.editMode = false;
+                        //f.notifySuccess(`Restriction added successfully.`);
+                    });
             }
         }
     }
@@ -145,9 +143,10 @@ class CVectorDBAccessContentRestriction extends Component {
     handlePolicyEdit = model => {
         const { vectorDBModel } = this.props;
         this.vectorDBPolicyFormUtil.setNewPayloadInForm(cloneDeep(model));
-        this.addPolicyModalRef?.show({
-          title: `Edit Restriction in "${vectorDBModel.name}" vector DB`
-        });
+//         this.addPolicyModalRef?.show({
+//           title: `Edit Restriction in "${vectorDBModel.name}" vector DB`
+//         });
+        this._vState.editMode = true;
     }
     handlePolicyDelete = model => {
         const {cPolicies} = this.props;
@@ -188,7 +187,7 @@ class CVectorDBAccessContentRestriction extends Component {
     }
     render() {
         const {_vState, handleSearch, handleMetaDataFilter, vectorDBPolicyFormUtil} = this;
-        const {cPolicies, cMetaData, handlePageChange, permission} = this.props;
+        const {cPolicies, cMetaData, handlePageChange, permission, vectorDBModel} = this.props;
 
         return (
             <>
@@ -205,7 +204,13 @@ class CVectorDBAccessContentRestriction extends Component {
                 <HeaderPanel expanded={this._vState.editMode} style={{width: this._vState.editMode ? '500px' : ''}} className='sidepanel-shadow'>
                     <Tile className='sidebar-form'>
                         <div className="header-panel-title">
-                            <h4>Add Data Filtering</h4>
+                            <h4>
+                                {
+                                    vectorDBModel && vectorDBModel.id
+                                    ? 'Edit Data Filtering'
+                                    : 'Add Data Filtering'
+                                }
+                            </h4>
                         </div>
                         <div className="header-panel-content">
                             <FormGroup legendText="">
