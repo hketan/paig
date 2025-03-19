@@ -221,7 +221,7 @@ class CVectorDBAccessContentRestriction extends Component {
                                 data-testid="vectordb-policy-save-btn"
                                 data-track-id="vectordb-policy-save-btn"
                                 disabled={this._vState.saving}
-                                //onClick={this.handleUpdate}
+                                onClick={this.handlePolicySave}
                             >
                                 Save
                             </Button>

@@ -2,7 +2,8 @@ import React, {Fragment, Component} from 'react';
 import {observer} from 'mobx-react';
 import { compact } from 'lodash';
 
-import {Layer, Form, Stack} from '@carbon/react';
+import {Layer, Form, Stack, DismissibleTag, FormGroup} from '@carbon/react';
+import {UserMultiple, User, UserRole} from '@carbon/icons-react';
 
 import { userGroupRolesLookups, metaDataLookUps, metaDataValueLookUps } from 'components/policies/field_lookups';
 import {Utils} from 'common-ui/utils/utils';
@@ -381,10 +382,261 @@ class DenyAccess extends Component {
     }
 }
 
-const AllowDeniedBox = observer(({form, vectorDBPolicyFormUtil, type}) => {
-    return null;
+let userGroupRef = null;
+const AllowBox = observer(({form, vectorDBPolicyFormUtil, type}) => {
+    const data = form.toJSON();
+    const { ROLE_USER_GROUP } = vectorDBPolicyFormUtil.getPermissionErrorTypes();
+    const splitDelimiter = "##__##";
+    const userGroupRolesValue = vectorDBPolicyFormUtil.getPrefillUsersGroupsRolesValues({
+        users: data.allowedUsers,
+        groups: data.allowedGroups,
+        roles: data.allowedRoles
+    }, splitDelimiter);
+
+    const errorListMap = vectorDBPolicyFormUtil.getErrorHashMap();
+    const hasRoleUserGroupError = errorListMap.get(`allow${ROLE_USER_GROUP}`) === `allow${ROLE_USER_GROUP}`;
+
     return (
-        null
+        <FormGroup legendText="">
+            <SelectComboBox
+                ref={ref => userGroupRef = ref}
+                label="Granted Access"
+                fetchOnLoad={true}
+                placeholder="Grant Access to Users/Groups"
+                value=""
+                data-testid="grant-access"
+                itemToElement={(item) => {
+                    return item ? (
+                        <span>
+                            {item.label}
+                        </span>
+                    ) : (
+                      ''
+                    )
+                }}
+                fetchOptions={(searchString, callback) => {
+                    userGroupRolesLookups(searchString, (options, op) => {
+                        let disabled = false;
+                        if (userGroupRolesValue.length && userGroupRolesValue[0]?.label === "Everyone") {
+                            disabled = true;
+                        }
+                        /* options.forEach(m => {
+                            if (userGroupRolesValue.length && userGroupRolesValue[0]?.label === "Everyone") {
+                                m.disabled = disabled;
+                            }
+                        }) */
+                        callback(options);
+                    }, type);
+                }}
+                onChange={(item) => {
+                    let value = item.inputValue || item.selectedItem?.value || '';
+
+                    const obj = {
+                        users: [],
+                        groups: [],
+                        roles: [],
+                        others: []
+                    };
+                    if (value) {
+                        let pattern = /,(?=users##__##|groups##__##|roles##__##|others##__##)/;
+                        value.split(pattern).forEach(v => {
+                            const [type, val] = compact(v.split("##__##"));
+                            obj[type].push(val);
+                        });
+                    }
+                    vectorDBPolicyFormUtil.setValidationError(`allow${ROLE_USER_GROUP}`, obj);
+
+                    obj.allowedUsers = obj.users;
+                    obj.allowedGroups = obj.groups;
+                    obj.allowedRoles = obj.roles;
+                    delete obj.users;
+                    delete obj.groups;
+                    delete obj.roles;
+
+                    if (obj.others.length) {
+                        obj.allowedUsers = [];
+                        obj.allowedGroups = [...obj.others];
+                        obj.allowedRoles = [];
+                        delete obj.others;
+                    } else {
+                        obj.allowedUsers = [...data.allowedUsers, ...obj.allowedUsers];
+                        obj.allowedGroups = [...data.allowedGroups, ...obj.allowedGroups].filter(g => g !== 'Everyone');
+                        obj.allowedRoles = [...data.allowedRoles, ...obj.allowedRoles];
+                    }
+                    if (obj.allowedGroups.includes('Everyone')) {
+                        obj.deniedUsers = [];
+                        obj.deniedGroups = [];
+                        obj.deniedRoles = [];
+                    } else if (obj.allowedUsers.length || obj.allowedGroups.length || obj.allowedRoles.length) {
+                        obj.deniedGroups = data.deniedGroups.filter(g => g !== 'Everyone');
+                        if (!obj.deniedGroups.includes('Others')) {
+                            obj.deniedGroups.push('Others');
+                        }
+                    }
+                    form.refresh(obj);
+                    //userGroupRef?.loadOptions?.();
+                }}
+                onInputChange={(item) => {
+                    //userGroupRef?.loadOptions?.(item);
+                }}
+            />
+            {
+                userGroupRolesValue.length > 0 &&
+                <div className="m-t-xs">
+                    {
+                        userGroupRolesValue.map((option, index) => {
+                            const value = ''+option.value;
+                            const [type, val] = compact(value.split(splitDelimiter));
+                            return (
+                                <DismissibleTag
+                                    key={index}
+                                    type="cool-gray"
+                                    text={val}
+                                    renderIcon={getIcon(type)}
+                                    size="md"
+                                    onClose={() => {
+                                        if (type === 'others' || type === 'groups') {
+                                            let others = data.allowedGroups.filter(g => g !== val);
+                                            form.refresh({allowedGroups: others});
+                                        } else if (type === 'users') {
+                                            let users = data.allowedUsers.filter(u => u !== val);
+                                            form.refresh({allowedUsers: users});
+                                        } else if (type === 'roles') {
+                                            let roles = data.allowedRoles.filter(r => r !== val);
+                                            form.refresh({allowedRoles: roles});
+                                        }
+                                        //userGroupRef?.loadOptions?.(value);
+                                    }}
+                                />
+                            )
+                        })
+                    }
+                </div>
+            }
+        </FormGroup>
+    )
+});
+
+let denyUserGroupRef = null;
+const DenyBox = observer(({form, vectorDBPolicyFormUtil, type}) => {
+    const data = form.toJSON();
+    const { ROLE_USER_GROUP } = vectorDBPolicyFormUtil.getPermissionErrorTypes();
+    const splitDelimiter = "##__##";
+    const userGroupRolesValue = vectorDBPolicyFormUtil.getPrefillUsersGroupsRolesValues({
+        users: data.deniedUsers,
+        groups: data.deniedGroups,
+        roles: data.deniedRoles
+    }, splitDelimiter);
+
+    // const errorListMap = vectorDBPolicyFormUtil.getErrorHashMap();
+    // const hasRoleUserGroupError = errorListMap.get(`deny${ROLE_USER_GROUP}`) === ROLE_USER_GROUP;
+
+    return (
+        <FormGroup legendText="">
+            <SelectComboBox
+                ref={ref => denyUserGroupRef = ref}
+                label="Denied Access"
+                fetchOnLoad={true}
+                placeholder="Restrict Access for Users/Groups"
+                value=""
+                data-testid="deny-access"
+                itemToElement={(item) => {
+                    return item ? (
+                        <span>
+                            {item.label}
+                        </span>
+                    ) : (
+                      ''
+                    )
+                }}
+                fetchOptions={(searchString, callback) => {
+                    userGroupRolesLookups(searchString, (options, op) => {
+                        /* let disabled = false;
+                        if (userGroupRolesValue.length && userGroupRolesValue[0]?.label === "Everyone") {
+                            disabled = true;
+                        }
+                        options.forEach(m => {
+                            if (userGroupRolesValue.length && userGroupRolesValue[0]?.label === "Everyone") {
+                                m.disabled = disabled;
+                            }
+                        }) */
+                        callback(options);
+                    }, 'deny', 'Others');
+                }}
+                onChange={(item) => {
+                    let value = item.inputValue || item.selectedItem?.value || '';
+                    const obj = {
+                        users: [],
+                        groups: [],
+                        roles: [],
+                        others: []
+                    };
+                    if (value) {
+                        let pattern = /,(?=users##__##|groups##__##|roles##__##|others##__##)/;
+                        value.split(pattern).forEach(v => {
+                            const [type, val] = compact(v.split("##__##"));
+                            obj[type].push(val);
+                        });
+                    }
+                    vectorDBPolicyFormUtil.setValidationError(`deny${ROLE_USER_GROUP}`, obj);
+
+                    obj.deniedUsers = obj.users;
+                    obj.deniedGroups = obj.groups;
+                    obj.deniedRoles = obj.roles;
+                    delete obj.users;
+                    delete obj.groups;
+                    delete obj.roles;
+
+                    if (obj.others.length) {
+                        obj.deniedGroups.push(...obj.others);
+                        delete obj.others;
+                    }
+
+                    obj.deniedUsers = [...data.deniedUsers, ...obj.deniedUsers];
+                    obj.deniedGroups = [...data.deniedGroups, ...obj.deniedGroups]
+                    obj.deniedRoles = [...data.deniedRoles, ...obj.deniedRoles];
+
+                    form.refresh(obj);
+                    //denyUserGroupRef?.loadOptions?.();
+                }}
+                onInputChange={(item) => {
+                    //denyUserGroupRef?.loadOptions?.(item);
+                }}
+            />
+            {
+                userGroupRolesValue.length > 0 &&
+                <div className="m-t-xs">
+                    {
+                        userGroupRolesValue.map((option, index) => {
+                            const value = ''+option.value;
+                            const [type, val] = compact(value.split(splitDelimiter));
+                            return (
+                                <DismissibleTag
+                                    key={index}
+                                    type="cool-gray"
+                                    text={val}
+                                    renderIcon={getIcon(type)}
+                                    size="md"
+                                    onClose={() => {
+                                        if (type === 'others' || type === 'groups') {
+                                            let others = data.deniedGroups.filter(g => g !== val);
+                                            form.refresh({deniedGroups: others});
+                                        } else if (type === 'users') {
+                                            let users = data.deniedUsers.filter(u => u !== val);
+                                            form.refresh({deniedUsers: users});
+                                        } else if (type === 'roles') {
+                                            let roles = data.deniedRoles.filter(r => r !== val);
+                                            form.refresh({deniedRoles: roles});
+                                        }
+                                        //denyUserGroupRef?.loadOptions?.(value);
+                                    }}
+                                />
+                            )
+                        })
+                    }
+                </div>
+            }
+        </FormGroup>
     )
 });
 
@@ -400,6 +652,7 @@ const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
                     <SelectComboBox
                         ref={ref => metadataKeyRef = ref}
                         label="Vector DB Metadata"
+                        placeholder="Choose VectorDB Metadata"
                         valueKey="label"
                         fetchOnLoad={true}
                         value={metadataKey.value}
@@ -423,6 +676,7 @@ const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
                     <SelectComboBox
                         ref={ref => metadataValueRef = ref}
                         label="Value"
+                        placeholder="Specify Values"
                         valueKey="label"
                         fetchOnLoad={true}
                         value={metadataValue.value}
@@ -439,6 +693,16 @@ const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
                         onInputChange={(item) => {
                             metadataValue.value = item;
                         }}
+                    />
+                    <AllowBox
+                        form={form}
+                        vectorDBPolicyFormUtil={vectorDBPolicyFormUtil}
+                        type="allowed"
+                    />
+                    <DenyBox
+                        form={form}
+                        vectorDBPolicyFormUtil={vectorDBPolicyFormUtil}
+                        type="deny"
                     />
                 </Stack>
             </Form>
@@ -540,16 +804,15 @@ const VVectorDBPolicyForm = observer(({ form, vectorDBPolicyFormUtil }) => {
 })
 
 const getIcon = type => {
-  const common = { fontSize: "small" }
   switch(type) {
     case 'users':
-      return null;// <PersonIcon {...common} />;
+      return User;
     case "groups":
-      return null;// <PeopleIcon {...common} />
+      return UserMultiple;
     case "roles":
-      return null;// <ContactsIcon {...common} />
+      return UserRole
     case "others":
-      return null;// <PeopleIcon {...common} />
+      return UserMultiple;
   }
 }
 
