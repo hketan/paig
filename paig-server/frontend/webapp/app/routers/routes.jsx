@@ -40,6 +40,8 @@ import CVectorDB from 'containers/applications/vector_db/c_vector_db';
 import CVectorDBForm from 'containers/applications/vector_db/c_vector_db_form';
 import CVectorDBMain from 'containers/applications/vector_db/c_vector_db_main';
 
+import CDashboard from 'containers/dashboard/c_dashboard';
+
 // import CEvaluationForm from 'containers/audits/evaluation/c_evaluation_create_form';
 // import CEvaluationConfigList from 'containers/audits/evaluation/c_evaluation_config_list';
 // import CEvaluationReportsList from 'containers/audits/evaluation/c_evaluation_report_list';
@@ -61,15 +63,11 @@ const checkComponentPermission = (permissionProperty) => {
     return !permissionCheckerUtil.checkHasReadPermission(permission);
 }
 
-const Dashboard = () => {
-    return (<div>Loader</div>)
-}
-
 const Routes = () => (
 	<Switch>
 		<Route exact path="/" component={RedirectToPath} />
 
-		<Route path="/dashboard" name="Dashboard" component={Dashboard} />
+		<Route path="/dashboard" name="Dashboard" component={CDashboard} />
 		{/* <Route path="/ai_application/create" name="Create Application" component={CAIApplicationForm} /> */}
 		<Route path="/ai_application/:id" name="AI Application Details" component={CAIApplicationMain} />
 		<Route path="/ai_applications" name="AI Applications" component={CAIApplications} />

@@ -11,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "7.17.9",
+    "@carbon/charts-react": "1.23.0",
     "@carbon/icons-react": "11.56.0",
     "@carbon/react": "1.74.0",
     "@testing-library/jest-dom": "5.16.5",

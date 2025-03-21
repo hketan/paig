@@ -2,18 +2,19 @@ import React, { Component, Fragment } from 'react';
 import { inject } from 'mobx-react';
 import { startCase } from 'lodash';
 
-import HelpIcon from '@material-ui/icons/Help';
-import Grid from '@material-ui/core/Grid';
+import {Row, IconButton} from '@carbon/react';
+import {Renew} from '@carbon/icons-react';
 
 import f from 'common-ui/utils/f';
 import {Utils} from 'common-ui/utils/utils';
-import BaseContainer from 'containers/base_container';
+// import BaseContainer from 'containers/base_container';
 import {MESSAGE_RESULT_TYPE, DATE_UNITS_GAP} from 'utils/globals';
 import {findActiveGuideByName, clearGuideTimeout, PENDO_GUIDE_NAME} from 'components/pendo/pendo_initializer';
+// import {VUsage, VSensitiveDataAccess, VDataAccess} from 'components/dashboard/v_dashboard';
 import {VUsage, VSensitiveDataAccess, VDataAccess} from 'components/dashboard/v_dashboard';
 import DashboardUtils from "utils/dashboard_utils";
-import {CustomAnchorBtn} from 'common-ui/components/action_buttons';
-import {DateRangePickerComponent} from 'common-ui/components/filters';
+// import {CustomAnchorBtn} from 'common-ui/components/action_buttons';
+// import {DateRangePickerComponent} from 'common-ui/components/filters';
 import {getUnitGap} from 'components/reports/gen_ai_report_util';
 
 const moment = Utils.dateUtil.momentInstance();
@@ -123,7 +124,7 @@ export class CDashboard extends Component {
         params: coll.params
       });
 
-      Object.values(MESSAGE_RESULT_TYPE).forEach(obj => {
+      /* Object.values(MESSAGE_RESULT_TYPE).forEach(obj => {
         if (!result.hasOwnProperty(obj.NAME)) {
           result[obj.NAME] = {
             count: 0,
@@ -143,8 +144,26 @@ export class CDashboard extends Component {
       })
 
       let totalCount = chartData.reduce((sum, data) => sum + data.y, 0);
-      let model = {totalCount, chartData}
-      f.resetCollection(coll, [model]);
+      let model = {totalCount, chartData} */
+
+      Object.values(MESSAGE_RESULT_TYPE).forEach(obj => {
+        if (!result.hasOwnProperty(obj.NAME)) {
+          result[obj.NAME] = {
+            count: 0,
+            color: obj.COLOR
+          };
+        } else {
+          result[obj.NAME].color = obj.COLOR
+        }
+      })
+
+      let chartData = Object.keys(result).map(key => {
+        return {
+          group: startCase(key),
+          count: parseInt(result[key].count)
+        }
+      })
+      f.resetCollection(coll, chartData);
     } catch(e) {
       console.error("Failed to get count", e);
       f.resetCollection(coll, []);
@@ -172,7 +191,7 @@ export class CDashboard extends Component {
       let result = await this.props.dashboardStore.fetchAccessDataCounts({
         params: this.cAccessData.params
       });
-      let data = {
+      /* let data = {
         categories: [],
         series: []
       }
@@ -210,16 +229,78 @@ export class CDashboard extends Component {
           data.series[1].data.push(d?.denied?.count || 0);
           data.series[2].data.push(d?.masked?.count || 0);
         }
-      }
-      f.resetCollection(this.cAccessData, [data]);
+      } */
+        let data = [];
+
+        if (result[interval]) {
+          // Sort result by interval
+          const sortedTimestamp = Object.fromEntries(
+            Object.entries(result[interval]).sort(([a], [b]) => a - b)
+          );
+
+          for (const timestamp in sortedTimestamp) {
+            const date = moment(parseInt(timestamp)).format(DATE_UNITS_GAP[interval.toUpperCase()].format);
+            const d = result[interval][timestamp]?.result;
+
+            data.push(
+              {
+                group: "Allowed Access",
+                key: date,
+                value: d?.allowed?.count || 0
+              },
+              {
+                group: "Denied Access",
+                key: date,
+                value: d?.denied?.count || 0
+              },
+              {
+                group: "Masked Access",
+                key: date,
+                value: d?.masked?.count || 0
+              }
+            );
+          }
+        }
+      f.resetCollection(this.cAccessData, data);
     } catch (e) {
       console.error("Failed to get access data", e);
       f.resetCollection(this.cAccessData, []);
     }
   };
 
-  render() {
-    const {dateRangeDetail, handleDateChange} = this;
+    render() {
+        const {dateRangeDetail, handleDateChange} = this;
+
+        return (
+            <>
+                <div className="header-container" style={{minHeight: '90px'}}>
+                    <Row style={{minHeight: '18px'}}>
+                    </Row>
+                    <div className="page-header m-t-sm d-flex gap-10">
+                        <div className="page-title">
+                            <h3 className="d-flex align-center">
+                                Dashboard
+                                <IconButton
+                                    label="Refresh"
+                                    kind="ghost"
+                                    onClick={this.handleRefresh}
+                                >
+                                    <Renew size={20} />
+                                </IconButton>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <VUsage
+                    cMessageUsage={this.cMessageUsage}
+                    cSensitiveDataPromptUsage={this.cSensitiveDataPromptUsage}
+                    cSensitiveDataRepliesUsage={this.cSensitiveDataRepliesUsage}
+                />
+                <VDataAccess data={this.cAccessData} />
+                <VSensitiveDataAccess data={this.cSensitiveDataInApplication} />
+            </>
+        )
+
     return (
       <BaseContainer
         className="page-title"

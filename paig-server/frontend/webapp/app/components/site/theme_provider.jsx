@@ -51,6 +51,7 @@ class ThemeProviderComponent extends React.Component {
             <ThemeContext.Provider value={{
                 currentTheme,
                 setTheme: this.setTheme,
+                getGlobalTheme: this.getGlobalTheme,
                 getSideNavTheme: this.getSideNavTheme
             }}>
                 <GlobalTheme>

@@ -3,30 +3,31 @@ import { observer } from 'mobx-react';
 import { clone } from 'lodash';
 import axios from 'axios';
 
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import PublishRoundedIcon from '@material-ui/icons/PublishRounded';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Tooltip from '@material-ui/core/Tooltip';
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent'
-import FormLabel from '@material-ui/core/FormLabel';
+// import Grid from '@material-ui/core/Grid';
+// import Typography from '@material-ui/core/Typography';
+// import Button from '@material-ui/core/Button';
+// import PublishRoundedIcon from '@material-ui/icons/PublishRounded';
+// import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+// import withStyles from '@material-ui/core/styles/withStyles';
+// import Tooltip from '@material-ui/core/Tooltip';
+// import Box from '@material-ui/core/Box';
+// import Card from '@material-ui/core/Card';
+// import CardContent from '@material-ui/core/CardContent'
+// import FormLabel from '@material-ui/core/FormLabel';
 
 import stores from 'data/stores/all_stores';
-import { Checkbox } from 'common-ui/components/filters';
-import { FormHorizontal, FormGroupInput, FormGroupSelect2 } from 'common-ui/components/form_fields';
+//import { Checkbox } from 'common-ui/components/filters';
+//import { FormHorizontal, FormGroupInput, FormGroupSelect2 } from 'common-ui/components/form_fields';
 import { SCHEDULE_FOR, DATE_UNITS_GAP } from 'utils/globals';
 import { SCHEDULE_TYP } from 'common-ui/utils/globals';
 import MScanSchedule from 'common-ui/data/models/m_scan_schedule';
 import MReportConfig from 'common-ui/data/models/m_report_config';
 import { CommonUtil } from 'common-ui/components/report_util';
-import FSModal from 'common-ui/lib/fs_modal';
+//import FSModal from 'common-ui/lib/fs_modal';
 import { createFSForm } from 'common-ui/lib/form/fs_form';
-import VAIScheduleReportForm, { report_form_def } from 'components/reports/v_report_form';
-import { DownloadButton, ReportSaveButton, ExportCSVBase, RelativeAbsoluteDateFilter } from 'common-ui/components/v_reporting';
+//import VAIScheduleReportForm, { report_form_def } from 'components/reports/v_report_form';
+//import { DownloadButton, ReportSaveButton, ExportCSVBase, RelativeAbsoluteDateFilter } from 'common-ui/components/v_reporting';
+const ExportCSVBase = () => {};
 
 class GenAIReportUtil extends CommonUtil {
 	configId = null;
@@ -377,7 +378,7 @@ class SaveReportInstance extends Component {
 	}
 }
 
-const SaveReport = withStyles(saveReportStyles)(SaveReportInstance);
+const SaveReport = SaveReportInstance; //withStyles(saveReportStyles)(SaveReportInstance);
 
 const ReportName = observer(({ collAttr = { sm: 12, md: 9 }, _vState = {}, onRemoveClick = null }) => {
 	let header = <Typography component="div" variant="h6" className="break-all scheduled-report-title">{_vState.name}</Typography>;
