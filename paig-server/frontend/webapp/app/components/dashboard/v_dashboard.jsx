@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { maxBy } from 'lodash';
 
 // import { Box, Grid, Paper, Typography } from "@material-ui/core";
-import {Tile, Row, Column, TableCell, Tag} from '@carbon/react';
+import {Tile, Grid, Row, Column, TableCell, Tag} from '@carbon/react';
 import { DonutChart, GroupedBarChart, StackedBarChart } from '@carbon/charts-react'
 import '@carbon/charts-react/styles.css';
 
@@ -29,7 +29,7 @@ const PaperCard = (props) => {
 const VChartComponent = observer(({title, data, trackId}) => {
   const { getGlobalTheme } = useContext(ThemeContext);
   return (
-    <Column item md={4} sm={6} xs={12} className="graph-border-left" data-track-id={trackId}>
+    <Tile data-track-id={trackId}>
         <DonutChart
             data={f.models(data).length ? f.models(data) : []}
             options={{
@@ -45,34 +45,37 @@ const VChartComponent = observer(({title, data, trackId}) => {
                 theme: getGlobalTheme()
             }}
         />
-    </Column>
+    </Tile>
   )
 })
 
 const VUsage = ({cMessageUsage, cSensitiveDataPromptUsage, cSensitiveDataRepliesUsage}) => {
   return (
-    <Tile>
-      <div>
-        Usage
-      </div>
-      <Row>
-        <VChartComponent
-          title="Messages"
-          data={cMessageUsage}
-          trackId="messages"
-        />
-        <VChartComponent
-          title="Sensitive Data in Prompts"
-          data={cSensitiveDataPromptUsage}
-          trackId="sensitive-data-prompts"
-        />
-        <VChartComponent
-          title="Sensitive Data in Replies"
-          data={cSensitiveDataRepliesUsage}
-          trackId="sensitive-data-replies"
-        />
-      </Row>
-    </Tile>
+    <>
+      <Grid>
+        <Column span={4}>
+            <VChartComponent
+              title="Messages"
+              data={cMessageUsage}
+              trackId="messages"
+            />
+        </Column>
+        <Column span={4}>
+            <VChartComponent
+              title="Sensitive Data in Prompts"
+              data={cSensitiveDataPromptUsage}
+              trackId="sensitive-data-prompts"
+            />
+        </Column>
+        <Column span={4}>
+            <VChartComponent
+              title="Sensitive Data in Replies"
+              data={cSensitiveDataRepliesUsage}
+              trackId="sensitive-data-replies"
+            />
+        </Column>
+      </Grid>
+    </>
   )
 }
 
