@@ -118,11 +118,11 @@ const VSensitiveDataAccess = observer(({data}) => {
        stacked: true,
        mapsTo: 'value'
      }
-   },
+   }/* ,
    grid: {
      x: false,
      y: false
-   },
+   } */,
    legend: {
      enabled: true, // ✅ Hide legend
    },
@@ -164,7 +164,7 @@ const VSensitiveDataAccess = observer(({data}) => {
   }
 
   return (
-    <Tile paperProps={{'data-track-id': 'sensitive-data-in-applications'}} className="m-t-md">
+    <Tile data-track-id="sensitive-data-in-applications" className="m-t-md">
       <div className="cds--cc--title m-b-md">
         <p className="title" id="sensitive-data-title">
           Sensitive Data Accessed in Applications
@@ -217,7 +217,7 @@ const VSensitiveDataAccess = observer(({data}) => {
 const VDataAccess = observer(({data}) => {
     const { getGlobalTheme } = useContext(ThemeContext);
   return (
-    <Tile paperProps={{'data-track-id': 'data-access'}} className="m-t-md">
+    <Tile data-track-id="data-access" className="m-t-md">
     <Row>
       <Column item xs={12}>
         {/* <DataAccessGraph data={{
