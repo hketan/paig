@@ -41,11 +41,15 @@ const VChartComponent = observer(({title, data, trackId}) => {
                 toolbar: {
                     enabled: false
                 },
+                height: '250px',
                 donut: {
                   center: {
                     label: 'Total Count'
                   },
                   alignment: 'center'
+                },
+                legend: {
+                    alignment: 'center'
                 },
                 theme: getGlobalTheme()
             }}
@@ -105,12 +109,12 @@ const VSensitiveDataAccess = observer(({data}) => {
    title: ' ',
    axes: {
      left: {
-       visible: false,
+       visible: true,
        scaleType: 'labels',
        mapsTo: 'key'
      },
      bottom: {
-       visible: false,
+       visible: true,
        stacked: true,
        mapsTo: 'value'
      }
@@ -120,12 +124,12 @@ const VSensitiveDataAccess = observer(({data}) => {
      y: false
    },
    legend: {
-     enabled: false, // ✅ Hide legend
+     enabled: true, // ✅ Hide legend
    },
    toolbar: {
      enabled: false, // ✅ Hide export and view table
    },
-   height: '40px',
+   height: '550px',
    theme: getGlobalTheme()
  }
 
@@ -172,12 +176,16 @@ const VSensitiveDataAccess = observer(({data}) => {
             ? (
               <Fragment>
                 <Column lg={16} /* className="border-right" */>
+                  <StackedBarChart
+                    data={models}
+                    options={options}
+                  />
                   {/* <ApplicationTable distributionData={firstHalf} maxQuery={maxQuery} /> */}
-                  <Table
+                  {/* <Table
                     data={firstHalf}
                     headers={headers}
                     getRowData={getRowData}
-                  />
+                  /> */}
                 </Column>
                 <Column lg={16}>
                   {/* <ApplicationTable distributionData={secondHalf} maxQuery={maxQuery} /> */}
@@ -185,11 +193,11 @@ const VSensitiveDataAccess = observer(({data}) => {
                     data={secondHalf}
                     options={options}
                   /> */}
-                  <Table
+                  {/* <Table
                       data={secondHalf}
                       headers={headers}
                       getRowData={getRowData}
-                  />
+                  /> */}
                 </Column>
               </Fragment>
             )

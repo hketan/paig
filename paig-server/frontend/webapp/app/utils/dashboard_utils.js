@@ -1,7 +1,7 @@
 var DashboardUtils = {};
 
 DashboardUtils.formatSensitiveDataInApplications = (data = {}) => {
-    const transformedData = [];
+    /*const transformedData = [];
 
     if (!data.traits) {
       return transformedData;
@@ -27,9 +27,9 @@ DashboardUtils.formatSensitiveDataInApplications = (data = {}) => {
       }
 
       transformedData.push(trait);
-    }
+    }*/
 
-    /*let transformedData = [];
+    let transformedData = [];
 
     if (!data.traits) {
       return transformedData;
@@ -50,7 +50,7 @@ DashboardUtils.formatSensitiveDataInApplications = (data = {}) => {
       }
     }
 
-    let d = transformedData.reduce((acc, curr) => {
+    /*let d = transformedData.reduce((acc, curr) => {
         if (acc[curr.key]) {
           acc[curr.key][graphData].push(curr);
         } else {
