@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { maxBy } from 'lodash';
 
 // import { Box, Grid, Paper, Typography } from "@material-ui/core";
-import {Tile, Grid, Row, Column, TableCell, Tag} from '@carbon/react';
+import {Tile, FlexGrid, Row, Column, TableCell, Tag} from '@carbon/react';
 import { DonutChart, GroupedBarChart, StackedBarChart } from '@carbon/charts-react'
 import '@carbon/charts-react/styles.css';
 
@@ -38,9 +38,14 @@ const VChartComponent = observer(({title, data, trackId}) => {
                 pie: {
                     valueMapsTo: 'count'
                 },
-                height: '400px',
                 toolbar: {
                     enabled: false
+                },
+                donut: {
+                  center: {
+                    label: 'Total Count'
+                  },
+                  alignment: 'center'
                 },
                 theme: getGlobalTheme()
             }}
@@ -52,29 +57,29 @@ const VChartComponent = observer(({title, data, trackId}) => {
 const VUsage = ({cMessageUsage, cSensitiveDataPromptUsage, cSensitiveDataRepliesUsage}) => {
   return (
     <>
-      <Grid>
-        <Column span={4}>
+        <Row>
+        <Column className="three-col">
             <VChartComponent
               title="Messages"
               data={cMessageUsage}
               trackId="messages"
             />
         </Column>
-        <Column span={4}>
+        <Column className="three-col">
             <VChartComponent
               title="Sensitive Data in Prompts"
               data={cSensitiveDataPromptUsage}
               trackId="sensitive-data-prompts"
             />
         </Column>
-        <Column span={4}>
+        <Column className="three-col">
             <VChartComponent
               title="Sensitive Data in Replies"
               data={cSensitiveDataRepliesUsage}
               trackId="sensitive-data-replies"
             />
         </Column>
-      </Grid>
+        </Row>
     </>
   )
 }
@@ -156,8 +161,10 @@ const VSensitiveDataAccess = observer(({data}) => {
 
   return (
     <Tile paperProps={{'data-track-id': 'sensitive-data-in-applications'}} className="m-t-md">
-      <div id="sensitive-data-title">
-        Sensitive Data Accessed in Applications
+      <div className="cds--cc--title m-b-md">
+        <p className="title" id="sensitive-data-title">
+          Sensitive Data Accessed in Applications
+        </p>
       </div>
         <Row>
           {
