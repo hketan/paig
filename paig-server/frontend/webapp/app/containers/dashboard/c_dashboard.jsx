@@ -160,7 +160,8 @@ export class CDashboard extends Component {
       let chartData = Object.keys(result).map(key => {
         return {
           group: startCase(key),
-          count: parseInt(result[key].count)
+          count: parseInt(result[key].count),
+          color: result[key].color
         }
       })
       f.resetCollection(coll, chartData);
@@ -246,17 +247,20 @@ export class CDashboard extends Component {
               {
                 group: "Allowed Access",
                 key: date,
-                value: d?.allowed?.count || 0
+                value: d?.allowed?.count || 0,
+                color: MESSAGE_RESULT_TYPE.ALLOWED.COLOR
               },
               {
                 group: "Denied Access",
                 key: date,
-                value: d?.denied?.count || 0
+                value: d?.denied?.count || 0,
+                color: MESSAGE_RESULT_TYPE.DENIED.COLOR
               },
               {
                 group: "Masked Access",
                 key: date,
-                value: d?.masked?.count || 0
+                value: d?.masked?.count || 0,
+                color: MESSAGE_RESULT_TYPE.MASKED.COLOR
               }
             );
           }
@@ -296,8 +300,8 @@ export class CDashboard extends Component {
                     cSensitiveDataPromptUsage={this.cSensitiveDataPromptUsage}
                     cSensitiveDataRepliesUsage={this.cSensitiveDataRepliesUsage}
                 />
-                <VDataAccess data={this.cAccessData} />
                 <VSensitiveDataAccess data={this.cSensitiveDataInApplication} />
+                <VDataAccess data={this.cAccessData} />
             </>
         )
 

@@ -26,6 +26,13 @@ const PaperCard = (props) => {
   );
 };
 
+const getColorByValue = (value) => {
+  if (value == 'Allowed') return '#42BE65'; // Green for low
+  if (value == 'Denied') return '#F1C21B'; // Yellow for medium
+  if (value == 'Masked') return '#F1C21B'; // Yellow for medium
+  return '#FF7EB6'; // Pink for high
+};
+
 const VChartComponent = observer(({title, data, trackId}) => {
   const { getGlobalTheme } = useContext(ThemeContext);
   return (
@@ -41,7 +48,7 @@ const VChartComponent = observer(({title, data, trackId}) => {
                 toolbar: {
                     enabled: false
                 },
-                height: '250px',
+                height: '300px',
                 donut: {
                   center: {
                     label: 'Total Count'
@@ -50,7 +57,13 @@ const VChartComponent = observer(({title, data, trackId}) => {
                 },
                 legend: {
                     alignment: 'center'
-                },
+                }/* ,
+                color: {
+                    scale: f.models(data).reduce((acc, item) => {
+                        acc[item.group] = item.color;
+                        return acc;
+                    }, {})
+                } */,
                 theme: getGlobalTheme()
             }}
         />
@@ -241,7 +254,13 @@ const VDataAccess = observer(({data}) => {
                height: '400px',
                toolbar: {
                    enabled: false
-               },
+               }/* ,
+               color: {
+                    scale: f.models(data).reduce((acc, item) => {
+                        acc[item.group] = item.color;
+                        return acc;
+                    }, {})
+               } */,
                theme: getGlobalTheme()
             }}
         />
