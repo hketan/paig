@@ -43,7 +43,8 @@ const {
     GUARDRAILS,
     RESPONSE_TEMPLATES,
     GUARDRAIL_CONNECTION_PROVIDER,
-    AI_APPLICATIONS_API_KEYS
+    AI_APPLICATIONS_API_KEYS,
+    AI_ASSETS
 } = UI_CONSTANTS
 
 const SIDEBAR_MENU_ITEMS = {
@@ -57,6 +58,7 @@ const SIDEBAR_MENU_ITEMS = {
             }
         }
     },
+    [AI_ASSETS]: {},
     [PAIG_LENS]: {
         SUBMENU: {
             [DASHBOARD]: {},
@@ -123,6 +125,7 @@ const UI_DEFAULT_FEATURE_SIDEBAR_TABS = {
             TABS: [AI_APPLICATIONS, AI_APPLICATIONS_PERMISSIONS, AI_APPLICATIONS_API_KEYS]
         }
     },
+    [AI_ASSETS]: {},
     [PAIG_LENS]: {
         [DASHBOARD]: {},
         [SECURITY]: {},
@@ -431,7 +434,7 @@ const featurePermissionUIMap = {
         propertyForShowHide: [DOCS]
     },
     'governance.ai_applications': {
-        propertyForShowHide: [`${PAIG_NAVIGATOR}.${AI_APPLICATIONS}.${AI_APPLICATIONS}`, `${PAIG_NAVIGATOR}.${AI_APPLICATIONS}.${AI_APPLICATIONS_PERMISSIONS}`, `${PAIG_NAVIGATOR}.${AI_APPLICATIONS}.${AI_APPLICATIONS_API_KEYS}`]
+        propertyForShowHide: [`${PAIG_NAVIGATOR}.${AI_APPLICATIONS}.${AI_APPLICATIONS}`, `${PAIG_NAVIGATOR}.${AI_APPLICATIONS}.${AI_APPLICATIONS_PERMISSIONS}`, `${PAIG_NAVIGATOR}.${AI_APPLICATIONS}.${AI_APPLICATIONS_API_KEYS}`, AI_ASSETS]
     },
     'governance.vector_db': {
         propertyForShowHide: [`${PAIG_NAVIGATOR}.${VECTOR_DB}.${VECTOR_DB}`, `${PAIG_NAVIGATOR}.${VECTOR_DB}.${VECTOR_DB_PERMISSIONS}`]

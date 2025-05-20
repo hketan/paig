@@ -17,6 +17,8 @@ import CAIApplications from 'containers/applications/ai_applications/c_ai_applic
 import CAIApplicationCreate from 'containers/applications/ai_applications/c_ai_application_create';
 import CAIApplicationMain from 'containers/applications/ai_applications/c_ai_application_main';
 
+import CAIAssets from 'containers/applications/ai_assets/c_ai_assets';
+
 import CVectorDB from 'containers/applications/vector_db/c_vector_db';
 import CVectorDBCreate from 'containers/applications/vector_db/c_vector_db_create';
 import CVectorDBMain from 'containers/applications/vector_db/c_vector_db_main';
@@ -63,10 +65,13 @@ const Routes = () => (
 	<Switch>
 		<Route exact path="/" component={RedirectToPath} />
 
+
         {/* Paig Navigator */}
         <Route path="/ai_application/create" name="Create Application" component={Authorization(CAIApplicationCreate, [UI_CONSTANTS.PAIG_NAVIGATOR, UI_CONSTANTS.AI_APPLICATIONS])} />
         <Route path="/ai_application/:id" name="AI Application Details" component={Authorization(CAIApplicationMain, [UI_CONSTANTS.PAIG_NAVIGATOR, UI_CONSTANTS.AI_APPLICATIONS])} />
         <Route path="/ai_applications" name="AI Applications" component={Authorization(CAIApplications, [UI_CONSTANTS.PAIG_NAVIGATOR, UI_CONSTANTS.AI_APPLICATIONS])} />
+
+        <Route path="/ai_assets" name="AI Assets" component={Authorization(CAIAssets, [UI_CONSTANTS.AI_ASSETS])} />
 
         <Route path="/vector_db/create" name="Create Vector DB" component={Authorization(CVectorDBCreate, [UI_CONSTANTS.PAIG_NAVIGATOR, UI_CONSTANTS.VECTOR_DB])} />
         <Route path="/vector_db/:id" name="Update Vector DB" component={Authorization(CVectorDBMain, [UI_CONSTANTS.PAIG_NAVIGATOR, UI_CONSTANTS.VECTOR_DB])} />

@@ -26,6 +26,11 @@ const SIDEBAR_MENU = [{
         childrenRoutes: ["/vector_db/", "/vector_db/create", "/vector_db/:id"]
     }]
 }, {
+     name: "AI Assets",
+     to: "/ai_assets",
+     //icon: <SettingsIcon className="list-svg-icon" />,
+     sidebar: UI_CONSTANTS.AI_ASSETS
+ }, {
     menuToggleAttrName: "paig_lens",
     name: "Paig Lens",
     icon: <ControlCameraRoundedIcon className="nav-rotated-icon" />,
