@@ -43,7 +43,8 @@ const {
     GUARDRAILS,
     RESPONSE_TEMPLATES,
     GUARDRAIL_CONNECTION_PROVIDER,
-    AI_APPLICATIONS_API_KEYS
+    AI_APPLICATIONS_API_KEYS,
+    KNOWLEDGE_IQ
 } = UI_CONSTANTS
 
 const SIDEBAR_MENU_ITEMS = {
@@ -57,6 +58,7 @@ const SIDEBAR_MENU_ITEMS = {
             }
         }
     },
+    [KNOWLEDGE_IQ]: {},
     [PAIG_LENS]: {
         SUBMENU: {
             [DASHBOARD]: {},
@@ -123,6 +125,7 @@ const UI_DEFAULT_FEATURE_SIDEBAR_TABS = {
             TABS: [AI_APPLICATIONS, AI_APPLICATIONS_PERMISSIONS, AI_APPLICATIONS_API_KEYS]
         }
     },
+    [KNOWLEDGE_IQ]: {},
     [PAIG_LENS]: {
         [DASHBOARD]: {},
         [SECURITY]: {},
@@ -447,6 +450,9 @@ const featurePermissionUIMap = {
     },
     'account.meta_data': {
         propertyForShowHide: [`${PAIG_GUARD}.${META_DATA}`]
+    },
+    'governance.knowledge_iq': {
+        propertyForShowHide: [KNOWLEDGE_IQ]
     }
 }
 

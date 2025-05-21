@@ -43,6 +43,8 @@ import CGuardrailForm from 'containers/guardrail/forms/c_guardrail_form';
 import CGuardrailConnectionProvider from 'containers/guardrail/c_guardrail_connection_provider';
 import CGuardrailProviderConnectedList from 'containers/guardrail/c_guardrail_provider_connected_list';
 
+import CKnowledgeIQLanding from 'containers/knowledge_iq/c_knowledge_iq_landing';
+
 history.listen((location, action) => {
     // scroll to top when route changes
     window.scrollTo(0, 0);
@@ -82,6 +84,8 @@ const Routes = () => (
 
         {/* Paig Lens */}
         <Route path="/dashboard" name="Dashboard" component={Authorization(CDashboard, [UI_CONSTANTS.PAIG_LENS, UI_CONSTANTS.DASHBOARD])} />
+
+        <Route path="/knowledge_iq" name="Knowledge IQ" component={Authorization(CKnowledgeIQLanding, [UI_CONSTANTS.KNOWLEDGE_IQ])} />
 
         <Route path="/eval_reports" name="Evaluation Reports" component={Authorization(CEvaluationReportsList, [UI_CONSTANTS.PAIG_LENS, UI_CONSTANTS.EVALUATION_REPORTS])} />
         <Route path="/eval/create" name="Create Security Evaluation" component={Authorization(CEvaluationForm, [UI_CONSTANTS.PAIG_LENS, UI_CONSTANTS.EVALUATION_SECURITY, UI_CONSTANTS.EVALUATION_CONFIG])} />

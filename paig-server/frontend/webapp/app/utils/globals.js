@@ -40,7 +40,8 @@ const UI_CONSTANTS = {
     GUARDRAILS: 'GUARDRAILS',
     RESPONSE_TEMPLATES: 'RESPONSE_TEMPLATES',
     GUARDRAIL_CONNECTION_PROVIDER: 'GUARDRAIL_CONNECTION_PROVIDER',
-    AI_APPLICATIONS_API_KEYS: 'AI_APPLICATIONS_API_KEYS'
+    AI_APPLICATIONS_API_KEYS: 'AI_APPLICATIONS_API_KEYS',
+    KNOWLEDGE_IQ: 'KNOWLEDGE_IQ'
 }
 
 const PERMISSIONS = {
@@ -64,7 +65,8 @@ const FEATURE_PERMISSIONS = {
         VECTOR_DB_POLICIES: {PROPERTY: 'governance.vector_db_policies'},
         EVALUATION_CONFIG: {PROPERTY: 'governance.evaluation_config'},
         EVALUATION_REPORTS: {PROPERTY: 'governance.evaluation_reports'},
-        GUARDRAILS: {PROPERTY: 'governance.guardrails'}
+        GUARDRAILS: {PROPERTY: 'governance.guardrails'},
+        KNOWLEDGE_IQ: {PROPERTY: 'governance.knowledge_iq'}
     },
     AUDITS: {
         SECURITY: {PROPERTY: 'audits.security'}
