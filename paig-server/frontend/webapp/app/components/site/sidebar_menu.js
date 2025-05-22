@@ -3,6 +3,7 @@ import React from 'react';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SecurityIcon from '@material-ui/icons/Security';
 import ControlCameraRoundedIcon from '@material-ui/icons/ControlCameraRounded';
+import LayersIcon from '@material-ui/icons/Layers';
 
 import { UI_CONSTANTS } from 'utils/globals';
 import { CodeWindowIcon } from './privacera_logo';
@@ -25,6 +26,11 @@ const SIDEBAR_MENU = [{
         sidebar: UI_CONSTANTS.VECTOR_DB,
         childrenRoutes: ["/vector_db/", "/vector_db/create", "/vector_db/:id"]
     }]
+}, {
+    to: "/knowledge_iq",
+    name: "Knowledge IQ",
+    icon: <LayersIcon className="list-svg-icon" />,
+    sidebar: UI_CONSTANTS.KNOWLEDGE_IQ,
 }, {
     menuToggleAttrName: "paig_lens",
     name: "Paig Lens",
