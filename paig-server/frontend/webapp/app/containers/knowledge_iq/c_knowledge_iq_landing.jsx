@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
 import { observable } from 'mobx';
+import { observer } from 'mobx-react';
 
 import { Grid, Box, Paper, Typography, List, ListItem, IconButton } from '@material-ui/core';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+//import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import BaseContainer from 'containers/base_container';
 import { FEATURE_PERMISSIONS } from 'utils/globals';
-import {AddButtonWithPermission} from 'common-ui/components/action_buttons';
+//import {AddButtonWithPermission} from 'common-ui/components/action_buttons';
 import { permissionCheckerUtil } from 'common-ui/utils/permission_checker_util';
 import { VKnowledgeIQPrompt } from 'components/knowledge_iq/v_knowledge_iq';
 
+@observer
 class CKnowledgeIQLanding extends Component {
     @observable _vState = {
         selectedLayer: null,
@@ -49,7 +51,7 @@ class CKnowledgeIQLanding extends Component {
 
         return (
             <BaseContainer>
-                <Box component={Paper} p="15px" style={{minHeight: 'calc(100vh - 200px)'}}>
+                <Box component={Paper} p="15px">
                     <Grid container spacing={2}>
                         <Grid item sm={4}>
                             <Grid container className="align-items-center space-between">
@@ -82,13 +84,16 @@ class CKnowledgeIQLanding extends Component {
                                                         e.stopPropagation();
                                                         console.log('layer', layer);
                                                     }}
+                                                    style={{
+                                                        paddingLeft: '8px'
+                                                    }}
                                                 >
                                                     <Box width="100%">
                                                     <Box display="flex" justifyContent="space-between" alignItems="center">
                                                         <Typography variant="subtitle1">{layer.name}</Typography>
-                                                        <IconButton size="small">
-                                                        <MoreVertIcon fontSize="small" />
-                                                        </IconButton>
+                                                        {/* <IconButton size="small">
+                                                            <MoreVertIcon fontSize="small" />
+                                                        </IconButton> */}
                                                     </Box>
                                                     <Typography variant="body2" color="textSecondary" noWrap>
                                                         {layer.description}
@@ -105,9 +110,10 @@ class CKnowledgeIQLanding extends Component {
                             backgroundColor: '#F4F9FC',
                             borderRadius: '5px',
                             paddingTop: '20px',
-                            paddingBottom: '20px'
+                            paddingBottom: '10px',
+                            height: '100%'
                         }}>
-                            <Paper>
+                            <Paper style={{minHeight: 'calc(100vh - 210px)'}}>
                                 <VKnowledgeIQPrompt
                                     _vState={this._vState}
                                     handleAskQuestion={this.handleAskQuestion}

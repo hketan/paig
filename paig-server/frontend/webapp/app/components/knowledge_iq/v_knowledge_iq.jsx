@@ -7,7 +7,7 @@ import {FormHorizontal, FormGroupInput, FormGroupSwitch} from 'common-ui/compone
 
 const VKnowledgeIQPrompt = observer(({_vState, handleAskQuestion}) => {
     return (
-        <FormHorizontal>
+        <FormHorizontal spacing={2}>
             <FormGroupInput
                 as="textarea"
                 placeholder="Ask a question..."
@@ -21,7 +21,7 @@ const VKnowledgeIQPrompt = observer(({_vState, handleAskQuestion}) => {
                 label="Explain Results"
                 checked={_vState.explainResults}
                 onChange={e => {
-                    _vState.explainResults = e.target.value;
+                    _vState.explainResults = e.target.checked;
                 }}
                 data-testid="explain-results"
             />
