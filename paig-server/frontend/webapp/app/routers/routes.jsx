@@ -18,6 +18,7 @@ import CAIApplicationCreate from 'containers/applications/ai_applications/c_ai_a
 import CAIApplicationMain from 'containers/applications/ai_applications/c_ai_application_main';
 
 import CAIAssets from 'containers/applications/ai_assets/c_ai_assets';
+import CAssetDetails from 'containers/applications/ai_assets/c_asset_details';
 
 import CVectorDB from 'containers/applications/vector_db/c_vector_db';
 import CVectorDBCreate from 'containers/applications/vector_db/c_vector_db_create';
@@ -71,6 +72,7 @@ const Routes = () => (
         <Route path="/ai_application/:id" name="AI Application Details" component={Authorization(CAIApplicationMain, [UI_CONSTANTS.PAIG_NAVIGATOR, UI_CONSTANTS.AI_APPLICATIONS])} />
         <Route path="/ai_applications" name="AI Applications" component={Authorization(CAIApplications, [UI_CONSTANTS.PAIG_NAVIGATOR, UI_CONSTANTS.AI_APPLICATIONS])} />
 
+        <Route path="/ai_assets/:id/details" name="AI Assets Details" component={Authorization(CAssetDetails, [UI_CONSTANTS.AI_ASSETS])} />
         <Route path="/ai_assets" name="AI Assets" component={Authorization(CAIAssets, [UI_CONSTANTS.AI_ASSETS])} />
 
         <Route path="/vector_db/create" name="Create Vector DB" component={Authorization(CVectorDBCreate, [UI_CONSTANTS.PAIG_NAVIGATOR, UI_CONSTANTS.VECTOR_DB])} />
