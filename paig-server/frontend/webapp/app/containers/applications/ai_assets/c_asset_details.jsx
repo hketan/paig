@@ -5,7 +5,9 @@ import { observable } from 'mobx';
 import { Box, Paper, Divider, Tabs, Tab, Grid } from '@material-ui/core';
 
 import BaseContainer from 'containers/base_container';
-import {AssetDetail, RiskScoreCard, ConfiguredService, AssetOverview, DependenciesView} from 'components/applications/ai_assets/v_asset_details';
+import {
+    AssetDetail, RiskScoreCard, ConfiguredService, AssetOverview, DependenciesView, RuntimeDetails
+} from 'components/applications/ai_assets/v_asset_details';
 
 @observer
 class CApplicationDetails extends Component {
@@ -114,6 +116,7 @@ class CApplicationDetails extends Component {
                     value={0}
                     indicatorColor="primary"
                     textColor="primary"
+                    className="m-t-md"
                 >
                     <Tab label="Overview" />
                 </Tabs>
@@ -131,6 +134,8 @@ class CApplicationDetails extends Component {
                         type: 'Cortex Agent',
                         updatedAt: '2h ago'
                     }}
+                />
+                <RuntimeDetails
                 />
             </BaseContainer>
         );

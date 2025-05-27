@@ -25,6 +25,9 @@ import ChatIcon from '@material-ui/icons/Chat';
 import HeadsetIcon from '@material-ui/icons/Headset';
 import FilterListIcon from '@material-ui/icons/FilterList';
 //import DataObjectIcon from '@material-ui/icons/DataObject';
+import LaunchIcon from '@material-ui/icons/Launch';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import IconButton from '@material-ui/core/IconButton';
 
 import {CustomAnchorBtn} from 'common-ui/components/action_buttons';
 
@@ -194,7 +197,7 @@ const ConfiguredService = observer(({ serviceDetails }) => {
 
 const AssetOverview = observer(({ asset={} }) => {
     return (
-        <Box component={Paper} p={3}>
+        <Box component={Paper} p={3} className="m-t-md">
             <Box className="d-flex align-items-center" style={{
                 gap: '12px',
                 marginBottom: '24px'
@@ -291,57 +294,9 @@ const DependencyItem = ({ icon, name, usedBy, usedAs, showView = true }) => (
     </Box>
 )
 
-const DependencyItem1 = ({ icon, name, usedBy, usedAs, showView = true }) => (
-    <Box p={3} style={{ 
-      borderBottom: '1px solid #eee',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between'
-    }}>
-      <Box className="d-flex align-items-center" style={{ gap: 2}}>
-        {icon}
-        <Box>
-            <Typography variant="subtitle1" style={{ fontWeight: 500 }}>{name}</Typography>
-            <Box className="d-flex align-items-center" style={{ gap: 1}}>
-                <Typography variant="body2" color="textSecondary">Used as:</Typography>
-                <Typography variant="body2" style={{ color: '#4B5563' }}>{usedAs}</Typography>
-                {
-                    usedBy && (
-                    <Box 
-                        px={2}
-                        py={0.5}
-                        component="span"
-                        className="d-flex align-items-center"
-                        style={{ 
-                            marginLeft: '2px',
-                            bgcolor: '#F3F4F6',
-                            borderRadius: '16px',
-                            gap: 1
-                        }}
-                    >
-                        {/* <LinkIcon style={{ fontSize: 16, color: '#6B7280' }} /> */}
-                        <Chip
-                            label={`used by ${usedBy} assets`}
-                            size="small"
-                            style={{
-                                backgroundColor: '#F3F4F6',
-                                borderRadius: '16px'
-                            }}
-                        />
-                    </Box>
-                )}
-            </Box>
-        </Box>
-    </Box>
-        {showView && (
-            <Button color="primary">View</Button>
-        )}
-    </Box>
-);
-  
 const DependenciesView = () => {
     return (
-        <Grid container spacing={3} className="m-t-lg">
+        <Grid container spacing={3} className="m-t-md">
             {/* Depends On Section */}
             <Grid item xs={6}>
                 <Box component={Paper}>
@@ -448,10 +403,77 @@ const DependenciesView = () => {
     );
 };
 
+const RuntimeDetails = () => {
+    return (
+        <Box p={3} component={Paper} className="m-t-md">
+            {/* Header */}
+            <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
+                <Box display="flex" alignItems="center">
+                    <StorageIcon 
+                        style={{ 
+                            color: '#4169E1',
+                            marginRight: '12px',
+                            fontSize: '24px'
+                        }} 
+                    />
+                    <Typography variant="h6">
+                        Runtime details
+                    </Typography>
+                </Box>
+                <Box>
+                    <Button
+                        variant="outlined"
+                        startIcon={<LaunchIcon />}
+                        style={{ marginRight: '8px' }}
+                    >
+                        External links
+                    </Button>
+                    <IconButton>
+                        <MoreHorizIcon />
+                    </IconButton>
+                </Box>
+            </Box>
+
+            {/* Inference Endpoint Section */}
+            <Box>
+                <Typography 
+                    variant="caption" 
+                    style={{ 
+                        color: '#6B7280',
+                        display: 'block',
+                        marginBottom: '8px'
+                    }}
+                >
+                    Inference Endpoint
+                </Typography>
+                <Box 
+                    sx={{
+                        padding: '12px 16px',
+                        backgroundColor: '#F9FAFB',
+                        borderRadius: '6px',
+                        border: '1px solid #E5E7EB'
+                    }}
+                >
+                    <Typography 
+                        variant="body2" 
+                        style={{ 
+                            color: '#374151',
+                            fontFamily: 'monospace'
+                        }}
+                    >
+                        jade-ganache-9a0c7f.netlify.app/applications/sentientworks
+                    </Typography>
+                </Box>
+            </Box>
+        </Box>
+    );
+};
+
 export {
     AssetDetail,
     RiskScoreCard,
     ConfiguredService,
     AssetOverview,
-    DependenciesView
+    DependenciesView,
+    RuntimeDetails
 }
