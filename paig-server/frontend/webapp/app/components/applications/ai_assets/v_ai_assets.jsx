@@ -27,6 +27,19 @@ const getQualityLevel = (metrics={}) => {
     return "Severe";
 }
 
+const getRiskLevelFromScore = (score) => {
+    if (score <= 2) {
+        return "Low";
+    } else if (score <= 4) {
+        return "Moderate";
+    } else if (score <= 6) {
+        return "Elevated";
+    } else if (score <= 8) {
+        return "High";
+    }
+    return "Critical";
+}
+
 class VAIAssets extends Component {
     constructor(props) {
         super(props);
@@ -77,9 +90,9 @@ class VAIAssets extends Component {
             </TableCell>,
             <TableCell key="riskLevel">
                 {
-                    model.riskLevel ?
+                    model.risk_score ?
                         <Chip
-                            label={model.riskLevel || "--"}
+                            label={getRiskLevelFromScore(model.risk_score) || "--"}
                             size="small"
                         />
                     : "--"
