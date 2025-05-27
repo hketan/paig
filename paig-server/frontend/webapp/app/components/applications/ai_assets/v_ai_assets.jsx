@@ -64,16 +64,13 @@ const AssetActionsMenu = ({ model }) => {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
+                getContentAnchorEl={null}
                 transformOrigin={{
                     vertical: 'top',
                     horizontal: 'right', 
                 }}
                 style={{
-                    marginTop: '45px'
+                    marginTop: '25px'
                 }}
             >
                 <MenuItem onClick={() => {
