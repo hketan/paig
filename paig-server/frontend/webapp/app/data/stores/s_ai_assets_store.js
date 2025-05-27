@@ -5,11 +5,11 @@ class AIAssetsStore extends BaseStore {
 	constructor() {
 		super({
 		    type: 'ai_assets',
-		    baseUrl: 'governance-service/api/ai/assets',
+		    baseUrl: 'governance-service/api/v1/ai_assets',
 		});
 	}
 
-	fetchAIAssets(appId, opts = {}) {
+	fetchAIAssets(opts = {}) {
 		opts.deserialize = (resp) => {
 			let {content, ...page} = resp
             this.page = page;
@@ -17,6 +17,11 @@ class AIAssetsStore extends BaseStore {
         }
 		opts.recordMapper = (json) => new MAiAssets(json);
 		return this.fetchAll('', opts);
+	}
+
+	fetchAIAssetDetails(id, opts = {}) {
+		opts.recordMapper = (json) => new MAiAssets(json);
+		return this.fetch(id, opts);
 	}
 }
 

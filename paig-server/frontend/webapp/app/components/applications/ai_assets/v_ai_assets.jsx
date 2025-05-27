@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 
 import { TableCell, Chip, Menu, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import Table from 'common-ui/components/table';
 import {Utils} from 'common-ui/utils/utils';
@@ -75,7 +74,7 @@ const AssetActionsMenu = ({ model }) => {
             >
                 <MenuItem onClick={() => {
                     setAnchorEl(null);
-                    history.push(`/ai_assets/${model.id}/details`);
+                    history.push(`/ai_assets/${model.document_id}/details`);
                 }}>
                     <ListItemText>View</ListItemText>
                 </MenuItem>

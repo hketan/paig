@@ -10,7 +10,6 @@ import {
     Typography,
     List,
     ListItem,
-    Card
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -29,9 +28,15 @@ import LaunchIcon from '@material-ui/icons/Launch';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import IconButton from '@material-ui/core/IconButton';
 
+import ROCKET_ICON from 'images/trust3_icons/rocket-01.svg';
+import DATA_ICON from 'images/trust3_icons/data.svg';
+import SCALE_ICON from 'images/trust3_icons/scale-03.svg';
 import {CustomAnchorBtn} from 'common-ui/components/action_buttons';
+import {Utils} from 'common-ui/utils/utils';
+import {ASSERT_RISK_LEVEL} from 'utils/globals';
 
-const AssetDetail = observer(({ asset={} }) => {
+const AssetDetail = observer(({ _vState }) => {
+    const {asset={}} = _vState;
     return (
         <Box p={3}>
             <Grid container spacing={3} alignItems="center">
@@ -48,7 +53,7 @@ const AssetDetail = observer(({ asset={} }) => {
                             color: '#4169E1'
                         }}
                     >
-                        <RocketLaunchIcon style={{fontSize: '65px'}} />
+                        <img src={ROCKET_ICON} style={{fontSize: '65px'}} />
                     </Box>
                 </Grid>
                 <Grid item xs>
@@ -56,7 +61,7 @@ const AssetDetail = observer(({ asset={} }) => {
                         <Box>
                             <Box display="flex" alignItems="center">
                                 <Typography variant="h5">
-                                    {asset.name}
+                                    {asset.body.display_name || asset.body.name}
                                 </Typography>
                                 <Chip
                                     className="m-l-sm"
@@ -67,7 +72,7 @@ const AssetDetail = observer(({ asset={} }) => {
                         </Box>
                         <Box textAlign="right">
                             <Chip 
-                                label={asset.type}
+                                label={asset.asset_type}
                                 size="small"
                             />
                         </Box>
@@ -75,17 +80,24 @@ const AssetDetail = observer(({ asset={} }) => {
                     <Box display="flex" alignItems="center" justifyContent="space-between">
                         <Box>
                             <Typography color="textSecondary" gutterBottom>
-                                {asset.description}
+                                {asset.body.description}
                             </Typography>
-                            <a>
-                                @{asset.author}
-                            </a>
+                            {
+                                asset.body.author && (
+                                    <a>
+                                        @{asset.body.author}
+                                    </a>
+                                )
+                            }
                         </Box>
                         <Box textAlign="right">
-                            <Box>
-                                <AccessTimeIcon fontSize="small" className="m-r-sm" />
-                                {asset.updatedAt}
-                            </Box>
+                            {
+                                asset.updated_at &&
+                                <Box>
+                                    <AccessTimeIcon fontSize="small" className="m-r-sm" />
+                                    {Utils.dateUtil.getMomentObject(asset.updated_at).fromNow().replace(/^an? /, '1 ')}
+                                </Box>
+                            }
                         </Box>
                     </Box>
                 </Grid>
@@ -94,48 +106,168 @@ const AssetDetail = observer(({ asset={} }) => {
     );
 });
 
+const getRiskLevelFromScore = (score) => {
+    // Convert percentage to risk score 1-5
+    let riskScore;
+    if (score <= 2) {
+        riskScore = 1;
+        return {
+            score: riskScore,
+            level: ASSERT_RISK_LEVEL.LOW
+        };
+    } else if (score <= 4) {
+        riskScore = 2;
+        return {
+            score: riskScore,
+            level: ASSERT_RISK_LEVEL.MODERATE
+        };
+    } else if (score <= 6) {
+        riskScore = 3;
+        return {
+            score: riskScore,
+            level: ASSERT_RISK_LEVEL.ELEVATED
+        };
+    } else if (score <= 8) {
+        riskScore = 4;
+        return {
+            score: riskScore,
+            level: ASSERT_RISK_LEVEL.HIGH
+        };
+    }
+    riskScore = 5;
+    return {
+        score: riskScore,
+        level: ASSERT_RISK_LEVEL.CRITICAL
+    };
+}
+
 // Risk Score Component
-const RiskScoreCard = observer(({ _vState, riskDetails }) => {
-    return (
-        <Box p={3}>
-            <Grid container alignItems="center">
-                <Grid item>
-                    <Box style={{
-                        width: 48,
-                        height: 48,
-                        borderRadius: '50%',
-                        backgroundColor: '#22C55E',
-                        color: '#fff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '1.5rem',
-                        fontWeight: 'bold'
-                    }} className="m-r-sm">
-                        {riskDetails.riskScore}
-                    </Box>
+const RiskScoreCard = observer(({ _vState }) => {
+    const {asset={}} = _vState;
+
+    if (!asset.body.risk_score) {
+        return null;
+    }
+
+    const riskScoreLevel = getRiskLevelFromScore(asset.body.risk_score);
+    let riskMessage = asset.body.riskMessage;
+    if (riskScoreLevel.level === ASSERT_RISK_LEVEL.LOW) {
+        riskMessage = "The application is generally safe, but reviewing permission is recommended for better security.";
+    } else if (riskScoreLevel.level === ASSERT_RISK_LEVEL.MODERATE) {
+        riskMessage = "The application is moderately safe, but reviewing permission is recommended for better security.";
+    } else if (riskScoreLevel.level === ASSERT_RISK_LEVEL.ELEVATED) {
+        riskMessage = "Before moving forward with the deployment, it's recommended to thoroughly review the application to ensure that all key functionalities are working as expected, configurations are correct, and there are no outstanding issues that could impact performance or user experience.";
+    } else if (riskScoreLevel.level === ASSERT_RISK_LEVEL.HIGH) {
+        riskMessage = "The application is high risk and should not be deployed without thorough review and testing. It's recommended to conduct a comprehensive security assessment and implement additional mitigations before proceeding.";
+    } else if (riskScoreLevel.level === ASSERT_RISK_LEVEL.CRITICAL) {
+        riskMessage = "The application is critical risk and should not be deployed. It's recommended to contact the application owner for further assistance.";
+    }
+
+    if (_vState.isRiskExpanded) {
+        return (
+            <Box p={3}>
+                <Grid container className="align-items-center space-between">
+                    <Grid item >
+                        <Box className="d-flex align-items-center">
+                            <Typography variant="h6">
+                                Risk Score
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item>
+                        <CustomAnchorBtn
+                            onClick={() => _vState.isRiskExpanded = !_vState.isRiskExpanded}
+                            icon={_vState.isRiskExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                            tooltipLabel={_vState.isRiskExpanded ? 'Collapse' : 'Expand'}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs className="d-flex align-items-center">
-                    <Typography variant="h6" style={{marginRight: '10px'}}>
-                        Overall risk score
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                        {riskDetails.riskMessage}
-                    </Typography>
+                <Grid container>
+                    <Grid item>
+                        <Box p={2} className="d-flex"
+                            style={{ 
+                                backgroundColor: riskScoreLevel.level.COLOR + '20',
+                                borderRadius: '2px',
+                                marginBottom: '3px',
+                                gap: '3px'
+                            }}
+                        >
+                            <Box p={2} className="text-center"
+                                style={{
+                                    backgroundColor: riskScoreLevel.level.COLOR,
+                                    color: 'white',
+                                    borderRadius: '2px',
+                                    minWidth: '120px',
+                                }}
+                            >
+                                <Typography variant="h3" component="div">
+                                    {riskScoreLevel.score}
+                                </Typography>
+                                <Typography>Overall risk score</Typography>
+                            </Box>
+                            <Box flex={1} className="m-l-sm">
+                                <Typography variant="body1" style={{ color: '#374151', marginBottom: '2px' }}>
+                                    {riskMessage}
+                                </Typography>
+                                {/* <a color="primary" style={{ display: 'inline-block', marginTop: '8px' }}>
+                                    Learn more
+                                </a> */}
+                            </Box>
+                        </Box>
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    <CustomAnchorBtn
-                        onClick={() => _vState.isRiskExpanded = !_vState.isRiskExpanded}
-                        icon={_vState.isRiskExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                        tooltipLabel={_vState.isRiskExpanded ? 'Collapse' : 'Expand'}
-                    />
+            </Box>
+        );
+    } else {
+        return (
+            <Box p={3}>
+                <Grid container className="align-items-center">
+                    <Grid item>
+                        <Box className="m-r-sm"
+                            style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: '50%',
+                                backgroundColor: riskScoreLevel.level.COLOR,
+                                color: '#fff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '1.2rem',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            {riskScoreLevel.score}
+                        </Box>
+                    </Grid>
+                    <Grid item xs className="d-flex align-items-center">
+                        <Typography variant="h6" style={{marginRight: '10px'}}>
+                            Overall risk score
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            {riskMessage}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <CustomAnchorBtn
+                            onClick={() => _vState.isRiskExpanded = !_vState.isRiskExpanded}
+                            icon={_vState.isRiskExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                            tooltipLabel={_vState.isRiskExpanded ? 'Collapse' : 'Expand'}
+                        />
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Box>
-    );
+            </Box>
+        );
+    }
 });
 
-const ConfiguredService = observer(({ serviceDetails }) => {
+const ConfiguredService = observer(({ _vState }) => {
+    const serviceDetails = _vState.asset?.body?.service_details;
+    
+    // if (!_vState.asset?.body?.service_details) {
+    //     return null;
+    // }
+
     return (
         <Box p={3}>
             <Grid container alignItems="center">
@@ -143,51 +275,63 @@ const ConfiguredService = observer(({ serviceDetails }) => {
                     <Box style={{
                         width: 40,
                         height: 40,
-                        backgroundColor: '#F0F4FF',
+                        //backgroundColor: '#F0F4FF',
                         borderRadius: '8px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
                     }} className="m-r-sm">
-                        {/* <DataObjectIcon /> */}
+                        <img src={DATA_ICON} style={{fontSize: '65px'}} />
                     </Box>
                 </Grid>
                 <Grid item xs>
                     <Box display="flex" alignItems="center">
                         <Typography variant="h6" className="m-r-sm">
-                            {serviceDetails.serviceName}
+                            {serviceDetails ? serviceDetails.serviceName : 'Not Configured'}
                         </Typography>
-                        <Chip
-                            icon={<CheckCircleOutlineIcon style={{
-                                fontSize: '16px',
-                                color: '#059669'
-                            }} />}
-                            label="Configured"
-                            size="small"
-                            style={{
-                                backgroundColor: '#ECFDF5',
-                                color: '#059669'
-                            }}
-                        />
+                        {
+                            serviceDetails?.serviceName && (
+                                <Chip
+                                    icon={
+                                        <CheckCircleOutlineIcon
+                                            style={{
+                                                fontSize: '16px',
+                                                color: '#059669'
+                                            }}
+                                        />
+                                    }
+                                    label="Configured"
+                                    size="small"
+                                    style={{
+                                        backgroundColor: '#ECFDF5',
+                                        color: '#059669'
+                                    }}
+                                />
+                            )
+                        }
                     </Box>
                     <Typography color="textSecondary">
-                        {serviceDetails.serviceDescription}
+                        Knowledge IQ layer
                     </Typography>
                 </Grid>
                 <Grid item>
                     <Box textAlign="right">
-                        <Button color="primary" style={{
+                        {/* <Button color="primary" style={{
                             marginLeft: 'auto',
                             color: '#2196F3'
                         }}>
                             View
-                        </Button>
-                        <Typography style={{
-                            color: '#6B7280',
-                            fontSize: '0.875rem'
-                        }}>
-                            {serviceDetails.serviceLastUpdated}
-                        </Typography>
+                        </Button> */}
+                        {
+                            serviceDetails?.serviceLastUpdated && (
+                                <Typography style={{
+                                    color: '#6B7280',
+                                    fontSize: '0.875rem'
+                                }}>
+                                    Last Updated: {Utils.dateUtil.getMomentObject(serviceDetails.serviceLastUpdated).fromNow().replace(/^an? /, '1 ')}
+                                </Typography>
+                            )
+                        }
                     </Box>
                 </Grid>
             </Grid>
@@ -195,7 +339,15 @@ const ConfiguredService = observer(({ serviceDetails }) => {
     );
 });
 
-const AssetOverview = observer(({ asset={} }) => {
+const AssetOverview = observer(({ _vState }) => {
+    const {asset} = _vState;
+
+    if (!asset?.body) {
+        return null;
+    }
+
+    const additionalData = asset.body.additional_data || [];
+
     return (
         <Box component={Paper} p={3} className="m-t-md">
             <Box className="d-flex align-items-center" style={{
@@ -208,40 +360,41 @@ const AssetOverview = observer(({ asset={} }) => {
                 </Typography>
             </Box>
             <Typography variant="body1" style={{ marginBottom: '32px', color: '#4B5563' }}>
-                parakeet-tdt-0.6b-v2 is a 600-million-parameter automatic speech recognition (ASR) model 
-                designed for high-quality English transcription, featuring support for punctuation, 
-                capitalization, and accurate timestamp prediction.
+                {asset.body.description || 'No description available'}
             </Typography>
 
             {/* Use Cases Section */}
-            <Typography variant="h6" component="h2" style={{ marginBottom: '16px' }}>
+            <Typography variant="h6" component="h2" className="m-b-sm">
                 Use Cases
             </Typography>
-            <Typography variant="body1" style={{ marginBottom: '32px', color: '#4B5563' }}>
-                Serves developers, researchers, academics, and industries that require speech-to-text 
-                capabilities, including but not limited to: conversational AI, voice assistants, 
-                transcription services, subtitle generation, and voice analytics platforms.
+            <Typography variant="body1" className="m-b-lg" style={{ color: '#4B5563' }}>
+                {asset.body.purpose || 'No use cases available'}
             </Typography>
 
-            {/* Model Architecture Section */}
-            <Typography variant="h6" component="h2" style={{ marginBottom: '16px' }}>
-                Model Architecture
-            </Typography>
-            <List style={{ marginBottom: '32px' }}>
-                <ListItem style={{ color: '#4B5563' }}>
-                • FastConformer-TDT
-                </ListItem>
-            </List>
-
-            {/* Datasets Section */}
-            <Typography variant="h6" component="h2" style={{ marginBottom: '16px' }}>
-                Datasets used for Training
-            </Typography>
-            <List>
-                <ListItem style={{ color: '#4B5563' }}>
-                • FastConformer-TDT
-                </ListItem>
-            </List>
+            {
+                additionalData.map((item, index) => {
+                    let value = item.value;
+                    if (typeof item.value === 'string') {
+                        value = [item.value];
+                    }
+                    return (
+                        <Fragment key={item.name}>
+                            <Typography variant="h6" component="h2">
+                                {item.description}
+                            </Typography>
+                            <List className="m-b-sm">
+                                {
+                                    value.map((val) => (
+                                        <ListItem key={val} style={{ color: '#4B5563' }}>
+                                            <Typography>• {val}</Typography>
+                                        </ListItem>
+                                    ))
+                                }
+                            </List>
+                        </Fragment>
+                    )
+                })
+            }
         </Box>
     );
 });
@@ -306,8 +459,8 @@ const DependenciesView = () => {
                         borderBottom: '1px solid #eee'
                     }}>
                         <Box style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                            {/* <LinkIcon style={{ color: '#6B7280' }} /> */}
-                            <Typography variant="h6">Depends On</Typography>
+                            <img src={SCALE_ICON} style={{ width: '24px', height: '24px' }} />
+                            <Typography variant="h6" className="m-l-xs">Depends On</Typography>
                         </Box>
                         <Button 
                             startIcon={<FilterListIcon />}
@@ -360,8 +513,8 @@ const DependenciesView = () => {
                         borderBottom: '1px solid #eee'
                     }}>
                         <Box style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                            {/* <LinkIcon style={{ color: '#6B7280', transform: 'rotate(180deg)' }} /> */}
-                            <Typography variant="h6">Consumed By</Typography>
+                            <img src={SCALE_ICON} style={{ width: '24px', height: '24px', transform: 'rotate(180deg)' }} />
+                            <Typography variant="h6" className="m-l-xs">Consumed By</Typography>
                         </Box>
                         <Button 
                             startIcon={<FilterListIcon />}

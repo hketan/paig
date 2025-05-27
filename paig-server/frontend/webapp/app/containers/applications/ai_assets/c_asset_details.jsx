@@ -1,75 +1,46 @@
 import React, { Component, Fragment } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 
-import { Box, Paper, Divider, Tabs, Tab, Grid } from '@material-ui/core';
+import { Box, Paper, Divider, Tabs, Tab, Typography } from '@material-ui/core';
 
 import BaseContainer from 'containers/base_container';
+import { getSkeleton, Loader } from 'common-ui/components/generic_components';
 import {
     AssetDetail, RiskScoreCard, ConfiguredService, AssetOverview, DependenciesView, RuntimeDetails
 } from 'components/applications/ai_assets/v_asset_details';
 
+@inject("aiAssetsStore")
 @observer
 class CApplicationDetails extends Component {
     @observable _vState = {
+        asset: undefined,
+        isLoading: false,
         isRiskExpanded: false
     }
     constructor(props) {
         super(props);
-        
-        // Mock application data - TODO: Fetch from API
-        this.mockApplication = {
-            id: this.props.match.params.id,
-            name: 'SentientWorks AI Chatbot',
-            description: 'An advanced AI chatbot system that provides customer support and service automation.',
-            author: '@MichaelJordan',
-            status: 'In Evaluation',
-            riskScore: 3,
-            riskMessage: 'You should consider reviewing the application before proceeding with deployment.',
-            useCases: [
-                '24/7 Customer Support Automation',
-                'Product Inquiries and FAQ',
-                'Technical Support Triage',
-                'Order Status Updates'
-            ],
-            targetAudience: [
-                'Online Retail Customers',
-                'Support Team Members'
-            ],
-            riskAnalysis: {
-                aiModel: {
-                    score: 4,
-                    description: 'Complex model with potential for bias'
-                },
-                sensitiveData: {
-                    score: 5,
-                    description: 'Handles PII and financial data'
-                },
-                security: {
-                    score: 3,
-                    description: 'Standard security measures in place'
-                }
-            }
-        };
+    }
+
+    componentDidMount() {
+        this.fetchData();
+    }
+
+    fetchData = async() => {
+        this._vState.isLoading = true;
+        try {
+            const asset = await this.props.aiAssetsStore.fetchAIAssetDetails(this.props.match.params.id);
+            this._vState.asset = asset;
+        } catch (error) {
+            this._vState.asset = undefined;
+            f.handleError()(error);
+        } finally {
+            this._vState.isLoading = false;
+        }
     }
 
     handleBack = () => {
         this.props.history.goBack();
-    };
-
-    handleDownloadConfig = () => {
-        // TODO: Implement config download
-        console.log('Downloading config...');
-    };
-
-    handleApplyGuardrails = () => {
-        // TODO: Implement guardrails application
-        console.log('Applying guardrails...');
-    };
-
-    handleApplyPermissions = () => {
-        // TODO: Implement permissions application
-        console.log('Applying permissions...');
     };
 
     render() {
@@ -78,65 +49,61 @@ class CApplicationDetails extends Component {
                 showBackButton={true}
                 showRefresh={false}
             >
-                <Box component={Paper}>
-                    <AssetDetail
-                        asset={{
-                            name: 'SentientWorks AI Chatbot',
-                            description: 'An advanced AI chatbot system that provides customer support and service automation.',
-                            author: 'MichaelJordan',
-                            status: 'In Evaluation',
-                            type: 'Cortex Agent',
-                            updatedAt: '2h ago'
-                        }}
-                    />
-                    <Fragment>
-                        <Divider className="m-t-sm m-b-sm" />
-                        <RiskScoreCard
-                            _vState={this._vState}
-                            riskDetails={{
-                                riskScore: '1.0',
-                                riskMessage: 'The application is generally safe, but reviewing permission is recommended for better security.'
-                            }}
-                        />
-                    </Fragment>
-                    <Fragment>
-                        <Divider className="m-t-sm m-b-sm" />
-                        <ConfiguredService
-                            _vState={this._vState}
-                            serviceDetails={{
-                                serviceName: 'Nimbus IQ',
-                                serviceDescription: 'Knowledge IQ layer',
-                                serviceStatus: 'Configured',
-                                serviceLastUpdated: '2h ago'
-                            }}
-                        />
-                    </Fragment>
-                </Box>
-                <Tabs
-                    value={0}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    className="m-t-md"
+                <Loader
+                    isLoading={this._vState.isLoading}
+                    loaderContent={getSkeleton('FULL_PAGE_LOADER')}
                 >
-                    <Tab label="Overview" />
-                </Tabs>
-                <AssetOverview
-                    asset={{
-                        
-                    }}
-                />
-                <DependenciesView
-                    asset={{
-                        name: 'SentientWorks AI Chatbot',
-                        description: 'An advanced AI chatbot system that provides customer support and service automation.',
-                        author: 'MichaelJordan',
-                        status: 'In Evaluation',
-                        type: 'Cortex Agent',
-                        updatedAt: '2h ago'
-                    }}
-                />
-                <RuntimeDetails
-                />
+                    <Fragment>
+                        {
+                            this._vState.asset
+                            ?
+                            <Fragment>
+                                <Box component={Paper}>
+                                    <AssetDetail
+                                        _vState={this._vState}
+                                    />
+                                    <Divider className="m-t-sm m-b-sm" />
+                                    <RiskScoreCard
+                                        _vState={this._vState}
+                                    />
+                                    <Divider className="m-t-sm" />
+                                    <ConfiguredService
+                                        _vState={this._vState}
+                                    />
+                                </Box>
+                                <Tabs
+                                    value={0}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    className="m-t-md"
+                                >
+                                    <Tab label="Overview" />
+                                </Tabs>
+                                <AssetOverview
+                                    _vState={this._vState}
+                                />
+                                <DependenciesView
+                                    asset={{
+                                        name: 'SentientWorks AI Chatbot',
+                                        description: 'An advanced AI chatbot system that provides customer support and service automation.',
+                                        author: 'MichaelJordan',
+                                        status: 'In Evaluation',
+                                        type: 'Cortex Agent',
+                                        updatedAt: '2h ago'
+                                    }}
+                                />
+                                <RuntimeDetails
+                                />
+                            </Fragment>
+                        :
+                            <Fragment>
+                                <Typography variant="h6">
+                                    No asset found
+                                </Typography>
+                            </Fragment>
+                        }
+                    </Fragment>
+                </Loader>
             </BaseContainer>
         );
     }
