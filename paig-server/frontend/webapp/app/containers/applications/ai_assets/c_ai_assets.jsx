@@ -4,7 +4,7 @@ import { observable } from 'mobx';
 
 import f from 'common-ui/utils/f';
 import { DEFAULTS } from 'common-ui/utils/globals';
-import { RISK_LEVEL } from 'utils/globals';
+import { ASSERT_RISK_LEVEL } from 'utils/globals';
 import BaseContainer from 'containers/base_container';
 import VAIAssets from 'components/applications/ai_assets/v_ai_assets';
 import { SearchField } from 'common-ui/components/filters';
@@ -401,7 +401,7 @@ class CAIAssets extends Component {
                                 sm: 6,
                                 xs: 12
                             }}
-                            data={Object.values(RISK_LEVEL)}
+                            data={Object.values(ASSERT_RISK_LEVEL)}
                             showLabel={false}
                             placeholder="All Risk Levels"
                             labelKey="LABEL"
